@@ -1,5 +1,6 @@
 package com.example.easycook;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -11,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -20,13 +20,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    Intent home = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(home);
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_explore);
+                case R.id.navigation_explore:
+                    Intent explore = new Intent(MainActivity.this, ExploreActivity.class);
+                    startActivity(explore);
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_settings);
+                case R.id.navigation_settings:
+                    Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivity(settings);
                     return true;
             }
             return false;
@@ -38,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
