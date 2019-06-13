@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_recipe_header"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:id="@+id/home_recipe_header" />
+
+    <TextView
+        android:id="@+id/home_ingredient_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/home_recipe_header"
+        android:layout_marginTop="731dp"
+        android:text="@string/home_ingredient_header"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_meat"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_meat"
+        android:layout_below="@+id/home_ingredient_header" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_grains"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_grains"
+        android:layout_below="@+id/home_ingredient_meat" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_veg"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_veg"
+        android:layout_below="@+id/home_ingredient_grains" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_dairy"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_dairy"
+        android:layout_below="@+id/home_ingredient_veg" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_sauces"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_sauces"
+        android:layout_below="@+id/home_ingredient_dairy" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/home_ingredient_condiment"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/home_ingredient_condiment"
+        android:layout_below="@+id/home_ingredient_sauces" />
+
+</RelativeLayout>
