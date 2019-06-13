@@ -15,6 +15,7 @@ import android.view.MenuItem;
 // TODO add recycler view
 // TODO glade lib
 // TODO add button
+// TODO add toolbar (three dots at top right)
 public class MainActivity extends AppCompatActivity {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -62,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
         // but this prevents fragment from being re-created
         // e.g. user scroll half-way & press something else, can go back to where he was
-        fragmentManager.beginTransaction().add(R.id.container, settingsFragment, "3").hide(settingsFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.container, exploreFragment, "2").hide(exploreFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.container, homeFragment, "1").commit();
+        fragmentManager.beginTransaction().add(R.id.container, settingsFragment, "settings").hide(settingsFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.container, exploreFragment, "explore").hide(exploreFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.container, homeFragment, "home").commit();
     }
 }
 
