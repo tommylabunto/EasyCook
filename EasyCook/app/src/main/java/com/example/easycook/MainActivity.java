@@ -11,39 +11,39 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
-import android.widget.TextView;
 
 // TODO add recycler view
 // TODO glade lib
 // TODO add button
 public class MainActivity extends AppCompatActivity {
 
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+
+    // bottom navigation bar fragments
+    final Fragment homeFragment = new HomeFragment();
+    final Fragment exploreFragment = new ExploreFragment();
+    final Fragment settingsFragment = new SettingsFragment();
+    Fragment active = homeFragment;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        Fragment fragment;
-
-        // bottom navigation bar fragments
-        final Fragment homeFragment = new HomeFragment();
-        final Fragment exploreFragment = new ExploreFragment();
-        final Fragment settingsFragment = new SettingsFragment();
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    fragment = homeFragment;
+                    fragmentManager.beginTransaction().hide(active).show(homeFragment).commit();
+                    active = homeFragment;
                     return true;
                 case R.id.navigation_explore:
-                    fragment = exploreFragment;
+                    fragmentManager.beginTransaction().hide(active).show(exploreFragment).commit();
+                    active = exploreFragment;
                     return true;
                 case R.id.navigation_settings:
-                    fragment = settingsFragment;
+                    fragmentManager.beginTransaction().hide(active).show(settingsFragment).commit();
+                    active = settingsFragment;
                     return true;
             }
-            fragmentManager.beginTransaction().replace(R.id.nav_view, fragment).commit();
             return false;
         }
     };
@@ -56,8 +56,15 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // set start-up screen to home
-        navView.setSelectedItemId(R.id.navigation_home);
-    }
 
+        // this is default method
+        // navView.setSelectedItemId(R.id.navigation_home);
+
+        // but this prevents fragment from being re-created
+        // e.g. user scroll half-way & press something else, can go back to where he was
+        fragmentManager.beginTransaction().add(R.id.container, settingsFragment, "3").hide(settingsFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.container, exploreFragment, "2").hide(exploreFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.container, homeFragment, "1").commit();
+    }
 }
 

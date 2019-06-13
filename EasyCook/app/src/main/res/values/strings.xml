@@ -3,4 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_explore">Explore</string>
     <string name="title_settings">Settings</string>
+    <string name="home_text">HOMEEEEEEE</string>
+    <string name="explore_text">EXPLOREEEEE</string>
+    <string name="settings_text">SETTINGSSSSS</string>
 </resources>
