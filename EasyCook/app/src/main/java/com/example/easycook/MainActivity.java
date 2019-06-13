@@ -7,31 +7,43 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
 import android.widget.TextView;
 
+// TODO add recycler view
+// TODO glade lib
+// TODO add button
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Fragment fragment;
+
+        // bottom navigation bar fragments
+        final Fragment homeFragment = new HomeFragment();
+        final Fragment exploreFragment = new ExploreFragment();
+        final Fragment settingsFragment = new SettingsFragment();
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Intent home = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(home);
+                    fragment = homeFragment;
                     return true;
                 case R.id.navigation_explore:
-                    Intent explore = new Intent(MainActivity.this, ExploreActivity.class);
-                    startActivity(explore);
+                    fragment = exploreFragment;
                     return true;
                 case R.id.navigation_settings:
-                    Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivity(settings);
+                    fragment = settingsFragment;
                     return true;
             }
+            fragmentManager.beginTransaction().replace(R.id.nav_view, fragment).commit();
             return false;
         }
     };
@@ -42,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // set start-up screen to home
+        navView.setSelectedItemId(R.id.navigation_home);
     }
 
 }
+
