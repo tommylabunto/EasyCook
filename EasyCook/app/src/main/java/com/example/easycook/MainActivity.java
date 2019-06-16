@@ -12,9 +12,9 @@ import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
 
-// TODO add recycler view
+// TODO if duck, insert under duck
 // TODO glade lib
-// TODO add button
+// TODO add add button
 // TODO add toolbar (three dots at top right)
 public class MainActivity extends AppCompatActivity {
 

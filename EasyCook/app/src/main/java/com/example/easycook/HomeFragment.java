@@ -5,10 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,6 +25,10 @@ import android.view.ViewGroup;
  */
 public class HomeFragment extends Fragment {
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -28,8 +36,29 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        ArrayList<IngredientItem> ingredientList = new ArrayList<>();
+        ingredientList.add(new IngredientItem("Meat","Duck"
+                , "500", "1/1/2019"));
+
+        // Create recycler view.
+        mRecyclerView = view.findViewById(R.id.meat_recyclerView);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new IngredientAdapter(getContext(),ingredientList);
+
+
+        // Give the recycler view a default layout manager.
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Connect the adapter with the recycler view.
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
+
+
+
+        return view;
     }
 
 
