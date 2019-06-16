@@ -48,47 +48,56 @@
                 android:text="@string/home_ingredient_header"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/meat_recyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
                 app:layout_constraintVertical_bias="0.0" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/meat_recyclerView"
-                android:layout_width="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_height="545dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_header" />
 
             <TextView
                 android:id="@+id/home_ingredient_meat"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="46dp"
                 android:layout_marginStart="8dp"
                 android:text="@string/home_ingredient_meat"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/meat_recyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_header"
+                app:layout_constraintBottom_toTopOf="@+id/meat_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/meat_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="495dp"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_grains"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_meat" />
 
             <TextView
                 android:id="@+id/home_ingredient_grains"
                 android:layout_width="0dp"
-                android:layout_height="61dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="65dp"
                 android:text="@string/home_ingredient_grains"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_meat" />
+                app:layout_constraintTop_toBottomOf="@+id/meat_recyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/grains_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/grains_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="507dp"
+                android:layout_marginEnd="4dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_grains"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_veg" />
 
             <TextView
                 android:id="@+id/home_ingredient_veg"
@@ -101,7 +110,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_grains" />
+                app:layout_constraintTop_toBottomOf="@+id/grains_recyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/veg_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/veg_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="507dp"
+                android:layout_marginEnd="4dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_veg"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_dairy" />
 
             <TextView
                 android:id="@+id/home_ingredient_dairy"
@@ -114,7 +134,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_veg" />
+                app:layout_constraintTop_toBottomOf="@+id/veg_recyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/dairy_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dairy_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="507dp"
+                android:layout_marginEnd="4dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_dairy"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_sauces" />
 
             <TextView
                 android:id="@+id/home_ingredient_sauces"
@@ -126,7 +157,18 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_dairy" />
+                app:layout_constraintTop_toBottomOf="@+id/dairy_recyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/sauces_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sauces_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="507dp"
+                android:layout_marginEnd="4dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces"
+                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_condiment" />
 
             <TextView
                 android:id="@+id/home_ingredient_condiment"
@@ -138,7 +180,17 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces" />
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces"
+                app:layout_constraintBottom_toTopOf="@+id/cond_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cond_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="507dp"
+                android:layout_marginEnd="4dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_condiment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

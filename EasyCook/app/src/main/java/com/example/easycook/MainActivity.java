@@ -12,10 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
 
-// TODO if duck, insert under duck
 // TODO glade lib
-// TODO add add button
-// TODO add toolbar (three dots at top right)
 public class MainActivity extends AppCompatActivity {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
