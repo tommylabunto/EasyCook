@@ -1,16 +1,21 @@
 package com.example.easycook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView.Adapter saucesAdapter;
     private RecyclerView.Adapter condAdapter;
 
+    private final String LOG_TAG = "HomeFragment";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,6 +60,23 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Button ingredientButton = view.findViewById(R.id.ingredientButton);
+        ingredientButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                // replace container view with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.home_container,ingredientFragment);
+
+                // add to back stack so user can navigate back
+                transaction.addToBackStack(null);
+
+                // make changes
+                transaction.commit();
+            }
+        });
 
         ArrayList<IngredientItem> ingredientList = new ArrayList<>();
         ArrayList<IngredientItem> meatList = new ArrayList<>();
@@ -148,5 +171,23 @@ public class HomeFragment extends Fragment {
         condRecyclerView.setHasFixedSize(true);
 
         return view;
+    }
+    // for debugging
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
     }
 }

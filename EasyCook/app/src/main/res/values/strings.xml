@@ -15,4 +15,10 @@
 
     <string name="explore_text">EXPLOREEEEE</string>
     <string name="settings_text">SETTINGSSSSS</string>
+
+    <string name="ingredient_type">Type of Ingredient</string>
+    <string name="ingredient_name">Ingredient</string>
+    <string name="ingredient_weight">Weight</string>
+    <string name="ingredient_expiry">Expiry</string>
+
 </resources>

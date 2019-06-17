@@ -7,192 +7,214 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <FrameLayout
+        android:id="@+id/home_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-1065dp"
-        tools:layout_editor_absoluteY="-418dp">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout2"
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="-1065dp"
+            tools:layout_editor_absoluteY="-418dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:layout_conversion_absoluteHeight="0dp"
+                tools:layout_conversion_absoluteWidth="411dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <TextView
+                    android:id="@+id/home_recipe_header"
+                    android:layout_width="0dp"
+                    android:layout_height="58dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/home_recipe_header"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="49dp"
+                    tools:layout_conversion_absoluteWidth="407dp" />
+
+
+
+                <TextView
+                    android:id="@+id/home_ingredient_header"
+                    android:layout_width="0dp"
+                    android:layout_height="67dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_header"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
+                    app:layout_constraintVertical_bias="0.0" />
+
+
+
+                <TextView
+                    android:id="@+id/home_ingredient_meat"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_meat"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/meat_recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_header" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/meat_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="495dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_grains"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_meat" />
+
+                <TextView
+                    android:id="@+id/home_ingredient_grains"
+                    android:layout_width="0dp"
+                    android:layout_height="65dp"
+                    android:text="@string/home_ingredient_grains"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/grains_recyclerView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/meat_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grains_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="507dp"
+                    android:layout_marginEnd="4dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_veg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_grains" />
+
+                <TextView
+                    android:id="@+id/home_ingredient_veg"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_veg"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/veg_recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/grains_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/veg_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="507dp"
+                    android:layout_marginEnd="4dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_dairy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_veg" />
+
+                <TextView
+                    android:id="@+id/home_ingredient_dairy"
+                    android:layout_width="0dp"
+                    android:layout_height="66dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_dairy"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/dairy_recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/veg_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dairy_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="507dp"
+                    android:layout_marginEnd="4dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_sauces"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_dairy" />
+
+                <TextView
+                    android:id="@+id/home_ingredient_sauces"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_sauces"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/sauces_recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dairy_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sauces_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="507dp"
+                    android:layout_marginEnd="4dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_condiment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces" />
+
+                <TextView
+                    android:id="@+id/home_ingredient_condiment"
+                    android:layout_width="0dp"
+                    android:layout_height="123dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/home_ingredient_condiment"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/cond_recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cond_recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="507dp"
+                    android:layout_marginEnd="4dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_condiment" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/recipeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="411dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            android:text="recipe" />
 
-            <TextView
-                android:id="@+id/home_recipe_header"
-                android:layout_width="0dp"
-                android:layout_height="58dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/home_recipe_header"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_conversion_absoluteHeight="49dp"
-                tools:layout_conversion_absoluteWidth="407dp" />
-
-            <TextView
-                android:id="@+id/home_ingredient_header"
-                android:layout_width="0dp"
-                android:layout_height="67dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_header"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/home_ingredient_meat"
-                android:layout_width="0dp"
-                android:layout_height="46dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_meat"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_header"
-                app:layout_constraintBottom_toTopOf="@+id/meat_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/meat_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="495dp"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_grains"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_meat" />
-
-            <TextView
-                android:id="@+id/home_ingredient_grains"
-                android:layout_width="0dp"
-                android:layout_height="65dp"
-                android:text="@string/home_ingredient_grains"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/meat_recyclerView"
-                app:layout_constraintBottom_toTopOf="@+id/grains_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/grains_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="507dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_grains"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_veg" />
-
-            <TextView
-                android:id="@+id/home_ingredient_veg"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_veg"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/grains_recyclerView"
-                app:layout_constraintBottom_toTopOf="@+id/veg_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/veg_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="507dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_veg"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_dairy" />
-
-            <TextView
-                android:id="@+id/home_ingredient_dairy"
-                android:layout_width="0dp"
-                android:layout_height="66dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_dairy"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/veg_recyclerView"
-                app:layout_constraintBottom_toTopOf="@+id/dairy_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dairy_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="507dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_dairy"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_sauces" />
-
-            <TextView
-                android:id="@+id/home_ingredient_sauces"
-                android:layout_width="0dp"
-                android:layout_height="46dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_sauces"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dairy_recyclerView"
-                app:layout_constraintBottom_toTopOf="@+id/sauces_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/sauces_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="507dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces"
-                app:layout_constraintBottom_toTopOf="@+id/home_ingredient_condiment" />
-
-            <TextView
-                android:id="@+id/home_ingredient_condiment"
-                android:layout_width="0dp"
-                android:layout_height="123dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/home_ingredient_condiment"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces"
-                app:layout_constraintBottom_toTopOf="@+id/cond_recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cond_recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="507dp"
-                android:layout_marginEnd="4dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_ingredient_condiment" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
+        <Button
+            android:id="@+id/ingredientButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingredient"
+            app:layout_constraintRight_toRightOf="parent" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
