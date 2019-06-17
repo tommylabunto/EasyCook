@@ -68,4 +68,16 @@ public class IngredientForm extends Fragment {
         super.onStop();
         Log.d(LOG_TAG, "onStop");
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(LOG_TAG, "onAttach");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(LOG_TAG, "onDetach");
+    }
 }

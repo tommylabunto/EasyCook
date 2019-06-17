@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO create form to 1. add ingredient  2. add recipe
-
+// TODO fix error -> old fragments still visible
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -189,5 +189,17 @@ public class HomeFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(LOG_TAG, "onAttach");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(LOG_TAG, "onDetach");
     }
 }
