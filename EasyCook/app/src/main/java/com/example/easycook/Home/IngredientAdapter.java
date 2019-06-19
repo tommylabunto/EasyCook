@@ -1,4 +1,4 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.easycook.R;
 
 import java.util.ArrayList;
 

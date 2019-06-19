@@ -1,4 +1,4 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
 import androidx.appcompat.app.AppCompatActivity;
 

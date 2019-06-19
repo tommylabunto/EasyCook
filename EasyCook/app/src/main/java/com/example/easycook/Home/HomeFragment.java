@@ -1,11 +1,8 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,13 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+
+import com.example.easycook.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-// TODO create form to 1. add ingredient (done) 2. add recipe
-// TODO pass information back to home fragment
+// TODO create form to 1. add recipe
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -51,6 +47,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView.Adapter saucesAdapter;
     private RecyclerView.Adapter condAdapter;
 
+    protected ArrayList<IngredientItem> ingredientList = new ArrayList<>();
+
     private final String LOG_TAG = "HomeFragment";
 
     public HomeFragment() {
@@ -71,7 +69,7 @@ public class HomeFragment extends Fragment {
                 IngredientForm ingredientFragment = new IngredientForm();
                 final FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container, ingredientFragment, "replaced");
+                transaction.replace(R.id.container, ingredientFragment);
 
                 // add to back stack so user can navigate back
                 transaction.addToBackStack(null);
@@ -81,7 +79,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ArrayList<IngredientItem> ingredientList = new ArrayList<>();
         ArrayList<IngredientItem> meatList = new ArrayList<>();
         ArrayList<IngredientItem> grainsList = new ArrayList<>();
         ArrayList<IngredientItem> vegList = new ArrayList<>();
@@ -176,6 +173,13 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    // update ingredient list with user input
+    public void createNewIngredient(String ingredientType, String ingredientName, int weight
+            , String expiry) {
+        ingredientList.add(new IngredientItem(ingredientType, ingredientName, weight
+                , expiry));
+
+    }
     // for debugging
     @Override
     public void onDestroy() {

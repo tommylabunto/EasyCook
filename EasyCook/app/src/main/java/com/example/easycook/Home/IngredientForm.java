@@ -1,4 +1,4 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,19 +6,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import com.example.easycook.R;
 
 // TODO replace type of ingredient from string input to spinner
 public class IngredientForm extends Fragment {
@@ -41,7 +42,7 @@ public class IngredientForm extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ingredient_form, container, false);
+        final View view = inflater.inflate(R.layout.fragment_ingredient_form, container, false);
 
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
@@ -50,7 +51,7 @@ public class IngredientForm extends Fragment {
         tickButton = view.findViewById(R.id.tick_button);
         tickButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view){
+            public void onClick(View v) {
                 // replace container view (the main activity container) with ingredient fragment
                 HomeFragment homeFragment = new HomeFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -61,6 +62,28 @@ public class IngredientForm extends Fragment {
 
                 // make changes
                 transaction.commit();
+
+                // get user input and list it in home fragment
+                EditText typeEditText = (EditText) view.findViewById(R.id.IngredientType_input);
+                EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
+                EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
+                EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+
+                String type = typeEditText.getText().toString();
+                String name = nameEditText.getText().toString();
+                String weight = weightEditText.getText().toString();
+                String date = dateEditText.getText().toString();
+
+                // if input is empty, go back to home fragment
+                if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
+                        || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
+                    // when fill in ingredient form, it attaches
+                    // and pauses home fragment (this is on top)
+                    fragmentManager.popBackStackImmediate();
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    homeFragment.createNewIngredient(type, name, Integer.parseInt(weight), date);
+                }
             }
         });
 
@@ -69,20 +92,9 @@ public class IngredientForm extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.popBackStackImmediate();
-                /*
-                // replace container view (the main activity container) with ingredient fragment
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container,homeFragment);
-
-                // add to back stack so user can navigate back
-                transaction.addToBackStack(null);
-
-                // make changes
-                transaction.commit();
-                */
             }
         });
         // Creates a new date picker fragment and show it.

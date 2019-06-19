@@ -1,4 +1,4 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
 
 import android.app.Activity;
@@ -9,15 +9,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.DialogFragment;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.TextView;
 
 import java.util.Calendar;
 

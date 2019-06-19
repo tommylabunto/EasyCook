@@ -1,4 +1,4 @@
-package com.example.easycook;
+package com.example.easycook.Explore;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,18 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.easycook.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {SettingsFragment.OnFragmentInteractionListener} interface
+ * { ExploreFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {SettingsFragment#newInstance} factory method to
+ * Use the {ExploreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class ExploreFragment extends Fragment {
 
-    public SettingsFragment() {
+    public ExploreFragment() {
         // Required empty public constructor
     }
 
@@ -29,7 +31,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return inflater.inflate(R.layout.fragment_explore, container, false);
     }
 
 }

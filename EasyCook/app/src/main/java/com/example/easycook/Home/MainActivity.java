@@ -1,25 +1,21 @@
-package com.example.easycook;
+package com.example.easycook.Home;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.easycook.Explore.ExploreFragment;
+import com.example.easycook.R;
+import com.example.easycook.Settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
-// TODO glide lib
+// TODO implement glide lib to cache image faster
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IngredientForm">
+    tools:context=".Home.IngredientForm">
 
     <FrameLayout
         android:id="@+id/form_container"
