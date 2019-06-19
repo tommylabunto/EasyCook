@@ -17,12 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO create form to 1. add ingredient  2. add recipe
-// TODO fix error -> old fragments still visible
+// TODO create form to 1. add ingredient (done) 2. add recipe
+// TODO pass information back to home fragment
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -66,11 +67,11 @@ public class HomeFragment extends Fragment {
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // replace container view with ingredient fragment
+                // replace container view (the main activity container) with ingredient fragment
                 IngredientForm ingredientFragment = new IngredientForm();
                 final FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.home_container, ingredientFragment);
+                transaction.replace(R.id.container, ingredientFragment, "replaced");
 
                 // add to back stack so user can navigate back
                 transaction.addToBackStack(null);

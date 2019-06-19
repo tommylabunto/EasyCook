@@ -24,6 +24,7 @@ import android.widget.Toast;
 public class IngredientForm extends Fragment {
 
     private Button tickButton;
+    private Button backButton;
     private EditText date;
     private String selectedDate;
 
@@ -50,16 +51,38 @@ public class IngredientForm extends Fragment {
         tickButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                // replace container view with ingredient fragment
+                // replace container view (the main activity container) with ingredient fragment
                 HomeFragment homeFragment = new HomeFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.form_container,homeFragment);
+                transaction.replace(R.id.container, homeFragment);
 
                 // add to back stack so user can navigate back
                 transaction.addToBackStack(null);
 
                 // make changes
                 transaction.commit();
+            }
+        });
+
+        // pressing back doesn't save any changes
+        backButton = view.findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.popBackStackImmediate();
+                /*
+                // replace container view (the main activity container) with ingredient fragment
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.container,homeFragment);
+
+                // add to back stack so user can navigate back
+                transaction.addToBackStack(null);
+
+                // make changes
+                transaction.commit();
+                */
             }
         });
         // Creates a new date picker fragment and show it.
