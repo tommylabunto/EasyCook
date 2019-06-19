@@ -1,9 +1,13 @@
 package com.example.easycook;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,14 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-// TODO replace weight input from string to int (change ingredientitem also)
 // TODO replace type of ingredient from string input to spinner
-// TODO replace expiry date from string input to date picker
-// TODO add hint for input fields
 public class IngredientForm extends Fragment {
 
+    private Button tickButton;
+    private EditText date;
+    private String selectedDate;
+
     private final String LOG_TAG = "IngredientForm";
+    // Used to identify the result
+    public static final int REQUEST_CODE = 11;
+    private OnFragmentInteractionListener mListener;
 
     public IngredientForm() {
         // Required empty public constructor
@@ -32,13 +42,17 @@ public class IngredientForm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredient_form, container, false);
 
-        Button tickButton = view.findViewById(R.id.tick_button);
+        // get fragment manager so we can launch from fragment
+        final FragmentManager fragmentManager = getFragmentManager();
+
+        // go back to home fragment
+        tickButton = view.findViewById(R.id.tick_button);
         tickButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 // replace container view with ingredient fragment
                 HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.form_container,homeFragment);
 
                 // add to back stack so user can navigate back
@@ -48,8 +62,27 @@ public class IngredientForm extends Fragment {
                 transaction.commit();
             }
         });
+        // Creates a new date picker fragment and show it.
+        date = view.findViewById(R.id.IngredientExpiry_input);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // create the datePickerFragment
+                AppCompatDialogFragment newFragment = new DatePickerFragment();
+                // set the targetFragment to receive the results, specifying the request code
+                newFragment.setTargetFragment(IngredientForm.this, REQUEST_CODE);
+                newFragment.show(fragmentManager,
+                        getString(R.string.datepicker));
+            }
+        });
         return view;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     // for debugging
     @Override
     public void onDestroy() {
@@ -70,14 +103,36 @@ public class IngredientForm extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // check for the results
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // get date from string
+            selectedDate = data.getStringExtra("selectedDate");
+            // set the value of the editText
+            date.setText(selectedDate);
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
         Log.d(LOG_TAG, "onAttach");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
         Log.d(LOG_TAG, "onDetach");
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
     }
 }

@@ -8,10 +8,10 @@ public class IngredientItem {
 
     private String ingredientType;
     private String ingredientName;
-    private String weight;
+    private int weight;
     private String expiry;
 
-    public IngredientItem(String ingredientType, String ingredientName, String weight
+    public IngredientItem(String ingredientType, String ingredientName, int weight
     , String expiry){
 
         this.ingredientType = ingredientType;
@@ -28,7 +28,7 @@ public class IngredientItem {
         return ingredientName;
     }
 
-    public String getWeight() {
+    public int getWeight() {
         return weight;
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -62,13 +63,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         Button ingredientButton = view.findViewById(R.id.ingredientButton);
-        ingredientButton.setOnClickListener(new View.OnClickListener(){
+        ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 // replace container view with ingredient fragment
                 IngredientForm ingredientFragment = new IngredientForm();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.home_container,ingredientFragment);
+                final FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.home_container, ingredientFragment);
 
                 // add to back stack so user can navigate back
                 transaction.addToBackStack(null);
@@ -86,18 +88,18 @@ public class HomeFragment extends Fragment {
         ArrayList<IngredientItem> saucesList = new ArrayList<>();
         ArrayList<IngredientItem> condList = new ArrayList<>();
 
-        ingredientList.add(new IngredientItem("Meat","Duck"
-                , "500", "1/1/2019"));
+        ingredientList.add(new IngredientItem("Meat", "Duck"
+                , 500, "1/1/2019"));
         ingredientList.add(new IngredientItem("Grains", "Rice"
-                , "500", "1/1/2019"));
+                , 500, "1/1/2019"));
         ingredientList.add(new IngredientItem("Vegetable", "Xiao Bai Cai"
-                , "500", "1/1/2019"));
+                , 500, "1/1/2019"));
         ingredientList.add(new IngredientItem("Dairy", "Milk"
-                , "500", "1/1/2019"));
+                , 500, "1/1/2019"));
         ingredientList.add(new IngredientItem("Sauces", "Soya sauce"
-                , "500", "1/1/2019"));
+                , 500, "1/1/2019"));
         ingredientList.add(new IngredientItem("Condiment", "Pepper"
-                , "500", "1/1/2019"));
+                , 500, "1/1/2019"));
 
         // Create recycler view
         meatRecyclerView = view.findViewById(R.id.meat_recyclerView);
@@ -172,6 +174,7 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
     // for debugging
     @Override
     public void onDestroy() {

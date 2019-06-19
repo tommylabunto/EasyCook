@@ -1,6 +1,8 @@
 package com.example.easycook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -9,36 +11,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-// TODO glade lib
-public class MainActivity extends AppCompatActivity {
+// TODO glide lib
+public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
-    final FragmentManager fragmentManager = getSupportFragmentManager();
+    private final String LOG_TAG = "MainActivity";
 
     // bottom navigation bar fragments
-    final Fragment homeFragment = new HomeFragment();
-    final Fragment exploreFragment = new ExploreFragment();
-    final Fragment settingsFragment = new SettingsFragment();
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment selectedFragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    fragmentManager.beginTransaction().replace(R.id.container,homeFragment).commit();
-                    return true;
+                    selectedFragment = new HomeFragment();
+                    break;
                 case R.id.navigation_explore:
-                    fragmentManager.beginTransaction().replace(R.id.container,exploreFragment).commit();
-                    return true;
+                    selectedFragment = new ExploreFragment();
+                    break;
                 case R.id.navigation_settings:
-                    fragmentManager.beginTransaction().replace(R.id.container,settingsFragment).commit();
-                    return true;
+                    selectedFragment = new SettingsFragment();
+                    break;
             }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, selectedFragment)
+                    .commit();
+
             return false;
         }
     };
@@ -52,6 +61,30 @@ public class MainActivity extends AppCompatActivity {
 
         // set start-up screen to home
         navView.setSelectedItemId(R.id.navigation_home);
+    }
+
+    // for debugging
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
 

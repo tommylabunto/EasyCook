@@ -21,4 +21,6 @@
     <string name="ingredient_weight">Weight</string>
     <string name="ingredient_expiry">Expiry</string>
 
+    <string name="date">Date:</string>
+    <string name="datepicker">datePicker</string>
 </resources>

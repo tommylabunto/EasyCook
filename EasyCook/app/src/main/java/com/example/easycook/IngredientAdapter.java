@@ -69,7 +69,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         IngredientItem currentItem = ingredientList.get(position);
 
         holder.ingredientName.setText(currentItem.getIngredientName());
-        holder.ingredientWeight.setText(currentItem.getWeight());
+        holder.ingredientWeight.setText("" + currentItem.getWeight());
     }
 
     /**

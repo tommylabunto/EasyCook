@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
@@ -50,8 +49,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="recipe"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/home_recipe_header"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -65,18 +64,18 @@
                     app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintRight_toLeftOf="@+id/ingredientButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintRight_toLeftOf="@+id/ingredientButton" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <Button
                     android:id="@+id/ingredientButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ingredient"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/home_ingredient_header"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recipeButton" />
 
                 <TextView
