@@ -5,8 +5,7 @@ import android.os.Bundle;
 
 import com.example.easycook.Explore.ExploreFragment;
 import com.example.easycook.Home.HomeFragment;
-import com.example.easycook.Home.IngredientForm;
-import com.example.easycook.R;
+import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.Settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 // TODO implement glide lib to cache image faster
+// TODO implement Firebase / sql lite
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";

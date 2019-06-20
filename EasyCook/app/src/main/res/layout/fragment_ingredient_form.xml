@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home.IngredientForm">
+    tools:context=".Home.Ingredient.IngredientForm">
 
     <FrameLayout
         android:id="@+id/form_container"
@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/tick_button"
+                android:id="@+id/tick_button_ingredient"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="44dp"
@@ -36,7 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/back_button"
+                android:id="@+id/back_button_ingredient"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_marginBottom="8dp"

@@ -1,4 +1,4 @@
-package com.example.easycook.Home;
+package com.example.easycook.Home.Ingredient;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.R;
 
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -76,7 +77,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         }
 
         // go back to home fragment
-        tickButton = view.findViewById(R.id.tick_button);
+        tickButton = view.findViewById(R.id.tick_button_ingredient);
         tickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +117,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         });
 
         // pressing back doesn't save any changes
-        backButton = view.findViewById(R.id.back_button);
+        backButton = view.findViewById(R.id.back_button_ingredient);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -39,6 +39,15 @@
                     tools:layout_conversion_absoluteHeight="49dp"
                     tools:layout_conversion_absoluteWidth="407dp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recipe_recyclerView"
+                    android:layout_width="406dp"
+                    android:layout_height="128dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_recipe_header" />
+
                 <Button
                     android:id="@+id/recipeButton"
                     android:layout_width="104dp"
@@ -67,9 +76,8 @@
                     android:id="@+id/ingredientButton"
                     android:layout_width="104dp"
                     android:layout_height="52dp"
+                    android:layout_marginRight="28dp"
                     android:text="Ingredient"
-                    app:layout_constraintHorizontal_bias="0.662"
-                    app:layout_constraintLeft_toRightOf="@+id/home_ingredient_header"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recipeButton" />
 

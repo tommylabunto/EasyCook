@@ -14,12 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.example.easycook.Home.Ingredient.IngredientAdapter;
+import com.example.easycook.Home.Ingredient.IngredientForm;
+import com.example.easycook.Home.Ingredient.IngredientItem;
+import com.example.easycook.Home.Recipe.RecipeAdapter;
+import com.example.easycook.Home.Recipe.RecipeForm;
+import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 
 import java.util.ArrayList;
 
-// TODO create form to 1. add recipe
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -32,6 +38,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView dairyRecyclerView;
     private RecyclerView saucesRecyclerView;
     private RecyclerView condRecyclerView;
+    private RecyclerView recipeRecyclerView;
 
     private RecyclerView.LayoutManager meatLayoutManager;
     private RecyclerView.LayoutManager grainsLayoutManager;
@@ -39,6 +46,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager dairyLayoutManager;
     private RecyclerView.LayoutManager saucesLayoutManager;
     private RecyclerView.LayoutManager condLayoutManager;
+    private RecyclerView.LayoutManager recipeLayoutManager;
 
     private RecyclerView.Adapter meatAdapter;
     private RecyclerView.Adapter grainsAdapter;
@@ -46,8 +54,10 @@ public class HomeFragment extends Fragment {
     private RecyclerView.Adapter dairyAdapter;
     private RecyclerView.Adapter saucesAdapter;
     private RecyclerView.Adapter condAdapter;
+    private RecyclerView.Adapter recipeAdapter;
 
     protected ArrayList<IngredientItem> ingredientList = new ArrayList<>();
+    protected ArrayList<RecipeItem> recipeList = new ArrayList<>();
 
     private final String LOG_TAG = "HomeFragment";
 
@@ -70,6 +80,24 @@ public class HomeFragment extends Fragment {
                 final FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.container, ingredientFragment);
+
+                // add to back stack so user can navigate back
+                transaction.addToBackStack(null);
+
+                // make changes
+                transaction.commit();
+            }
+        });
+
+        Button recipeButton = view.findViewById(R.id.recipeButton);
+        recipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // replace container view (the main activity container) with recipe fragment
+                RecipeForm recipeForm = new RecipeForm();
+                final FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.container, recipeForm);
 
                 // add to back stack so user can navigate back
                 transaction.addToBackStack(null);
@@ -170,6 +198,23 @@ public class HomeFragment extends Fragment {
         saucesRecyclerView.setHasFixedSize(true);
         condRecyclerView.setHasFixedSize(true);
 
+        // Create recycler view
+        recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
+
+        // Create layout manager
+        recipeLayoutManager = new LinearLayoutManager(getContext());
+
+        // Create an adapter and supply the data to be displayed.
+        recipeAdapter = new RecipeAdapter(getContext(), recipeList);
+
+        // Give the recycler view a default layout manager.
+        recipeRecyclerView.setLayoutManager(recipeLayoutManager);
+
+        // Connect the adapter with the recycler view.
+        recipeRecyclerView.setAdapter(recipeAdapter);
+
+        recipeRecyclerView.setHasFixedSize(true);
+
         return view;
     }
 
@@ -180,6 +225,12 @@ public class HomeFragment extends Fragment {
                 , expiry));
 
     }
+
+    // update recipe list with user input
+    public void createNewRecipe(String ingredient, String preparation) {
+        recipeList.add(new RecipeItem(ingredient, preparation));
+    }
+
     // for debugging
     @Override
     public void onDestroy() {
