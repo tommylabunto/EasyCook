@@ -1,9 +1,11 @@
-package com.example.easycook.Home;
+package com.example.easycook;
 
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.easycook.Explore.ExploreFragment;
+import com.example.easycook.Home.HomeFragment;
+import com.example.easycook.Home.IngredientForm;
 import com.example.easycook.R;
 import com.example.easycook.Settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

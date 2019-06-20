@@ -16,13 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.easycook.R;
 
-// TODO replace type of ingredient from string input to spinner
-public class IngredientForm extends Fragment {
+public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private Button tickButton;
     private Button backButton;
@@ -47,9 +49,35 @@ public class IngredientForm extends Fragment {
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
 
+        // Create the spinner.
+        // set it as listener
+        Spinner spinner = view.findViewById(R.id.IngredientType_input);
+        if (spinner != null) {
+            spinner.setOnItemSelectedListener(this);
+        }
+
+        // Create an ArrayAdapter using the string array and default spinner
+        // layout.
+        // ArrayAdapter connects array of spinner items to spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getContext(),
+                // string array in strings.xml
+                R.array.ingredients_array,
+                // default Android supplied
+                android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner.
+        if (spinner != null) {
+            spinner.setAdapter(adapter);
+        }
+
         // go back to home fragment
         tickButton = view.findViewById(R.id.tick_button);
-        tickButton.setOnClickListener(new View.OnClickListener(){
+        tickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // replace container view (the main activity container) with ingredient fragment
@@ -64,12 +92,12 @@ public class IngredientForm extends Fragment {
                 transaction.commit();
 
                 // get user input and list it in home fragment
-                EditText typeEditText = (EditText) view.findViewById(R.id.IngredientType_input);
+                Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
                 EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
                 EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
                 EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
 
-                String type = typeEditText.getText().toString();
+                String type = typeEditText.getSelectedItem().toString();
                 String name = nameEditText.getText().toString();
                 String weight = weightEditText.getText().toString();
                 String date = dateEditText.getText().toString();
@@ -170,4 +198,18 @@ public class IngredientForm extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
+    // for spinner
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView,
+                               View view, int i, long l) {
+        String spinnerLabel = adapterView.getItemAtPosition(i).toString();
+    }
+
+    // Interface callback for when no spinner item is selected.
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        // Do nothing.
+    }
+
 }

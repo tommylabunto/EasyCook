@@ -23,4 +23,14 @@
 
     <string name="date">Date:</string>
     <string name="datepicker">datePicker</string>
+
+    <string-array name="ingredients_array">
+        <item>Meat</item>
+        <item>Grains</item>
+        <item>Vegetable</item>
+        <item>Dairy</item>
+        <item>Sauces</item>
+        <item>Condiment</item>
+    </string-array>
+
 </resources>
