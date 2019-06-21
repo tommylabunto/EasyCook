@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1016789155182",
+    "firebase_url": "https://orbital-805e9.firebaseio.com",
+    "project_id": "orbital-805e9",
+    "storage_bucket": "orbital-805e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016789155182:android:e1d409a0b9ea627d",
+        "android_client_info": {
+          "package_name": "com.example.easycook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1016789155182-j5ljh4g2tu89il1ife2p7rmfsi4en49r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.easycook",
+            "certificate_hash": "30fce87c9f4a20eb7fc13524c432282fadb835de"
+          }
+        },
+        {
+          "client_id": "1016789155182-mkfcpcb6cvedlcr10p7mbflaljl0tapv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBLsGWNqh7pX6MA4_FMXXAPrmqnu5Ft88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1016789155182-mkfcpcb6cvedlcr10p7mbflaljl0tapv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
