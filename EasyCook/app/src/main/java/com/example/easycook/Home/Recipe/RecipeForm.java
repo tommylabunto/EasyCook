@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.easycook.Home.HomeFragment;
+import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class RecipeForm extends Fragment {
@@ -46,25 +50,24 @@ public class RecipeForm extends Fragment {
         tickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // replace container view (the main activity container) with home fragment
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container, homeFragment);
-
-                // add to back stack so user can navigate back
-                transaction.addToBackStack(null);
-
-                // make changes
-                transaction.commit();
 
                 // get user input and list it in home fragment
+                EditText nameEditText = (EditText) view.findViewById(R.id.recipe_name_input);
                 EditText ingredientEditText = (EditText) view.findViewById(R.id.ingredient_list_input);
                 EditText preparationEditText = (EditText) view.findViewById(R.id.preparation_input);
 
+                String name = nameEditText.getText().toString();
                 String ingredient = ingredientEditText.getText().toString();
                 String preparation = preparationEditText.getText().toString();
 
-                homeFragment.createNewRecipe(ingredient, preparation);
+                // if input is empty, go back to home fragment
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
+                        || TextUtils.isEmpty(preparation)) {
+                } else {
+                    // add into firestore
+                    addRecipe(name, ingredient, preparation);
+                }
+                backToHome(fragmentManager);
             }
         });
 
@@ -74,20 +77,38 @@ public class RecipeForm extends Fragment {
             @Override
             public void onClick(View view) {
 
-                final FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.popBackStackImmediate();
             }
         });
         return view;
     }
 
+    public void addRecipe(String name, String ingredient, String preparation) {
+        CollectionReference myRecipe = FirebaseFirestore.getInstance()
+                .collection("my_recipe");
+        myRecipe.add(new RecipeItem(name, ingredient, preparation));
 
+    }
+
+    public void backToHome(FragmentManager fragmentManager) {
+        // replace container view (the main activity container) with home fragment
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, homeFragment);
+
+        // add to back stack so user can navigate back
+        transaction.addToBackStack(null);
+
+        // make changes
+        transaction.commit();
+    }
+
+    // for debugging
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    // for debugging
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -117,5 +138,4 @@ public class RecipeForm extends Fragment {
         super.onDetach();
         Log.d(LOG_TAG, "onDetach");
     }
-
 }

@@ -23,15 +23,26 @@ import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
+// TODO implement onclick and swipe
+// TODO do the same for recipe
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
  */
 public class HomeFragment extends Fragment {
 
+    private final String LOG_TAG = "HomeFragment";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // to show recycler view
     private RecyclerView meatRecyclerView;
     private RecyclerView grainsRecyclerView;
     private RecyclerView vegRecyclerView;
@@ -40,26 +51,37 @@ public class HomeFragment extends Fragment {
     private RecyclerView condRecyclerView;
     private RecyclerView recipeRecyclerView;
 
-    private RecyclerView.LayoutManager meatLayoutManager;
-    private RecyclerView.LayoutManager grainsLayoutManager;
-    private RecyclerView.LayoutManager vegLayoutManager;
-    private RecyclerView.LayoutManager dairyLayoutManager;
-    private RecyclerView.LayoutManager saucesLayoutManager;
-    private RecyclerView.LayoutManager condLayoutManager;
-    private RecyclerView.LayoutManager recipeLayoutManager;
+    private CollectionReference meatRef;
+    private CollectionReference grainsRef;
+    private CollectionReference vegRef;
+    private CollectionReference dairyRef;
+    private CollectionReference saucesRef;
+    private CollectionReference condRef;
+    private CollectionReference recipeRef;
 
-    private RecyclerView.Adapter meatAdapter;
-    private RecyclerView.Adapter grainsAdapter;
-    private RecyclerView.Adapter vegAdapter;
-    private RecyclerView.Adapter dairyAdapter;
-    private RecyclerView.Adapter saucesAdapter;
-    private RecyclerView.Adapter condAdapter;
-    private RecyclerView.Adapter recipeAdapter;
+    private IngredientAdapter meatAdapter;
+    private IngredientAdapter grainsAdapter;
+    private IngredientAdapter vegAdapter;
+    private IngredientAdapter dairyAdapter;
+    private IngredientAdapter saucesAdapter;
+    private IngredientAdapter condAdapter;
+    private RecipeAdapter recipeAdapter;
 
-    protected ArrayList<IngredientItem> ingredientList = new ArrayList<>();
-    protected ArrayList<RecipeItem> recipeList = new ArrayList<>();
+    private Query meatQuery;
+    private Query grainsQuery;
+    private Query vegQuery;
+    private Query dairyQuery;
+    private Query saucesQuery;
+    private Query condQuery;
+    private Query recipeQuery;
 
-    private final String LOG_TAG = "HomeFragment";
+    private FirestoreRecyclerOptions<IngredientItem> meatOptions;
+    private FirestoreRecyclerOptions<IngredientItem> grainsOptions;
+    private FirestoreRecyclerOptions<IngredientItem> vegOptions;
+    private FirestoreRecyclerOptions<IngredientItem> dairyOptions;
+    private FirestoreRecyclerOptions<IngredientItem> saucesOptions;
+    private FirestoreRecyclerOptions<IngredientItem> condOptions;
+    private FirestoreRecyclerOptions<RecipeItem> recipeOptions;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -71,13 +93,17 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // get fragment manager so we can launch from fragment
+        final FragmentManager fragmentManager = getFragmentManager();
+
+        // when click ingredient button
         Button ingredientButton = view.findViewById(R.id.ingredientButton);
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // replace container view (the main activity container) with ingredient fragment
                 IngredientForm ingredientFragment = new IngredientForm();
-                final FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.container, ingredientFragment);
 
@@ -89,13 +115,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // when click recipe button
         Button recipeButton = view.findViewById(R.id.recipeButton);
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // replace container view (the main activity container) with recipe fragment
                 RecipeForm recipeForm = new RecipeForm();
-                final FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.container, recipeForm);
 
@@ -107,130 +134,102 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ArrayList<IngredientItem> meatList = new ArrayList<>();
-        ArrayList<IngredientItem> grainsList = new ArrayList<>();
-        ArrayList<IngredientItem> vegList = new ArrayList<>();
-        ArrayList<IngredientItem> dairyList = new ArrayList<>();
-        ArrayList<IngredientItem> saucesList = new ArrayList<>();
-        ArrayList<IngredientItem> condList = new ArrayList<>();
+        showRecyclerView(view);
 
-        ingredientList.add(new IngredientItem("Meat", "Duck"
-                , 500, "1/1/2019"));
-        ingredientList.add(new IngredientItem("Grains", "Rice"
-                , 500, "1/1/2019"));
-        ingredientList.add(new IngredientItem("Vegetable", "Xiao Bai Cai"
-                , 500, "1/1/2019"));
-        ingredientList.add(new IngredientItem("Dairy", "Milk"
-                , 500, "1/1/2019"));
-        ingredientList.add(new IngredientItem("Sauces", "Soya sauce"
-                , 500, "1/1/2019"));
-        ingredientList.add(new IngredientItem("Condiment", "Pepper"
-                , 500, "1/1/2019"));
-
-        // Create recycler view
-        meatRecyclerView = view.findViewById(R.id.meat_recyclerView);
-        grainsRecyclerView = view.findViewById(R.id.grains_recyclerView);
-        vegRecyclerView = view.findViewById(R.id.veg_recyclerView);
-        dairyRecyclerView = view.findViewById(R.id.dairy_recyclerView);
-        saucesRecyclerView = view.findViewById(R.id.sauces_recyclerView);
-        condRecyclerView = view.findViewById(R.id.cond_recyclerView);
-
-        // Create layout manager
-        meatLayoutManager = new LinearLayoutManager(getContext());
-        grainsLayoutManager = new LinearLayoutManager(getContext());
-        vegLayoutManager = new LinearLayoutManager(getContext());
-        dairyLayoutManager = new LinearLayoutManager(getContext());
-        saucesLayoutManager = new LinearLayoutManager(getContext());
-        condLayoutManager = new LinearLayoutManager(getContext());
-
-        // sort ingredients
-        for (int i = 0; i < ingredientList.size(); i++) {
-            switch (ingredientList.get(i).getIngredientType()) {
-                case "Meat":
-                    meatList.add(ingredientList.get(i));
-                    continue;
-                case "Grains":
-                    grainsList.add(ingredientList.get(i));
-                    continue;
-                case "Vegetable":
-                    vegList.add(ingredientList.get(i));
-                    continue;
-                case "Dairy":
-                    dairyList.add(ingredientList.get(i));
-                    continue;
-                case "Sauces":
-                    saucesList.add(ingredientList.get(i));
-                    continue;
-                case "Condiment":
-                    condList.add(ingredientList.get(i));
-                    continue;
-            }
-        }
-
-        // Create an adapter and supply the data to be displayed.
-        meatAdapter = new IngredientAdapter(getContext(), meatList);
-        grainsAdapter = new IngredientAdapter(getContext(), grainsList);
-        vegAdapter = new IngredientAdapter(getContext(), vegList);
-        dairyAdapter = new IngredientAdapter(getContext(), dairyList);
-        saucesAdapter = new IngredientAdapter(getContext(), saucesList);
-        condAdapter = new IngredientAdapter(getContext(), condList);
-
-        // Give the recycler view a default layout manager.
-        meatRecyclerView.setLayoutManager(meatLayoutManager);
-        grainsRecyclerView.setLayoutManager(grainsLayoutManager);
-        vegRecyclerView.setLayoutManager(vegLayoutManager);
-        dairyRecyclerView.setLayoutManager(dairyLayoutManager);
-        saucesRecyclerView.setLayoutManager(saucesLayoutManager);
-        condRecyclerView.setLayoutManager(condLayoutManager);
-
-        // Connect the adapter with the recycler view.
-        meatRecyclerView.setAdapter(meatAdapter);
-        grainsRecyclerView.setAdapter(grainsAdapter);
-        vegRecyclerView.setAdapter(vegAdapter);
-        dairyRecyclerView.setAdapter(dairyAdapter);
-        saucesRecyclerView.setAdapter(saucesAdapter);
-        condRecyclerView.setAdapter(condAdapter);
-
-        meatRecyclerView.setHasFixedSize(true);
-        grainsRecyclerView.setHasFixedSize(true);
-        vegRecyclerView.setHasFixedSize(true);
-        dairyRecyclerView.setHasFixedSize(true);
-        saucesRecyclerView.setHasFixedSize(true);
-        condRecyclerView.setHasFixedSize(true);
-
-        // Create recycler view
-        recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
-
-        // Create layout manager
-        recipeLayoutManager = new LinearLayoutManager(getContext());
-
-        // Create an adapter and supply the data to be displayed.
-        recipeAdapter = new RecipeAdapter(getContext(), recipeList);
-
-        // Give the recycler view a default layout manager.
-        recipeRecyclerView.setLayoutManager(recipeLayoutManager);
-
-        // Connect the adapter with the recycler view.
-        recipeRecyclerView.setAdapter(recipeAdapter);
-
-        recipeRecyclerView.setHasFixedSize(true);
+        // this causes the error of recycler view only appearing
+        // if click on ingredient form (but don't fill in anything)
+        //meatRecyclerView.setHasFixedSize(true);
 
         return view;
     }
 
-    // update ingredient list with user input
-    public void createNewIngredient(String ingredientType, String ingredientName, int weight
-            , String expiry) {
-        ingredientList.add(new IngredientItem(ingredientType, ingredientName, weight
-                , expiry));
+    public void showRecyclerView(View view) {
+
+        // meat
+        meatRef = db.collection("ingredient_meat");
+        meatQuery = meatRef;
+        meatOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(meatQuery, IngredientItem.class)
+                .build();
+
+        meatAdapter = new IngredientAdapter(meatOptions);
+        meatRecyclerView = view.findViewById(R.id.meat_recyclerView);
+        meatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        meatRecyclerView.setAdapter(meatAdapter);
+
+        // grains
+        grainsRef = db.collection("ingredient_grains");
+        grainsQuery = grainsRef;
+        grainsOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(grainsQuery, IngredientItem.class)
+                .build();
+
+        grainsAdapter = new IngredientAdapter(grainsOptions);
+        grainsRecyclerView = view.findViewById(R.id.grains_recyclerView);
+        grainsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        grainsRecyclerView.setAdapter(grainsAdapter);
+
+        // veg
+        vegRef = db.collection("ingredient_vegetable");
+        vegQuery = vegRef;
+        vegOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(vegQuery, IngredientItem.class)
+                .build();
+
+        vegAdapter = new IngredientAdapter(vegOptions);
+        vegRecyclerView = view.findViewById(R.id.veg_recyclerView);
+        vegRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        vegRecyclerView.setAdapter(vegAdapter);
+
+        // dairy
+        dairyRef = db.collection("ingredient_dairy");
+        dairyQuery = dairyRef;
+        dairyOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(dairyQuery, IngredientItem.class)
+                .build();
+
+        dairyAdapter = new IngredientAdapter(dairyOptions);
+        dairyRecyclerView = view.findViewById(R.id.dairy_recyclerView);
+        dairyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        dairyRecyclerView.setAdapter(dairyAdapter);
+
+        // sauces
+        saucesRef = db.collection("ingredient_sauces");
+        saucesQuery = saucesRef;
+        saucesOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(saucesQuery, IngredientItem.class)
+                .build();
+
+        saucesAdapter = new IngredientAdapter(saucesOptions);
+        saucesRecyclerView = view.findViewById(R.id.sauces_recyclerView);
+        saucesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        saucesRecyclerView.setAdapter(saucesAdapter);
+
+        // condiment
+        condRef = db.collection("ingredient_condiment");
+        condQuery = condRef;
+        condOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
+                .setQuery(condQuery, IngredientItem.class)
+                .build();
+
+        condAdapter = new IngredientAdapter(condOptions);
+        condRecyclerView = view.findViewById(R.id.cond_recyclerView);
+        condRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        condRecyclerView.setAdapter(condAdapter);
+
+        // recipe
+        recipeRef = db.collection("my_recipe");
+        recipeQuery = recipeRef;
+        recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(recipeQuery, RecipeItem.class)
+                .build();
+
+        recipeAdapter = new RecipeAdapter(recipeOptions);
+        recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
+        recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recipeRecyclerView.setAdapter(recipeAdapter);
 
     }
-
-    // update recipe list with user input
-    public void createNewRecipe(String ingredient, String preparation) {
-        recipeList.add(new RecipeItem(ingredient, preparation));
-    }
-
     // for debugging
     @Override
     public void onDestroy() {
@@ -245,8 +244,28 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        meatAdapter.startListening();
+        grainsAdapter.startListening();
+        vegAdapter.startListening();
+        dairyAdapter.startListening();
+        saucesAdapter.startListening();
+        condAdapter.startListening();
+        recipeAdapter.startListening();
+        Log.d(LOG_TAG, "onStart");
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
+        meatAdapter.stopListening();
+        grainsAdapter.stopListening();
+        vegAdapter.stopListening();
+        dairyAdapter.stopListening();
+        saucesAdapter.stopListening();
+        condAdapter.stopListening();
+        recipeAdapter.stopListening();
         Log.d(LOG_TAG, "onStop");
     }
 

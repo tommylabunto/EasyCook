@@ -24,6 +24,8 @@ import android.widget.Spinner;
 
 import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -50,6 +52,45 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
 
+        // when done, go back to home fragment
+        tickButton = view.findViewById(R.id.tick_button_ingredient);
+        tickButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // get user input and list it in home fragment
+                Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
+                EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
+                EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
+                EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+
+                String type = typeEditText.getSelectedItem().toString();
+                String name = nameEditText.getText().toString();
+                String weight = weightEditText.getText().toString();
+                String date = dateEditText.getText().toString();
+
+                // if input is empty, go back to home fragment
+                if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
+                        || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
+                } else {
+                    // sort ingredient by type and add into firestore accordingly
+                    sortIngredient(type, name, weight, date);
+                }
+                backToHome(fragmentManager);
+            }
+        });
+
+        // pressing back doesn't save any changes
+        backButton = view.findViewById(R.id.back_button_ingredient);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.popBackStackImmediate();
+            }
+        });
+
         // Create the spinner.
         // set it as listener
         Spinner spinner = view.findViewById(R.id.IngredientType_input);
@@ -57,6 +98,73 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
             spinner.setOnItemSelectedListener(this);
         }
 
+        createSpinner(spinner);
+
+        // Creates a new date picker fragment and show it.
+        date = view.findViewById(R.id.IngredientExpiry_input);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // create the datePickerFragment
+                AppCompatDialogFragment newFragment = new DatePickerFragment();
+                // set the targetFragment to receive the results, specifying the request code
+                newFragment.setTargetFragment(IngredientForm.this, REQUEST_CODE);
+                newFragment.show(fragmentManager,
+                        getString(R.string.datepicker));
+            }
+        });
+        return view;
+    }
+
+    public void sortIngredient(String type, String name, String weight, String date) {
+        switch (type) {
+            case ("Meat"):
+                CollectionReference meatRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_meat");
+                meatRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+            case ("Grains"):
+                CollectionReference grainsRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_grains");
+                grainsRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+            case ("Vegetable"):
+                CollectionReference vegRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_vegetable");
+                vegRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+            case ("Dairy"):
+                CollectionReference dairyRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_dairy");
+                dairyRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+            case ("Sauces"):
+                CollectionReference saucesRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_sauces");
+                saucesRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+            case ("Condiment"):
+                CollectionReference condRef = FirebaseFirestore.getInstance()
+                        .collection("ingredient_condiment");
+                condRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                break;
+        }
+    }
+
+    public void backToHome(FragmentManager fragmentManager) {
+        // replace container view (the main activity container) with ingredient fragment
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, homeFragment);
+
+        // add to back stack so user can navigate back
+        transaction.addToBackStack(null);
+
+        // make changes
+        transaction.commit();
+    }
+
+    public void createSpinner(Spinner spinner) {
         // Create an ArrayAdapter using the string array and default spinner
         // layout.
         // ArrayAdapter connects array of spinner items to spinner
@@ -75,79 +183,14 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         if (spinner != null) {
             spinner.setAdapter(adapter);
         }
-
-        // go back to home fragment
-        tickButton = view.findViewById(R.id.tick_button_ingredient);
-        tickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // replace container view (the main activity container) with ingredient fragment
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container, homeFragment);
-
-                // add to back stack so user can navigate back
-                transaction.addToBackStack(null);
-
-                // make changes
-                transaction.commit();
-
-                // get user input and list it in home fragment
-                Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
-                EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
-                EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
-                EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
-
-                String type = typeEditText.getSelectedItem().toString();
-                String name = nameEditText.getText().toString();
-                String weight = weightEditText.getText().toString();
-                String date = dateEditText.getText().toString();
-
-                // if input is empty, go back to home fragment
-                if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
-                        || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
-                    // when fill in ingredient form, it attaches
-                    // and pauses home fragment (this is on top)
-                    fragmentManager.popBackStackImmediate();
-                    fragmentManager.popBackStackImmediate();
-                } else {
-                    homeFragment.createNewIngredient(type, name, Integer.parseInt(weight), date);
-                }
-            }
-        });
-
-        // pressing back doesn't save any changes
-        backButton = view.findViewById(R.id.back_button_ingredient);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStackImmediate();
-            }
-        });
-        // Creates a new date picker fragment and show it.
-        date = view.findViewById(R.id.IngredientExpiry_input);
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // create the datePickerFragment
-                AppCompatDialogFragment newFragment = new DatePickerFragment();
-                // set the targetFragment to receive the results, specifying the request code
-                newFragment.setTargetFragment(IngredientForm.this, REQUEST_CODE);
-                newFragment.show(fragmentManager,
-                        getString(R.string.datepicker));
-            }
-        });
-        return view;
     }
 
+    // for debugging
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    // for debugging
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -200,7 +243,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         void onFragmentInteraction(Uri uri);
     }
 
-    // for spinner
+    // for spinner (date)
     @Override
     public void onItemSelected(AdapterView<?> adapterView,
                                View view, int i, long l) {

@@ -11,6 +11,10 @@ public class IngredientItem {
     private int weight;
     private String expiry;
 
+    // no argument constructor
+    public IngredientItem() {
+    }
+
     public IngredientItem(String ingredientType, String ingredientName, int weight
     , String expiry){
 

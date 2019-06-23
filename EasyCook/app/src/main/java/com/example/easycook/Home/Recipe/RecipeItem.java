@@ -1,17 +1,23 @@
 package com.example.easycook.Home.Recipe;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.widget.ImageView;
-
 public class RecipeItem {
 
+    private String name;
     private String ingredient;
     private String preparation;
 
-    public RecipeItem(String ingredient, String preparation) {
+    // no argument constructor
+    public RecipeItem() {
+    }
+
+    public RecipeItem(String name, String ingredient, String preparation) {
+        this.name = name;
         this.ingredient = ingredient;
         this.preparation = preparation;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getIngredient() {
