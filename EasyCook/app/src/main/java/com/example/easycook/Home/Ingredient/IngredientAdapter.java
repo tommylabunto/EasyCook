@@ -34,6 +34,10 @@ public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientItem, 
         ingredientViewHolder.ingredientWeight.setText(String.valueOf(ingredientItem.getWeight()));
     }
 
+    public void deleteItem(int position) {
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
     /**
      * Creates a new custom view holder to hold the view to display in
      * the RecyclerView.

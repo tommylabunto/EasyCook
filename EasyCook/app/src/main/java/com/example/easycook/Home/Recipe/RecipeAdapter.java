@@ -32,6 +32,10 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
         recipeViewHolder.recipeName.setText(recipeItem.getName());
     }
 
+    public void deleteItem(int position) {
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
     /**
      * Creates a new custom view holder to hold the view to display in
      * the RecyclerView.

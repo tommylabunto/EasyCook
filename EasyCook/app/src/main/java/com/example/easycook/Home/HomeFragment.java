@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,8 +31,10 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
+// TODO add background color for item & make smaller
 // TODO implement onclick and swipe
 // TODO do the same for recipe
+// TODO cannot see text when typing
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -157,6 +160,21 @@ public class HomeFragment extends Fragment {
         meatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         meatRecyclerView.setAdapter(meatAdapter);
 
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView meatRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                meatAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(meatRecyclerView);
+
+
         // grains
         grainsRef = db.collection("ingredient_grains");
         grainsQuery = grainsRef;
@@ -168,6 +186,20 @@ public class HomeFragment extends Fragment {
         grainsRecyclerView = view.findViewById(R.id.grains_recyclerView);
         grainsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         grainsRecyclerView.setAdapter(grainsAdapter);
+
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView grainsRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                grainsAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(grainsRecyclerView);
 
         // veg
         vegRef = db.collection("ingredient_vegetable");
@@ -181,6 +213,20 @@ public class HomeFragment extends Fragment {
         vegRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         vegRecyclerView.setAdapter(vegAdapter);
 
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView vegRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                vegAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(vegRecyclerView);
+
         // dairy
         dairyRef = db.collection("ingredient_dairy");
         dairyQuery = dairyRef;
@@ -192,6 +238,20 @@ public class HomeFragment extends Fragment {
         dairyRecyclerView = view.findViewById(R.id.dairy_recyclerView);
         dairyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dairyRecyclerView.setAdapter(dairyAdapter);
+
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView dairyRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                dairyAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(dairyRecyclerView);
 
         // sauces
         saucesRef = db.collection("ingredient_sauces");
@@ -205,6 +265,20 @@ public class HomeFragment extends Fragment {
         saucesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         saucesRecyclerView.setAdapter(saucesAdapter);
 
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView saucesRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                saucesAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(saucesRecyclerView);
+
         // condiment
         condRef = db.collection("ingredient_condiment");
         condQuery = condRef;
@@ -217,6 +291,20 @@ public class HomeFragment extends Fragment {
         condRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         condRecyclerView.setAdapter(condAdapter);
 
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView condRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                condAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(condRecyclerView);
+
         // recipe
         recipeRef = db.collection("my_recipe");
         recipeQuery = recipeRef;
@@ -228,6 +316,20 @@ public class HomeFragment extends Fragment {
         recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recipeRecyclerView.setAdapter(recipeAdapter);
+
+        // delete when swipe left/right
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recipeRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                recipeAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recipeRecyclerView);
 
     }
     // for debugging
