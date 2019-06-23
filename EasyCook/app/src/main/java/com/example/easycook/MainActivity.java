@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 // TODO implement glide lib to cache image faster
-// TODO implement Firebase / sql lite
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";

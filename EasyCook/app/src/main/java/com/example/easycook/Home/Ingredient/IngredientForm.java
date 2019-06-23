@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -24,20 +25,35 @@ import android.widget.Spinner;
 
 import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
+
+    private final String LOG_TAG = "IngredientForm";
 
     private Button tickButton;
     private Button backButton;
     private EditText date;
     private String selectedDate;
 
-    private final String LOG_TAG = "IngredientForm";
+    // for date picker
     // Used to identify the result
     public static final int REQUEST_CODE = 11;
     private OnFragmentInteractionListener mListener;
+
+    // for spinner
+    private ArrayAdapter<CharSequence> adapter;
+
+    // referenced passed from home fragment
+    private IngredientItem ingredient;
+    private String id;
+    private String path;
 
     public IngredientForm() {
         // Required empty public constructor
@@ -51,6 +67,18 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
+
+        // Create the spinner.
+        // set it as listener
+        Spinner spinner = view.findViewById(R.id.IngredientType_input);
+        if (spinner != null) {
+            spinner.setOnItemSelectedListener(this);
+        }
+
+        createSpinner(spinner);
+
+        // if snapshot exist, populate screen with data
+        checkIfSnapshotExist(view);
 
         // when done, go back to home fragment
         tickButton = view.findViewById(R.id.tick_button_ingredient);
@@ -91,15 +119,6 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
             }
         });
 
-        // Create the spinner.
-        // set it as listener
-        Spinner spinner = view.findViewById(R.id.IngredientType_input);
-        if (spinner != null) {
-            spinner.setOnItemSelectedListener(this);
-        }
-
-        createSpinner(spinner);
-
         // Creates a new date picker fragment and show it.
         date = view.findViewById(R.id.IngredientExpiry_input);
         date.setOnClickListener(new View.OnClickListener() {
@@ -116,37 +135,109 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         return view;
     }
 
+    public void checkIfSnapshotExist(final View view) {
+
+        if (path != null) {
+            DocumentReference docIdRef = FirebaseFirestore.getInstance().document(path);
+            docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+
+                            Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
+                            EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
+                            EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
+                            EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+
+                            if (ingredient != null) {
+                                int spinnerPosition = adapter.getPosition(ingredient.getIngredientType());
+                                typeEditText.setSelection(spinnerPosition);
+                            }
+                            nameEditText.setText(ingredient.getIngredientName());
+                            weightEditText.setText("" + ingredient.getWeight());
+                            dateEditText.setText(ingredient.getExpiry());
+
+                            Log.d(LOG_TAG, "Document exists!");
+                        } else {
+                            Log.d(LOG_TAG, "Document does not exist!");
+                        }
+                    } else {
+                        Log.d(LOG_TAG, "Failed with: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
     public void sortIngredient(String type, String name, String weight, String date) {
         switch (type) {
             case ("Meat"):
-                CollectionReference meatRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_meat");
-                meatRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference meatRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_meat");
+                    meatRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference meatRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_meat");
+                    meatRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
             case ("Grains"):
-                CollectionReference grainsRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_grains");
-                grainsRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference grainsRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_grains");
+                    grainsRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference grainsRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_grains");
+                    grainsRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
             case ("Vegetable"):
-                CollectionReference vegRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_vegetable");
-                vegRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference vegRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_vegetable");
+                    vegRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference vegRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_vegetable");
+                    vegRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
             case ("Dairy"):
-                CollectionReference dairyRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_dairy");
-                dairyRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference dairyRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_dairy");
+                    dairyRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference dairyRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_dairy");
+                    dairyRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
             case ("Sauces"):
-                CollectionReference saucesRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_sauces");
-                saucesRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference saucesRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_sauces");
+                    saucesRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference saucesRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_sauces");
+                    saucesRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
             case ("Condiment"):
-                CollectionReference condRef = FirebaseFirestore.getInstance()
-                        .collection("ingredient_condiment");
-                condRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                if (id == null) {
+                    CollectionReference condRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_condiment");
+                    condRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                } else {
+                    CollectionReference condRef = FirebaseFirestore.getInstance()
+                            .collection("ingredient_condiment");
+                    condRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                }
                 break;
         }
     }
@@ -168,7 +259,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         // Create an ArrayAdapter using the string array and default spinner
         // layout.
         // ArrayAdapter connects array of spinner items to spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        adapter = ArrayAdapter.createFromResource(
                 getContext(),
                 // string array in strings.xml
                 R.array.ingredients_array,
@@ -183,6 +274,14 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         if (spinner != null) {
             spinner.setAdapter(adapter);
         }
+    }
+
+    // receive reference from home fragment
+    // need to check if its null (not created before)
+    public void passReference(IngredientItem ingredient, String id, String path) {
+        this.ingredient = ingredient;
+        this.id = id;
+        this.path = path;
     }
 
     // for debugging

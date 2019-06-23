@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.easycook.Home.Ingredient.IngredientAdapter;
 import com.example.easycook.Home.Ingredient.IngredientForm;
@@ -23,17 +24,18 @@ import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
+import com.example.easycook.MainActivity;
 import com.example.easycook.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 
 // TODO add background color for item & make smaller
-// TODO implement onclick and swipe
-// TODO do the same for recipe
 // TODO cannot see text when typing
 /**
  * Home page
@@ -107,14 +109,7 @@ public class HomeFragment extends Fragment {
 
                 // replace container view (the main activity container) with ingredient fragment
                 IngredientForm ingredientFragment = new IngredientForm();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container, ingredientFragment);
-
-                // add to back stack so user can navigate back
-                transaction.addToBackStack(null);
-
-                // make changes
-                transaction.commit();
+                goToFragment(ingredientFragment);
             }
         });
 
@@ -126,14 +121,7 @@ public class HomeFragment extends Fragment {
 
                 // replace container view (the main activity container) with recipe fragment
                 RecipeForm recipeForm = new RecipeForm();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container, recipeForm);
-
-                // add to back stack so user can navigate back
-                transaction.addToBackStack(null);
-
-                // make changes
-                transaction.commit();
+                goToFragment(recipeForm);
             }
         });
 
@@ -174,6 +162,23 @@ public class HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(meatRecyclerView);
 
+        // edits value when clicked
+        meatAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
 
         // grains
         grainsRef = db.collection("ingredient_grains");
@@ -201,6 +206,24 @@ public class HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(grainsRecyclerView);
 
+        // edits value when clicked
+        grainsAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
+
         // veg
         vegRef = db.collection("ingredient_vegetable");
         vegQuery = vegRef;
@@ -226,6 +249,24 @@ public class HomeFragment extends Fragment {
                 vegAdapter.deleteItem(viewHolder.getAdapterPosition());
             }
         }).attachToRecyclerView(vegRecyclerView);
+
+        // edits value when clicked
+        vegAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
 
         // dairy
         dairyRef = db.collection("ingredient_dairy");
@@ -253,6 +294,24 @@ public class HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(dairyRecyclerView);
 
+        // edits value when clicked
+        dairyAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
+
         // sauces
         saucesRef = db.collection("ingredient_sauces");
         saucesQuery = saucesRef;
@@ -278,6 +337,24 @@ public class HomeFragment extends Fragment {
                 saucesAdapter.deleteItem(viewHolder.getAdapterPosition());
             }
         }).attachToRecyclerView(saucesRecyclerView);
+
+        // edits value when clicked
+        saucesAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
 
         // condiment
         condRef = db.collection("ingredient_condiment");
@@ -305,6 +382,24 @@ public class HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(condRecyclerView);
 
+        // edits value when clicked
+        condAdapter.setOnItemClickListener(new IngredientAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                IngredientItem ingredient = documentSnapshot.toObject(IngredientItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+
+                // pass reference to ingredient fragment
+                ingredientFragment.passReference(ingredient, id, path);
+
+                goToFragment(ingredientFragment);
+            }
+        });
+
         // recipe
         recipeRef = db.collection("my_recipe");
         recipeQuery = recipeRef;
@@ -331,7 +426,36 @@ public class HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(recipeRecyclerView);
 
+        // edits value when clicked
+        recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                RecipeItem recipe = documentSnapshot.toObject(RecipeItem.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+
+                // replace container view (the main activity container) with ingredient fragment
+                RecipeForm recipeFragment = new RecipeForm();
+
+                // pass reference to ingredient fragment
+                recipeFragment.passReference(recipe, id, path);
+
+                goToFragment(recipeFragment);
+            }
+        });
     }
+
+    public void goToFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+
+        // add to back stack so user can navigate back
+        transaction.addToBackStack(null);
+
+        // make changes
+        transaction.commit();
+    }
+
     // for debugging
     @Override
     public void onDestroy() {
