@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment {
 
         // meat
         meatRef = db.collection("ingredient_meat");
-        meatQuery = meatRef;
+        meatQuery = meatRef.orderBy("numDays", Query.Direction.ASCENDING);
         meatOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(meatQuery, IngredientItem.class)
                 .build();
@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment {
 
         // grains
         grainsRef = db.collection("ingredient_grains");
-        grainsQuery = grainsRef;
+        grainsQuery = grainsRef.orderBy("numDays", Query.Direction.ASCENDING);
         grainsOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(grainsQuery, IngredientItem.class)
                 .build();
@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment {
 
         // veg
         vegRef = db.collection("ingredient_vegetable");
-        vegQuery = vegRef;
+        vegQuery = vegRef.orderBy("numDays", Query.Direction.ASCENDING);
         vegOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(vegQuery, IngredientItem.class)
                 .build();
@@ -270,7 +270,7 @@ public class HomeFragment extends Fragment {
 
         // dairy
         dairyRef = db.collection("ingredient_dairy");
-        dairyQuery = dairyRef;
+        dairyQuery = dairyRef.orderBy("numDays", Query.Direction.ASCENDING);
         dairyOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(dairyQuery, IngredientItem.class)
                 .build();
@@ -314,7 +314,7 @@ public class HomeFragment extends Fragment {
 
         // sauces
         saucesRef = db.collection("ingredient_sauces");
-        saucesQuery = saucesRef;
+        saucesQuery = saucesRef.orderBy("numDays", Query.Direction.ASCENDING);
         saucesOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(saucesQuery, IngredientItem.class)
                 .build();
@@ -358,7 +358,7 @@ public class HomeFragment extends Fragment {
 
         // condiment
         condRef = db.collection("ingredient_condiment");
-        condQuery = condRef;
+        condQuery = condRef.orderBy("numDays", Query.Direction.ASCENDING);
         condOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(condQuery, IngredientItem.class)
                 .build();
@@ -402,7 +402,7 @@ public class HomeFragment extends Fragment {
 
         // recipe
         recipeRef = db.collection("my_recipe");
-        recipeQuery = recipeRef;
+        recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recipeQuery, RecipeItem.class)
                 .build();

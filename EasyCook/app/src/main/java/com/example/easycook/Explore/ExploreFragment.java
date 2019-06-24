@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.easycook.R;
 
-
+// TODO search function (add in many recipes first)
 public class ExploreFragment extends Fragment {
 
     private final String LOG_TAG = "ExploreFragment";

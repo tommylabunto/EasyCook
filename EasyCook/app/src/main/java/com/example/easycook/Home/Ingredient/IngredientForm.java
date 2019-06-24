@@ -31,6 +31,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -177,66 +178,66 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                 if (id == null) {
                     CollectionReference meatRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_meat");
-                    meatRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    meatRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference meatRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_meat");
-                    meatRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    meatRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
             case ("Grains"):
                 if (id == null) {
                     CollectionReference grainsRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_grains");
-                    grainsRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    grainsRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference grainsRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_grains");
-                    grainsRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    grainsRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
             case ("Vegetable"):
                 if (id == null) {
                     CollectionReference vegRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_vegetable");
-                    vegRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    vegRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference vegRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_vegetable");
-                    vegRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    vegRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
             case ("Dairy"):
                 if (id == null) {
                     CollectionReference dairyRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_dairy");
-                    dairyRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    dairyRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference dairyRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_dairy");
-                    dairyRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    dairyRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
             case ("Sauces"):
                 if (id == null) {
                     CollectionReference saucesRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_sauces");
-                    saucesRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    saucesRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference saucesRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_sauces");
-                    saucesRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    saucesRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
             case ("Condiment"):
                 if (id == null) {
                     CollectionReference condRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_condiment");
-                    condRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date));
+                    condRef.add(new IngredientItem(type, name, Integer.parseInt(weight), date, 0));
                 } else {
                     CollectionReference condRef = FirebaseFirestore.getInstance()
                             .collection("ingredient_condiment");
-                    condRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date), SetOptions.merge());
+                    condRef.document(id).set(new IngredientItem(type, name, Integer.parseInt(weight), date, 0), SetOptions.merge());
                 }
                 break;
         }

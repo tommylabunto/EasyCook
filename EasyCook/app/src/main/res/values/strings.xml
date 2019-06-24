@@ -13,8 +13,8 @@
     <string name="home_ingredient_condiment">Condiment</string>
     <string name="home_ingredient_sauces">Sauces</string>
 
-    <string name="explore_text">EXPLOREEEEE</string>
-    <string name="settings_text">SETTINGSSSSS</string>
+    <string name="explore_text">EXPLORE</string>
+    <string name="settings_text">SETTINGS</string>
 
     <string name="ingredient_type">Type of Ingredient</string>
     <string name="ingredient_name">Ingredient</string>
