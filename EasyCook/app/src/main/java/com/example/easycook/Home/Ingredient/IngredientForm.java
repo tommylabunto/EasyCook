@@ -93,10 +93,10 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                 EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
                 EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
 
-                String type = typeEditText.getSelectedItem().toString();
-                String name = nameEditText.getText().toString();
-                String weight = weightEditText.getText().toString();
-                String date = dateEditText.getText().toString();
+                String type = typeEditText.getSelectedItem().toString().trim();
+                String name = nameEditText.getText().toString().trim();
+                String weight = weightEditText.getText().toString().trim();
+                String date = dateEditText.getText().toString().trim();
 
                 // if input is empty, go back to home fragment
                 if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)

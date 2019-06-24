@@ -31,6 +31,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class RecipeForm extends Fragment {
 
@@ -70,16 +73,18 @@ public class RecipeForm extends Fragment {
                 EditText ingredientEditText = (EditText) view.findViewById(R.id.ingredient_list_input);
                 EditText preparationEditText = (EditText) view.findViewById(R.id.preparation_input);
 
-                String name = nameEditText.getText().toString();
-                String ingredient = ingredientEditText.getText().toString();
-                String preparation = preparationEditText.getText().toString();
+                String name = nameEditText.getText().toString().trim();
+                String ingredient = ingredientEditText.getText().toString().trim();
+                String preparation = preparationEditText.getText().toString().trim();
+
+
 
                 // if input is empty, go back to home fragment
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
                         || TextUtils.isEmpty(preparation)) {
                 } else {
                     // add into firestore
-                    addRecipe(name, ingredient, preparation);
+                    addRecipe(name, Arrays.asList(ingredient.split(" ")), preparation);
                 }
                 backToHome(fragmentManager);
             }
@@ -113,7 +118,7 @@ public class RecipeForm extends Fragment {
                             EditText preparationEditText = (EditText) view.findViewById(R.id.preparation_input);
 
                             nameEditText.setText(recipe.getName());
-                            ingredientEditText.setText("" + recipe.getIngredient());
+                            ingredientEditText.setText(recipe.getIngredientString());
                             preparationEditText.setText(recipe.getPreparation());
 
                             Log.d(LOG_TAG, "Document exists!");
@@ -134,7 +139,7 @@ public class RecipeForm extends Fragment {
         this.path = path;
     }
 
-    public void addRecipe(String name, String ingredient, String preparation) {
+    public void addRecipe(String name, List<String> ingredient, String preparation) {
 
         if (id == null) {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
