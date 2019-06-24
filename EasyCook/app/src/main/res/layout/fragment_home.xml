@@ -210,7 +210,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/cond_recyclerView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/home_ingredient_sauces" />
+                    app:layout_constraintTop_toBottomOf="@+id/sauces_recyclerView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/cond_recyclerView"

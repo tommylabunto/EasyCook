@@ -35,8 +35,6 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 
-// TODO add background color for item & make smaller
-// TODO cannot see text when typing
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
