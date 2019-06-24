@@ -77,8 +77,6 @@ public class RecipeForm extends Fragment {
                 String ingredient = ingredientEditText.getText().toString().trim();
                 String preparation = preparationEditText.getText().toString().trim();
 
-
-
                 // if input is empty, go back to home fragment
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
                         || TextUtils.isEmpty(preparation)) {
