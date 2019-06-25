@@ -32,8 +32,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
+import java.util.Random;
 
-// TODO recommended and recipe of the day
+// TODO add many recipe
 public class ExploreFragment extends Fragment {
 
     private final String LOG_TAG = "ExploreFragment";
@@ -230,8 +231,17 @@ public class ExploreFragment extends Fragment {
 
     // show recipe of the day
     public void showTodayRecyclerView(View view) {
+
+        // the cheat way
+        // refreshes every time start app
+        String[] ingredientList = {"Duck", "Chicken", "Noodles", "Rice", "Water"};
+        Random random = new Random();
+        String search = ingredientList[random.nextInt(ingredientList.length)];
+
         todayRef = db.collection("my_recipe");
-        todayQuery = todayRef.orderBy("name", Query.Direction.ASCENDING);
+        todayQuery = todayRef
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereArrayContains("ingredient", search);
         todayOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(todayQuery, RecipeItem.class)
                 .build();
