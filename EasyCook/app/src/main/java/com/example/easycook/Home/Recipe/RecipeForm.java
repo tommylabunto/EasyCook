@@ -22,6 +22,7 @@ import android.widget.Spinner;
 
 import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.Home.Ingredient.IngredientItem;
+import com.example.easycook.MainActivity;
 import com.example.easycook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -148,6 +149,7 @@ public class RecipeForm extends Fragment {
                     .collection("my_recipe");
             myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation), SetOptions.merge());
         }
+
     }
 
     public void backToHome(FragmentManager fragmentManager) {

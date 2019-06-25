@@ -41,10 +41,30 @@ public class ExploreFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private RecyclerView recipeRecyclerView;
+    private RecyclerView recommendedRecyclerView;
+    private RecyclerView recentRecyclerView;
+    private RecyclerView todayRecyclerView;
+
     private CollectionReference recipeRef;
+    private CollectionReference recommendedRef;
+    private CollectionReference recentRef;
+    private CollectionReference todayRef;
+
     private RecipeAdapter recipeAdapter;
+    private RecipeAdapter recommendedAdapter;
+    private RecipeAdapter recentAdapter;
+    private RecipeAdapter todayAdapter;
+
     private Query recipeQuery;
+    private Query recommendedQuery;
+    private Query recentQuery;
+    private Query todayQuery;
+
     private FirestoreRecyclerOptions<RecipeItem> recipeOptions;
+    private FirestoreRecyclerOptions<RecipeItem> recommendedOptions;
+    private FirestoreRecyclerOptions<RecipeItem> recentOptions;
+    private FirestoreRecyclerOptions<RecipeItem> todayOptions;
+
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -53,6 +73,7 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
@@ -75,7 +96,10 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        showRecyclerView(view);
+        showRecipeRecyclerView(view);
+        showRecommendedRecyclerView(view);
+        showRecentRecyclerView(view);
+        showTodayRecyclerView(view);
 
         return view;
     }
@@ -88,7 +112,7 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    public void showRecyclerView(View view) {
+    public void showRecipeRecyclerView(View view) {
         // recipe
         recipeRef = db.collection("my_recipe");
         recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
@@ -101,9 +125,9 @@ public class ExploreFragment extends Fragment {
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recipeRecyclerView.setAdapter(recipeAdapter);
 
-        recyclerViewSwipe();
+        recyclerViewSwipe(recipeAdapter, recipeRecyclerView);
 
-        recyclerViewClick();
+        recyclerViewClick(recipeAdapter);
     }
 
     // update recycler view when user enter search
@@ -124,13 +148,13 @@ public class ExploreFragment extends Fragment {
         // manually call onStart for adapter to start listening
         onStart();
 
-        recyclerViewSwipe();
+        recyclerViewSwipe(recipeAdapter, recipeRecyclerView);
 
-        recyclerViewClick();
+        recyclerViewClick(recipeAdapter);
     }
 
     // delete when swipe left/right
-    public void recyclerViewSwipe() {
+    public void recyclerViewSwipe(final RecipeAdapter adapter, RecyclerView recyclerView) {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -140,14 +164,14 @@ public class ExploreFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                recipeAdapter.deleteItem(viewHolder.getAdapterPosition());
+                adapter.deleteItem(viewHolder.getAdapterPosition());
             }
-        }).attachToRecyclerView(recipeRecyclerView);
+        }).attachToRecyclerView(recyclerView);
     }
 
     // edits value when clicked
-    public void recyclerViewClick() {
-        recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+    public void recyclerViewClick(RecipeAdapter adapter) {
+        adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 RecipeItem recipe = documentSnapshot.toObject(RecipeItem.class);
@@ -163,6 +187,63 @@ public class ExploreFragment extends Fragment {
                 goToFragment(recipeFragment);
             }
         });
+    }
+
+    // recommends only recipes with duck
+    public void showRecommendedRecyclerView(View view) {
+        // recommended
+        recommendedRef = db.collection("my_recipe");
+        recommendedQuery = recommendedRef
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereArrayContains("ingredient", "Duck");
+        recommendedOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(recommendedQuery, RecipeItem.class)
+                .build();
+
+        recommendedAdapter = new RecipeAdapter(recommendedOptions);
+        recommendedRecyclerView = view.findViewById(R.id.recommended_recyclerView);
+        recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recommendedRecyclerView.setAdapter(recommendedAdapter);
+
+        recyclerViewSwipe(recommendedAdapter, recommendedRecyclerView);
+
+        recyclerViewClick(recommendedAdapter);
+    }
+
+    // show recent
+    public void showRecentRecyclerView(View view) {
+        recentRef = db.collection("my_recipe");
+        recentQuery = recentRef.orderBy("name", Query.Direction.ASCENDING);
+        recentOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(recentQuery, RecipeItem.class)
+                .build();
+
+        recentAdapter = new RecipeAdapter(recentOptions);
+        recentRecyclerView = view.findViewById(R.id.recent_recyclerView);
+        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recentRecyclerView.setAdapter(recentAdapter);
+
+        recyclerViewSwipe(recentAdapter, recentRecyclerView);
+
+        recyclerViewClick(recentAdapter);
+    }
+
+    // show recipe of the day
+    public void showTodayRecyclerView(View view) {
+        todayRef = db.collection("my_recipe");
+        todayQuery = todayRef.orderBy("name", Query.Direction.ASCENDING);
+        todayOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(todayQuery, RecipeItem.class)
+                .build();
+
+        todayAdapter = new RecipeAdapter(todayOptions);
+        todayRecyclerView = view.findViewById(R.id.today_recyclerView);
+        todayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        todayRecyclerView.setAdapter(todayAdapter);
+
+        recyclerViewSwipe(todayAdapter, todayRecyclerView);
+
+        recyclerViewClick(todayAdapter);
     }
 
     public void goToFragment(Fragment fragment) {
@@ -193,6 +274,9 @@ public class ExploreFragment extends Fragment {
     public void onStart() {
         super.onStart();
         recipeAdapter.startListening();
+        recommendedAdapter.startListening();
+        recentAdapter.startListening();
+        todayAdapter.startListening();
         Log.d(LOG_TAG, "onStart");
     }
 
@@ -200,6 +284,9 @@ public class ExploreFragment extends Fragment {
     public void onStop() {
         super.onStop();
         recipeAdapter.stopListening();
+        recommendedAdapter.stopListening();
+        recentAdapter.stopListening();
+        todayAdapter.stopListening();
         Log.d(LOG_TAG, "onStop");
     }
 

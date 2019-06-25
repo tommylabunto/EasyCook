@@ -14,17 +14,13 @@
         <ScrollView
             android:id="@+id/scrollView3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="-1065dp"
-            tools:layout_editor_absoluteY="-418dp">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/search_text"
@@ -68,25 +64,55 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/search_recyclerView" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recommended_recyclerView"
+                    android:layout_width="380dp"
+                    android:layout_height="201dp"
+                    android:layout_marginEnd="8dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recommended_recipe" />
+
                 <TextView
                     android:id="@+id/recently_viewed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="32dp"
                     android:text="Recently Viewed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recommended_recipe" />
+                    app:layout_constraintTop_toBottomOf="@+id/recommended_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recent_recyclerView"
+                    android:layout_width="380dp"
+                    android:layout_height="201dp"
+                    android:layout_marginEnd="8dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recently_viewed" />
 
                 <TextView
                     android:id="@+id/recipe_of_the_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="32dp"
                     android:text="Recipe Of The Day"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recently_viewed" />
+                    app:layout_constraintTop_toBottomOf="@+id/recent_recyclerView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/today_recyclerView"
+                    android:layout_width="380dp"
+                    android:layout_height="201dp"
+                    android:layout_marginEnd="8dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recipe_of_the_day" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </FrameLayout>
