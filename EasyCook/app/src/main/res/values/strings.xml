@@ -24,6 +24,9 @@
     <string name="date">Date:</string>
     <string name="datepicker">datePicker</string>
 
+    <string name="web_client_id">1016789155182-mkfcpcb6cvedlcr10p7mbflaljl0tapv.apps.googleusercontent.com</string>
+    <string name="sign_out">Sign Out</string>
+
     <string-array name="ingredients_array">
         <item>Meat</item>
         <item>Grains</item>
@@ -32,5 +35,8 @@
         <item>Sauces</item>
         <item>Condiment</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

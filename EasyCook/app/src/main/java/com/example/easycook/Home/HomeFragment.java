@@ -28,6 +28,7 @@ import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.MainActivity;
 import com.example.easycook.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

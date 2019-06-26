@@ -41,7 +41,6 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.Arrays;
 import java.util.Random;
 
-// TODO add previously viewed
 public class ExploreFragment extends Fragment {
 
     private final String LOG_TAG = "ExploreFragment";
