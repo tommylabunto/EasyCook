@@ -1,10 +1,7 @@
 package com.example.easycook.Home.Recipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RecipeItem {
 
@@ -12,14 +9,19 @@ public class RecipeItem {
     private List<String> ingredient;
     private String preparation;
 
+
+    // used to identify the document
+    private String documentID;
+
     // no argument constructor
     public RecipeItem() {
     }
 
-    public RecipeItem(String name, List<String> ingredient, String preparation) {
+    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID) {
         this.name = name;
         this.ingredient = ingredient;
         this.preparation = preparation;
+        this.documentID = documentID;
     }
 
     public String getName() {
@@ -37,5 +39,9 @@ public class RecipeItem {
 
     public String getPreparation() {
         return preparation;
+    }
+
+    public String getDocumentID() {
+        return documentID;
     }
 }

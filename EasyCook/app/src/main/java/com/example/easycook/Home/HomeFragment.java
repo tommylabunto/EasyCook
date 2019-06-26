@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.easycook.Explore.ExploreFragment;
 import com.example.easycook.Home.Ingredient.IngredientAdapter;
 import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.Home.Ingredient.IngredientItem;
@@ -431,6 +432,8 @@ public class HomeFragment extends Fragment {
                 RecipeItem recipe = documentSnapshot.toObject(RecipeItem.class);
                 String id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
+
+                ExploreFragment.recentDocumentID = id;
 
                 // replace container view (the main activity container) with ingredient fragment
                 RecipeForm recipeFragment = new RecipeForm();

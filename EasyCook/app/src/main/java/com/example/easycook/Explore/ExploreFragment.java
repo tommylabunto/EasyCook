@@ -26,15 +26,22 @@ import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Arrays;
 import java.util.Random;
 
-// TODO add many recipe
+// TODO add previously viewed
 public class ExploreFragment extends Fragment {
 
     private final String LOG_TAG = "ExploreFragment";
@@ -66,6 +73,9 @@ public class ExploreFragment extends Fragment {
     private FirestoreRecyclerOptions<RecipeItem> recentOptions;
     private FirestoreRecyclerOptions<RecipeItem> todayOptions;
 
+    // keeps track of recent recipes clicked
+    // thus recycler view can only show 1
+    public static String recentDocumentID;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -131,6 +141,76 @@ public class ExploreFragment extends Fragment {
         recyclerViewClick(recipeAdapter);
     }
 
+    // recommends only recipes with duck
+    public void showRecommendedRecyclerView(View view) {
+
+        // recommended
+        recommendedRef = db.collection("my_recipe");
+        recommendedQuery = recommendedRef
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereArrayContains("ingredient", "Duck");
+        recommendedOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(recommendedQuery, RecipeItem.class)
+                .build();
+
+        recommendedAdapter = new RecipeAdapter(recommendedOptions);
+        recommendedRecyclerView = view.findViewById(R.id.recommended_recyclerView);
+        recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recommendedRecyclerView.setAdapter(recommendedAdapter);
+
+        recyclerViewSwipe(recommendedAdapter, recommendedRecyclerView);
+
+        recyclerViewClick(recommendedAdapter);
+    }
+
+    // show recent
+    // can only show one
+    public void showRecentRecyclerView(View view) {
+        recentRef = db.collection("my_recipe");
+        recentQuery = recentRef
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereEqualTo("documentID", recentDocumentID);
+        recentOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(recentQuery, RecipeItem.class)
+                .build();
+
+        recentAdapter = new RecipeAdapter(recentOptions);
+        recentRecyclerView = view.findViewById(R.id.recent_recyclerView);
+        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recentRecyclerView.setAdapter(recentAdapter);
+
+        recyclerViewSwipe(recentAdapter, recentRecyclerView);
+
+        recyclerViewClick(recentAdapter);
+    }
+
+    // show recipe of the day
+    public void showTodayRecyclerView(View view) {
+
+        // the cheat way
+        // refreshes every time start app
+        String[] ingredientList = {"Duck", "Chicken", "Noodles", "Rice", "Water"};
+        Random random = new Random();
+        String search = ingredientList[random.nextInt(ingredientList.length)];
+
+        todayRef = db.collection("my_recipe");
+        todayQuery = todayRef
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereArrayContains("ingredient", search);
+        todayOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
+                .setQuery(todayQuery, RecipeItem.class)
+                .build();
+
+        todayAdapter = new RecipeAdapter(todayOptions);
+        todayRecyclerView = view.findViewById(R.id.today_recyclerView);
+        todayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        todayRecyclerView.setAdapter(todayAdapter);
+
+        recyclerViewSwipe(todayAdapter, todayRecyclerView);
+
+        recyclerViewClick(todayAdapter);
+    }
+
     // update recycler view when user enter search
     public void updateAdapter(View view, String search) {
 
@@ -179,6 +259,8 @@ public class ExploreFragment extends Fragment {
                 String id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
 
+                recentDocumentID = id;
+
                 // replace container view (the main activity container) with ingredient fragment
                 RecipeForm recipeFragment = new RecipeForm();
 
@@ -188,72 +270,6 @@ public class ExploreFragment extends Fragment {
                 goToFragment(recipeFragment);
             }
         });
-    }
-
-    // recommends only recipes with duck
-    public void showRecommendedRecyclerView(View view) {
-        // recommended
-        recommendedRef = db.collection("my_recipe");
-        recommendedQuery = recommendedRef
-                .orderBy("name", Query.Direction.ASCENDING)
-                .whereArrayContains("ingredient", "Duck");
-        recommendedOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
-                .setQuery(recommendedQuery, RecipeItem.class)
-                .build();
-
-        recommendedAdapter = new RecipeAdapter(recommendedOptions);
-        recommendedRecyclerView = view.findViewById(R.id.recommended_recyclerView);
-        recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recommendedRecyclerView.setAdapter(recommendedAdapter);
-
-        recyclerViewSwipe(recommendedAdapter, recommendedRecyclerView);
-
-        recyclerViewClick(recommendedAdapter);
-    }
-
-    // show recent
-    public void showRecentRecyclerView(View view) {
-        recentRef = db.collection("my_recipe");
-        recentQuery = recentRef.orderBy("name", Query.Direction.ASCENDING);
-        recentOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
-                .setQuery(recentQuery, RecipeItem.class)
-                .build();
-
-        recentAdapter = new RecipeAdapter(recentOptions);
-        recentRecyclerView = view.findViewById(R.id.recent_recyclerView);
-        recentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recentRecyclerView.setAdapter(recentAdapter);
-
-        recyclerViewSwipe(recentAdapter, recentRecyclerView);
-
-        recyclerViewClick(recentAdapter);
-    }
-
-    // show recipe of the day
-    public void showTodayRecyclerView(View view) {
-
-        // the cheat way
-        // refreshes every time start app
-        String[] ingredientList = {"Duck", "Chicken", "Noodles", "Rice", "Water"};
-        Random random = new Random();
-        String search = ingredientList[random.nextInt(ingredientList.length)];
-
-        todayRef = db.collection("my_recipe");
-        todayQuery = todayRef
-                .orderBy("name", Query.Direction.ASCENDING)
-                .whereArrayContains("ingredient", search);
-        todayOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
-                .setQuery(todayQuery, RecipeItem.class)
-                .build();
-
-        todayAdapter = new RecipeAdapter(todayOptions);
-        todayRecyclerView = view.findViewById(R.id.today_recyclerView);
-        todayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        todayRecyclerView.setAdapter(todayAdapter);
-
-        recyclerViewSwipe(todayAdapter, todayRecyclerView);
-
-        recyclerViewClick(todayAdapter);
     }
 
     public void goToFragment(Fragment fragment) {
@@ -283,6 +299,9 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        setID();
+
         recipeAdapter.startListening();
         recommendedAdapter.startListening();
         recentAdapter.startListening();
@@ -290,6 +309,27 @@ public class ExploreFragment extends Fragment {
         Log.d(LOG_TAG, "onStart");
     }
 
+    // set document id for each recipe
+    // cheat way
+    public void setID() {
+        recipeRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            RecipeItem recipe = documentSnapshot.toObject(RecipeItem.class);
+
+                            if (recipe.getDocumentID() == null) {
+                                // set document id
+                                FirebaseFirestore.getInstance()
+                                        .collection("my_recipe").document(documentSnapshot.getId())
+                                        .set(new RecipeItem(recipe.getName(), recipe.getIngredient(), recipe.getPreparation(), documentSnapshot.getId()), SetOptions.merge());
+                            }
+                        }
+                    }
+                });
+    }
     @Override
     public void onStop() {
         super.onStop();
@@ -311,5 +351,4 @@ public class ExploreFragment extends Fragment {
         super.onDetach();
         Log.d(LOG_TAG, "onDetach");
     }
-
 }

@@ -140,16 +140,18 @@ public class RecipeForm extends Fragment {
 
     public void addRecipe(String name, List<String> ingredient, String preparation) {
 
+        // when recipe is first created, id is null
+        // but when recipe is clicked / explore page is clicked -> the id is set
+
         if (id == null) {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("my_recipe");
-            myRecipe.add(new RecipeItem(name, ingredient, preparation));
+            myRecipe.add(new RecipeItem(name, ingredient, preparation, id));
         } else {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("my_recipe");
-            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation), SetOptions.merge());
+            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id), SetOptions.merge());
         }
-
     }
 
     public void backToHome(FragmentManager fragmentManager) {

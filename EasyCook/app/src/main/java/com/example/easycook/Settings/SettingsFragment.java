@@ -13,14 +13,8 @@ import android.view.ViewGroup;
 import com.example.easycook.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {SettingsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {SettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+// TODO create google sign in
+// TODO save user settings
 public class SettingsFragment extends Fragment {
 
     public SettingsFragment() {
