@@ -9,7 +9,6 @@ public class RecipeItem {
     private List<String> ingredient;
     private String preparation;
 
-
     // used to identify the document
     private String documentID;
 

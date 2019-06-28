@@ -12,8 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.easycook.Home.HomeFragment;
+import com.example.easycook.Home.Recipe.RecipeItem;
+import com.example.easycook.Settings.ProfileForm;
+import com.example.easycook.Settings.ProfileItem;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +32,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 
 public class SignInFragment extends Fragment {
@@ -43,6 +50,8 @@ public class SignInFragment extends Fragment {
     private int RC_SIGN_IN = 1800;
 
     private SignInButton signInButton;
+
+    private ProfileItem passUser;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -98,6 +107,7 @@ public class SignInFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
+                            Toast.makeText(getContext(), "Hello amigo: " + user.getDisplayName(), Toast.LENGTH_LONG).show();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -132,7 +142,21 @@ public class SignInFragment extends Fragment {
 
         if (user != null) {
 
-            MainActivity.passAuth(mAuth);
+            MainActivity.passAuth(mAuth, user);
+
+            if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+                passUser = new ProfileItem(user.getUid(), user.getDisplayName(), user.getEmail(), 0);
+            } else {
+                passUser = new ProfileItem(user.getUid(), user.getDisplayName(), user.getEmail(), Integer.parseInt(user.getPhoneNumber()));
+            }
+
+            ProfileForm.passUser(passUser);
+
+            // create/save document in firestore
+            CollectionReference myUsers = FirebaseFirestore.getInstance()
+                    .collection("users");
+            myUsers.document(user.getUid())
+                    .set((passUser), SetOptions.merge());
 
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new HomeFragment())
