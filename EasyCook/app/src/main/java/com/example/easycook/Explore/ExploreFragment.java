@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.easycook.Home.Ingredient.IngredientForm;
+import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
@@ -42,6 +43,7 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.Arrays;
 import java.util.Random;
 
+// Search recipe by typing ingredient (caps and leave a space)
 public class ExploreFragment extends Fragment {
 
     private final String LOG_TAG = "ExploreFragment";
@@ -76,6 +78,9 @@ public class ExploreFragment extends Fragment {
     // keeps track of recent recipes clicked
     // thus recycler view can only show 1
     public static String recentDocumentID;
+
+    // the ingredient closest to expiring
+    public static IngredientItem ingredient;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -141,14 +146,14 @@ public class ExploreFragment extends Fragment {
         recyclerViewClick(recipeAdapter);
     }
 
-    // recommends only recipes with duck
+    // recommends only recipes with the ingredient closest to expiry
     public void showRecommendedRecyclerView(View view) {
 
         // recommended
         recommendedRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recommendedQuery = recommendedRef
                 .orderBy("name", Query.Direction.ASCENDING)
-                .whereArrayContains("ingredient", "Duck");
+                .whereArrayContains("ingredient", ingredient.getIngredientName());
         recommendedOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recommendedQuery, RecipeItem.class)
                 .build();
@@ -283,6 +288,14 @@ public class ExploreFragment extends Fragment {
         transaction.commit();
     }
 
+    public static void passIngredient(IngredientItem thisIngredient) {
+
+        if ((ingredient == null && thisIngredient.getNumDays() > 0) ||
+                (thisIngredient.getNumDays() < ingredient.getNumDays() && thisIngredient.getNumDays() > 0)) {
+            ingredient = thisIngredient;
+        }
+    }
+
     // for debugging
     @Override
     public void onDestroy() {
@@ -331,6 +344,7 @@ public class ExploreFragment extends Fragment {
                     }
                 });
     }
+
     @Override
     public void onStop() {
         super.onStop();

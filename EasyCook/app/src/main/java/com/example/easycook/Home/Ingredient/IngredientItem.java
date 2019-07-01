@@ -14,7 +14,7 @@ public class IngredientItem {
     private String expiry;
 
     // used to sort ingredients
-    private int numDays;
+    public int numDays;
 
     // no argument constructor
     public IngredientItem() {
@@ -58,14 +58,22 @@ public class IngredientItem {
         try {
             // convert into number of days
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
             Date expiryDate = df.parse(expiry);
+            Calendar current = Calendar.getInstance();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(expiryDate);
 
+
             // not accurate, but can compare
-            num = calendar.get(Calendar.DAY_OF_WEEK)
+            // positive number means not expired
+            // negative number means expired already
+            num = (calendar.get(Calendar.DAY_OF_MONTH)
                     + (calendar.get(Calendar.MONTH) * 30)
-                    + (calendar.get(Calendar.YEAR) * 12 * 30);
+                    + (calendar.get(Calendar.YEAR) * 12 * 30)) -
+                    (current.get(Calendar.DAY_OF_MONTH)
+                            + (current.get(Calendar.MONTH) * 30)
+                            + (current.get(Calendar.YEAR) * 12 * 30));
         } catch (ParseException e) {
             System.err.println(e.toString());
         }

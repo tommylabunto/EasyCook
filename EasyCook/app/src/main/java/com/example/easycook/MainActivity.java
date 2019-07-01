@@ -22,8 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 // TODO do up documentation
-// TODO save recipe to user
-// TODO recommended: ingredient with shortest expiry
 // TODO implement glide lib to cache image faster
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
