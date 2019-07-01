@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -82,6 +83,19 @@ public class ExploreFragment extends Fragment {
     // the ingredient closest to expiring
     public static IngredientItem ingredient;
 
+    /*
+    private ArrayAdapter arrayAdapter;
+    private static List<String> ingredients = new ArrayList<>();
+    private ArrayList<String> titles = new ArrayList<>();
+    private List<String> recipeList = new ArrayList<>();
+    private static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static CollectionReference recipeData = FirebaseFirestore.getInstance()
+            .collection(user.getEmail()).document(user.getUid())
+            .collection("recipes");
+    private ListView listView = null;
+    */
+
+
     public ExploreFragment() {
         // Required empty public constructor
     }
@@ -117,8 +131,91 @@ public class ExploreFragment extends Fragment {
         showRecentRecyclerView(view);
         showTodayRecyclerView(view);
 
+        /*
+        listView = (ListView) view.findViewById(R.id.listView);
+        arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, titles);
+        listView.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+
+        // Getting recipes according to ingredients
+        DownloadTask task = new DownloadTask();
+        String website = "https://www.food2fork.com/api/search?key=661577d405d71b5d483485750800452e&q=";
+        for (String s : ingredients) {
+            website += "," + s;
+        }
+        try {
+            task.execute(website);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getContext(), RecipeItem.class);
+                intent.putExtra("recipes", recipeList.get(i));
+                startActivity(intent);
+            }
+        });
+        */
+
+
         return view;
     }
+
+    /*
+     // Downloading web data
+    public class DownloadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings){
+            String result = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+            try {
+                url = new URL(strings[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream in = urlConnection.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in);
+                int data = reader.read();
+                while (data != -1) {
+                    char current = (char) data;
+                    result += current;
+                    data = reader.read();
+                }
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray recipes = (JSONArray) jsonObject.get("recipes");
+                for (int i = 0; i < recipes.length(); i++) {
+                    JSONObject details = (JSONObject) recipes.get(i);
+                    titles.add(details.getString("title"));
+                    recipeList.add(details.getString("source_url"));
+                    //Saving Recipes to Firebase. They are stored as ingredientItems
+                    // because I had issues using RecipeItem
+                    FirebaseFirestore.getInstance()
+                            .collection(user.getEmail()).document(user.getUid())
+                            .collection("recipes").document(details.getString("title"))
+                            .set(new IngredientItem("meat",
+                                    details.getString("source_url")
+                            ,200,"30/12/2020", 0));
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            arrayAdapter.notifyDataSetChanged();
+        }
+    }
+    */
+
 
     public void hideKeyboard(View view) {
 
@@ -149,6 +246,9 @@ public class ExploreFragment extends Fragment {
     // recommends only recipes with the ingredient closest to expiry
     public void showRecommendedRecyclerView(View view) {
 
+        if (ingredient == null) {
+            ingredient = new IngredientItem("", "", 0, "", 0);
+        }
         // recommended
         recommendedRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recommendedQuery = recommendedRef

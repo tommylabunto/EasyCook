@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// TODO notification for ingredient
+// TODO upload image
 // TODO do up documentation
 // TODO implement glide lib to cache image faster
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
