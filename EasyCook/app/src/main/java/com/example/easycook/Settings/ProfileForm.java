@@ -35,7 +35,7 @@ public class ProfileForm extends Fragment {
     private Button backButton;
     private Button tickButton;
 
-    private static ProfileItem user;
+    public static ProfileItem user;
 
     public ProfileForm() {
         // Required empty public constructor

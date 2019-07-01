@@ -26,6 +26,7 @@ import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
+import com.example.easycook.Settings.ProfileForm;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -133,7 +134,7 @@ public class HomeFragment extends Fragment {
     public void showRecyclerView(View view) {
 
         // meat
-        meatRef = db.collection("ingredient_meat");
+        meatRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_meat");
         meatQuery = meatRef.orderBy("numDays", Query.Direction.ASCENDING);
         meatOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(meatQuery, IngredientItem.class)
@@ -177,7 +178,7 @@ public class HomeFragment extends Fragment {
         });
 
         // grains
-        grainsRef = db.collection("ingredient_grains");
+        grainsRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_grains");
         grainsQuery = grainsRef.orderBy("numDays", Query.Direction.ASCENDING);
         grainsOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(grainsQuery, IngredientItem.class)
@@ -221,7 +222,7 @@ public class HomeFragment extends Fragment {
         });
 
         // veg
-        vegRef = db.collection("ingredient_vegetable");
+        vegRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_vegetable");
         vegQuery = vegRef.orderBy("numDays", Query.Direction.ASCENDING);
         vegOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(vegQuery, IngredientItem.class)
@@ -265,7 +266,7 @@ public class HomeFragment extends Fragment {
         });
 
         // dairy
-        dairyRef = db.collection("ingredient_dairy");
+        dairyRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_dairy");
         dairyQuery = dairyRef.orderBy("numDays", Query.Direction.ASCENDING);
         dairyOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(dairyQuery, IngredientItem.class)
@@ -309,7 +310,7 @@ public class HomeFragment extends Fragment {
         });
 
         // sauces
-        saucesRef = db.collection("ingredient_sauces");
+        saucesRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_sauces");
         saucesQuery = saucesRef.orderBy("numDays", Query.Direction.ASCENDING);
         saucesOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(saucesQuery, IngredientItem.class)
@@ -353,7 +354,7 @@ public class HomeFragment extends Fragment {
         });
 
         // condiment
-        condRef = db.collection("ingredient_condiment");
+        condRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_condiment");
         condQuery = condRef.orderBy("numDays", Query.Direction.ASCENDING);
         condOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(condQuery, IngredientItem.class)
@@ -397,7 +398,7 @@ public class HomeFragment extends Fragment {
         });
 
         // recipe
-        recipeRef = db.collection("my_recipe");
+        recipeRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recipeQuery, RecipeItem.class)

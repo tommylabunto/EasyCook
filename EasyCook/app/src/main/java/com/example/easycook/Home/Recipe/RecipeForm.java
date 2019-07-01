@@ -24,6 +24,7 @@ import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.MainActivity;
 import com.example.easycook.R;
+import com.example.easycook.Settings.ProfileForm;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -145,11 +146,11 @@ public class RecipeForm extends Fragment {
 
         if (id == null) {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
-                    .collection("my_recipe");
+                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
             myRecipe.add(new RecipeItem(name, ingredient, preparation, id));
         } else {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
-                    .collection("my_recipe");
+                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
             myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id), SetOptions.merge());
         }
     }

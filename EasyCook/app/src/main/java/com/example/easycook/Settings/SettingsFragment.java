@@ -14,13 +14,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.easycook.R;
+import com.example.easycook.SignInFragment;
+import com.google.firebase.auth.FirebaseAuth;
+
 import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.R;
+import com.example.easycook.SignInFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
 // To restart, go AVD manager -> more -> wipe data || file -> invalidate cache & restart
-// TODO save user settings as document in firestore (UID) -> think of what settings first
 public class SettingsFragment extends Fragment {
 
     private String LOG_TAG = "SettingsFragment";

@@ -25,6 +25,7 @@ import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
+import com.example.easycook.Settings.ProfileForm;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -124,7 +125,7 @@ public class ExploreFragment extends Fragment {
 
     public void showRecipeRecyclerView(View view) {
         // recipe
-        recipeRef = db.collection("my_recipe");
+        recipeRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recipeQuery, RecipeItem.class)
@@ -144,7 +145,7 @@ public class ExploreFragment extends Fragment {
     public void showRecommendedRecyclerView(View view) {
 
         // recommended
-        recommendedRef = db.collection("my_recipe");
+        recommendedRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recommendedQuery = recommendedRef
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereArrayContains("ingredient", "Duck");
@@ -165,7 +166,7 @@ public class ExploreFragment extends Fragment {
     // show recent
     // can only show one
     public void showRecentRecyclerView(View view) {
-        recentRef = db.collection("my_recipe");
+        recentRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recentQuery = recentRef
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereEqualTo("documentID", recentDocumentID);
@@ -192,7 +193,7 @@ public class ExploreFragment extends Fragment {
         Random random = new Random();
         String search = ingredientList[random.nextInt(ingredientList.length)];
 
-        todayRef = db.collection("my_recipe");
+        todayRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         todayQuery = todayRef
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereArrayContains("ingredient", search);
@@ -322,6 +323,7 @@ public class ExploreFragment extends Fragment {
                             if (recipe.getDocumentID() == null) {
                                 // set document id
                                 FirebaseFirestore.getInstance()
+                                        .collection("users").document(ProfileForm.user.getUid())
                                         .collection("my_recipe").document(documentSnapshot.getId())
                                         .set(new RecipeItem(recipe.getName(), recipe.getIngredient(), recipe.getPreparation(), documentSnapshot.getId()), SetOptions.merge());
                             }
