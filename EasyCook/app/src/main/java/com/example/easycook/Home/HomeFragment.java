@@ -1,6 +1,7 @@
 package com.example.easycook.Home;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,7 +34,22 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.SetOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+// use random email generator to register for food2fork
 /**
  * Home page
  * Entire page is a scroll view and individual categories are recycler views
@@ -85,6 +101,17 @@ public class HomeFragment extends Fragment {
     private FirestoreRecyclerOptions<IngredientItem> condOptions;
     private FirestoreRecyclerOptions<RecipeItem> recipeOptions;
 
+    // to display database recipes
+    private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
+    private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
+    private static final String API_KEY = "d841e53f00567b3f308c02d2eaaadd02";
+    private static final String API_SEARCH_END = "&q=";
+    private static final String API_GET_END = "&rId=";
+
+    private static List<String> list = new ArrayList<>();
+
+    private String id;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -127,6 +154,8 @@ public class HomeFragment extends Fragment {
         // this causes the error of recycler view only appearing
         // if click on ingredient form (but don't fill in anything)
         //meatRecyclerView.setHasFixedSize(true);
+
+        showDatabaseRecipe();
 
         return view;
     }
@@ -428,7 +457,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 RecipeItem recipe = documentSnapshot.toObject(RecipeItem.class);
-                String id = documentSnapshot.getId();
+                id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
 
                 ExploreFragment.recentDocumentID = id;
@@ -453,6 +482,100 @@ public class HomeFragment extends Fragment {
 
         // make changes
         transaction.commit();
+    }
+
+    public void showDatabaseRecipe() {
+        // Getting recipes according to ingredients
+        DownloadTask task = new DownloadTask();
+        String website = API_URL_SEARCH_BASE + API_KEY + API_SEARCH_END;
+        for (String s : list) {
+            website += "," + s;
+        }
+        try {
+            task.execute(website);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Downloading web data
+    public class DownloadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            String result = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+            try {
+                url = new URL(strings[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream in = urlConnection.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in);
+                int data = reader.read();
+                while (data != -1) {
+                    char current = (char) data;
+                    result += current;
+                    data = reader.read();
+                }
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray recipes = (JSONArray) jsonObject.get("recipes");
+                // for every recipe
+                for (int i = 0; i < recipes.length(); i++) {
+                    JSONObject details = (JSONObject) recipes.get(i);
+
+                    //Getting every recipe ingredients
+                    String recipeURL = API_URL_GET_BASE + API_KEY + API_GET_END
+                            + details.getString("recipe_id");
+
+                    List<String> ingredientList = new ArrayList<>();
+                    try {
+                        url = new URL(recipeURL);
+                        urlConnection = (HttpURLConnection) url.openConnection();
+                        InputStream input = urlConnection.getInputStream();
+                        InputStreamReader readers = new InputStreamReader(input);
+                        int output = readers.read();
+                        String ingredients = "";
+                        while (output != -1) {
+                            char current = (char) output;
+                            ingredients += current;
+                            output = readers.read();
+                        }
+                        JSONObject ingredientsObject = new JSONObject(ingredients);
+                        JSONObject detailsObject = (JSONObject) ingredientsObject.get("recipe");
+                        JSONArray ingredientArray = (JSONArray) detailsObject.get("ingredients");
+
+                        for (int k = 0; k < ingredientArray.length(); k++) {
+                            ingredientList.add(ingredientArray.get(k).toString());
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (id == null) {
+                        recipeRef.add(new RecipeItem(details.getString("title"),
+                                ingredientList,
+                                "", id));
+                    } else {
+                        recipeRef.document(id).set(new RecipeItem(details.getString("title"),
+                                ingredientList,
+                                "", id), SetOptions.merge());
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
     }
 
     // for debugging
