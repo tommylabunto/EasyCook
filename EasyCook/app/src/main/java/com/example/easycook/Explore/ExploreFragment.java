@@ -44,6 +44,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.Random;
 
+// TODO click on textview -> link to recipe
 // TODO fix recommended recipe
 // Search recipe by typing ingredient (caps and leave a space)
 public class ExploreFragment extends Fragment {
