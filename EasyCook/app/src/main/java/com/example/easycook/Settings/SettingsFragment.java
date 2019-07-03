@@ -11,19 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.easycook.R;
-import com.example.easycook.SignInFragment;
-import com.google.firebase.auth.FirebaseAuth;
-
-import com.example.easycook.Home.Ingredient.IngredientForm;
-import com.example.easycook.R;
-import com.example.easycook.SignInFragment;
-import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 // To restart, go AVD manager -> more -> wipe data || file -> invalidate cache & restart
 public class SettingsFragment extends Fragment {

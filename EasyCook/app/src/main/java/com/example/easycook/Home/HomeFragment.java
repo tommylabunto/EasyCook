@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
     // to display database recipes
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "d841e53f00567b3f308c02d2eaaadd02";
+    private static final String API_KEY = "afc21f9ff78be02bb0f73df6b36f6eee";
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 

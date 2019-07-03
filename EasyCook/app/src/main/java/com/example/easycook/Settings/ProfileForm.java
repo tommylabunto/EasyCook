@@ -2,6 +2,7 @@ package com.example.easycook.Settings;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.easycook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,7 +40,7 @@ public class ProfileForm extends Fragment {
     private Button backButton;
     private Button tickButton;
 
-    public static ProfileItem user;
+    public static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public ProfileForm() {
         // Required empty public constructor
@@ -59,18 +64,15 @@ public class ProfileForm extends Fragment {
                 // save changes in firestore documents
                 EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
                 EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
-                EditText phoneNumberEditText = (EditText) view.findViewById(R.id.phoneNumber_input);
 
                 String name = nameEditText.getText().toString().trim();
                 String email = emailEditText.getText().toString().trim();
-                String phoneNumber = phoneNumberEditText.getText().toString().trim();
 
                 // if input is empty, go back to home fragment
-                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email)
-                        || TextUtils.isEmpty(phoneNumber)) {
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email)) {
                 } else {
                     // save into firestore
-                    saveUser(name, email, phoneNumber);
+                    saveUser(name, email);
                 }
                 goToFragment(new SettingsFragment());
             }
@@ -91,42 +93,41 @@ public class ProfileForm extends Fragment {
 
     public void checkIfSnapshotExist(final View view) {
 
-        DocumentReference docIdRef = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
-        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+        EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
+        EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
 
-                        EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
-                        EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
-                        EditText phoneNumberEditText = (EditText) view.findViewById(R.id.phoneNumber_input);
-
-                        nameEditText.setText(user.getUsername());
-                        emailEditText.setText(user.getEmail());
-                        phoneNumberEditText.setText("" + user.getPhoneNumber());
-
-                        Log.d(LOG_TAG, "Document exists!");
-                    } else {
-                        Log.d(LOG_TAG, "Document does not exist!");
-                    }
-                } else {
-                    Log.d(LOG_TAG, "Failed with: ", task.getException());
-                }
-            }
-        });
+        nameEditText.setText(user.getDisplayName());
+        emailEditText.setText(user.getEmail());
     }
 
-    public void saveUser(String name, String email, String phoneNumber) {
+    // saves changes to user data on firebase, not firestore collection
+    // takes a while to load changes, done when toast appears
+    public void saveUser(String name, String email) {
 
-        user = new ProfileItem(user.getUid(), name, email, Integer.parseInt(phoneNumber));
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
 
-        // save document in firestore
-        CollectionReference myUsers = FirebaseFirestore.getInstance()
-                .collection("users");
-        myUsers.document(user.getUid())
-                .set(user, SetOptions.merge());
+        FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(LOG_TAG, "User profile updated.");
+                            Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        FirebaseAuth.getInstance().getCurrentUser().updateEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(LOG_TAG, "User email address updated.");
+                            Toast.makeText(getContext(), "Email address updated", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     public void goToFragment(Fragment fragment) {
@@ -138,10 +139,6 @@ public class ProfileForm extends Fragment {
 
         // make changes
         transaction.commit();
-    }
-
-    public static void passUser(ProfileItem thisUser) {
-        user = thisUser;
     }
 
     // for debugging
