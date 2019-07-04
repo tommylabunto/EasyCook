@@ -147,11 +147,11 @@ public class RecipeForm extends Fragment {
         if (id == null) {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.add(new RecipeItem(name, ingredient, preparation, id));
+            myRecipe.add(new RecipeItem(name, ingredient, preparation, id, ""));
         } else {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id), SetOptions.merge());
+            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id, ""), SetOptions.merge());
         }
     }
 

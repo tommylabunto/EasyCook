@@ -9,6 +9,8 @@ public class RecipeItem {
     private List<String> ingredient;
     private String preparation;
 
+    private String url;
+
     // used to identify the document
     private String documentID;
 
@@ -16,11 +18,12 @@ public class RecipeItem {
     public RecipeItem() {
     }
 
-    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID) {
+    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID, String url) {
         this.name = name;
         this.ingredient = ingredient;
         this.preparation = preparation;
         this.documentID = documentID;
+        this.url = url;
     }
 
     public String getName() {
@@ -42,5 +45,9 @@ public class RecipeItem {
 
     public String getDocumentID() {
         return documentID;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

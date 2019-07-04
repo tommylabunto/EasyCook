@@ -2,6 +2,8 @@ package com.example.easycook.Home.Recipe;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -71,13 +73,34 @@ public class RecipeFormView extends Fragment {
         backButton = view.findViewById(R.id.back_button_recipe_view);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
 
                 final FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.popBackStackImmediate();
             }
         });
 
+        // when clicked on url, opens up the page
+        final TextView urlEditText = (TextView) view.findViewById(R.id.url_input_view);
+        urlEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get the URL text.
+                String url = urlEditText.getText().toString();
+
+                // Parse the URI and create the intent.
+                Uri webpage = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+
+                // Find an activity to hand the intent and start that activity.
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Log.d("ImplicitIntents", "Can't handle this intent!");
+                }
+            }
+        });
         return view;
     }
 
@@ -95,10 +118,15 @@ public class RecipeFormView extends Fragment {
                             TextView nameEditText = (TextView) view.findViewById(R.id.recipe_name_input_view);
                             TextView ingredientEditText = (TextView) view.findViewById(R.id.ingredient_list_input_view);
                             TextView preparationEditText = (TextView) view.findViewById(R.id.preparation_input_view);
+                            TextView urlEditText = (TextView) view.findViewById(R.id.url_input_view);
 
                             nameEditText.setText(recipe.getName());
                             ingredientEditText.setText(recipe.getIngredientString());
                             preparationEditText.setText(recipe.getPreparation());
+
+                            if (!recipe.getUrl().isEmpty()) {
+                                urlEditText.setText(recipe.getUrl());
+                            }
 
                             Log.d(LOG_TAG, "Document exists!");
                         } else {

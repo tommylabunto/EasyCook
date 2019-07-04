@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-// TODO download data from food2fork just once
 // TODO notification for ingredient
 // TODO upload image
 // TODO do up documentation

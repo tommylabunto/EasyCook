@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,11 +32,15 @@ import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 import com.example.easycook.Settings.ProfileForm;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONArray;
@@ -106,7 +111,7 @@ public class HomeFragment extends Fragment {
     // to display database recipes
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "f670b471beeb39b243e828607620b7c5";
+    private static final String API_KEY = "80665d2ce31ddd34451bfaa7653bc773";
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 
@@ -151,20 +156,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // load recyclerview for ingredients and recipes
         showRecyclerView(view);
+
+        // check if user has zero recipes. If yes -> load recipes from food2fork
+        checkRecipe();
 
         // this causes the error of recycler view only appearing
         // if click on ingredient form (but don't fill in anything)
         //meatRecyclerView.setHasFixedSize(true);
-
-        showDatabaseRecipe();
 
         return view;
     }
 
     public void showRecyclerView(View view) {
 
-        // TODO change meat only
         // meat
         meatRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_meat");
         meatQuery = meatRef.orderBy("numDays", Query.Direction.ASCENDING);
@@ -487,6 +493,33 @@ public class HomeFragment extends Fragment {
         transaction.commit();
     }
 
+    public void checkRecipe() {
+        db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+            int count = 0;
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        count++;
+                        if (count >= 1) {
+                            break;
+                        }
+                        Log.d(LOG_TAG, document.getId() + " => " + document.getData());
+                    }
+                    if (count == 0) {
+                        Toast.makeText(getContext(), "Loading recipes...", Toast.LENGTH_LONG).show();
+                        showDatabaseRecipe();
+                    }
+                } else {
+                    Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
     public void showDatabaseRecipe() {
         // Getting recipes according to ingredients
         DownloadTask task = new DownloadTask();
@@ -556,11 +589,11 @@ public class HomeFragment extends Fragment {
                     if (id == null) {
                         recipeRef.add(new RecipeItem(details.getString("title"),
                                 ingredientList,
-                                "", id));
+                                "", id, details.getString("source_url")));
                     } else {
                         recipeRef.document(id).set(new RecipeItem(details.getString("title"),
                                 ingredientList,
-                                "", id), SetOptions.merge());
+                                "", id, details.getString("source_url")), SetOptions.merge());
                     }
                 }
 

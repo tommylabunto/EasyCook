@@ -26,6 +26,7 @@ import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
+import com.example.easycook.Home.Recipe.RecipeFormView;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 import com.example.easycook.Settings.ProfileForm;
@@ -44,7 +45,6 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.Random;
 
-// TODO click on textview -> link to recipe
 // TODO fix recommended recipe
 // Search recipe by typing ingredient (caps and leave a space)
 public class ExploreFragment extends Fragment {
@@ -275,12 +275,12 @@ public class ExploreFragment extends Fragment {
                 recentDocumentID = id;
 
                 // replace container view (the main activity container) with ingredient fragment
-                RecipeForm recipeFragment = new RecipeForm();
+                RecipeFormView recipeFragmentView = new RecipeFormView();
 
                 // pass reference to ingredient fragment
-                recipeFragment.passReference(recipe, id, path);
+                recipeFragmentView.passReference(recipe, id, path);
 
-                goToFragment(recipeFragment);
+                goToFragment(recipeFragmentView);
             }
         });
     }
@@ -346,7 +346,7 @@ public class ExploreFragment extends Fragment {
                                 FirebaseFirestore.getInstance()
                                         .collection("users").document(ProfileForm.user.getUid())
                                         .collection("my_recipe").document(documentSnapshot.getId())
-                                        .set(new RecipeItem(recipe.getName(), recipe.getIngredient(), recipe.getPreparation(), documentSnapshot.getId()), SetOptions.merge());
+                                        .set(new RecipeItem(recipe.getName(), recipe.getIngredient(), recipe.getPreparation(), documentSnapshot.getId(), recipe.getUrl()), SetOptions.merge());
                             }
                         }
                     }
