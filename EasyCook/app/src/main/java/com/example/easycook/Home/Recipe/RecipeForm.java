@@ -43,7 +43,7 @@ public class RecipeForm extends Fragment {
     private Button backButton;
     private Button tickButton;
 
-    // referenced passed from home fragment
+    // referenced passed from recipe form view fragment
     private RecipeItem recipe;
     private String id;
     private String path;

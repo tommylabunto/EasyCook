@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Home.Ingredient.IngredientFormView">
+
+    <FrameLayout
+        android:id="@+id/form_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/IngredientType_view"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="48dp"
+                android:text="@string/ingredient_type"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/edit_button_ingredient"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="44dp"
+                android:text="edit"
+                app:layout_constraintStart_toEndOf="@+id/IngredientType_view"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/back_button_ingredient_view"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="8dp"
+                android:text="back"
+                app:layout_constraintBottom_toTopOf="@+id/IngredientType_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/IngredientType_input_view"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientType_view" />
+
+            <TextView
+                android:id="@+id/IngredientName_view"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:text="@string/ingredient_name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientType_input_view" />
+
+            <TextView
+                android:id="@+id/IngredientName_input_view"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientName_view" />
+
+            <TextView
+                android:id="@+id/IngredientWeight_view"
+                android:layout_width="0dp"
+                android:layout_height="53dp"
+                android:text="@string/ingredient_weight"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientName_input_view" />
+
+            <TextView
+                android:id="@+id/IngredientWeight_input_view"
+                android:layout_width="0dp"
+                android:text=""
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientWeight_view" />
+
+            <TextView
+                android:id="@+id/IngredientExpiry_view"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:text="@string/ingredient_expiry"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientWeight_input_view" />
+
+            <TextView
+                android:id="@+id/IngredientExpiry_input_view"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientExpiry_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -22,9 +22,11 @@ import android.widget.Toast;
 import com.example.easycook.Explore.ExploreFragment;
 import com.example.easycook.Home.Ingredient.IngredientAdapter;
 import com.example.easycook.Home.Ingredient.IngredientForm;
+import com.example.easycook.Home.Ingredient.IngredientFormView;
 import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
+import com.example.easycook.Home.Recipe.RecipeFormView;
 import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 import com.example.easycook.Settings.ProfileForm;
@@ -104,7 +106,7 @@ public class HomeFragment extends Fragment {
     // to display database recipes
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "afc21f9ff78be02bb0f73df6b36f6eee";
+    private static final String API_KEY = "f670b471beeb39b243e828607620b7c5";
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 
@@ -162,6 +164,7 @@ public class HomeFragment extends Fragment {
 
     public void showRecyclerView(View view) {
 
+        // TODO change meat only
         // meat
         meatRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_meat");
         meatQuery = meatRef.orderBy("numDays", Query.Direction.ASCENDING);
@@ -197,12 +200,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -241,12 +244,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -285,12 +288,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -329,12 +332,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -373,12 +376,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -417,12 +420,12 @@ public class HomeFragment extends Fragment {
                 String path = documentSnapshot.getReference().getPath();
 
                 // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
+                IngredientFormView ingredientFragmentView = new IngredientFormView();
 
                 // pass reference to ingredient fragment
-                ingredientFragment.passReference(ingredient, id, path);
+                ingredientFragmentView.passReference(ingredient, id, path);
 
-                goToFragment(ingredientFragment);
+                goToFragment(ingredientFragmentView);
             }
         });
 
@@ -463,12 +466,12 @@ public class HomeFragment extends Fragment {
                 ExploreFragment.recentDocumentID = id;
 
                 // replace container view (the main activity container) with ingredient fragment
-                RecipeForm recipeFragment = new RecipeForm();
+                RecipeFormView recipeFragmentView = new RecipeFormView();
 
                 // pass reference to ingredient fragment
-                recipeFragment.passReference(recipe, id, path);
+                recipeFragmentView.passReference(recipe, id, path);
 
-                goToFragment(recipeFragment);
+                goToFragment(recipeFragmentView);
             }
         });
     }

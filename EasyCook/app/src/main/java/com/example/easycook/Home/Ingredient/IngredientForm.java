@@ -36,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
+// TODO include unit of measurement
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private final String LOG_TAG = "IngredientForm";
@@ -284,7 +285,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    // receive reference from home fragment
+    // receive reference from ingredientformview fragment
     // need to check if its null (not created before)
     public void passReference(IngredientItem ingredient, String id, String path) {
         this.ingredient = ingredient;
