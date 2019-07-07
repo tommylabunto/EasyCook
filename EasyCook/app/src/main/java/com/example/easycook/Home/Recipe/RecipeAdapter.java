@@ -1,5 +1,6 @@
 package com.example.easycook.Home.Recipe;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.easycook.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAdapter.RecipeViewHolder> {
+
+    private final String LOG_TAG = "RecipeAdapter";
 
     private RecipeAdapter.OnItemClickListener listener;
 
@@ -36,6 +45,26 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
     }
 
     public void deleteItem(int position) {
+
+        // delete image on storage
+        RecipeItem recipe = getSnapshots().getSnapshot(position).toObject(RecipeItem.class);
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference imageRef = storageRef.child(recipe.getPath());
+
+        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(LOG_TAG, "deleted image successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d(LOG_TAG, "failed to delete image");
+            }
+        });
+
+        // delete document reference on firestore
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 

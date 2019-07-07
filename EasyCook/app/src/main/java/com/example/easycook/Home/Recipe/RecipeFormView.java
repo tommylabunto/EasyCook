@@ -3,6 +3,7 @@ package com.example.easycook.Home.Recipe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,13 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.easycook.R;
@@ -26,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
@@ -119,13 +124,21 @@ public class RecipeFormView extends Fragment {
                             TextView ingredientEditText = (TextView) view.findViewById(R.id.ingredient_list_input_view);
                             TextView preparationEditText = (TextView) view.findViewById(R.id.preparation_input_view);
                             TextView urlEditText = (TextView) view.findViewById(R.id.url_input_view);
+                            ImageView recipeImage = (ImageView) view.findViewById(R.id.food_image_view);
 
                             nameEditText.setText(recipe.getName());
                             ingredientEditText.setText(recipe.getIngredientString());
                             preparationEditText.setText(recipe.getPreparation());
 
                             if (!recipe.getUrl().isEmpty()) {
-                                urlEditText.setText(recipe.getUrl());
+                                // underline text
+                                SpannableString content = new SpannableString(recipe.getUrl());
+                                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                                urlEditText.setText(content);
+                            }
+
+                            if (!recipe.getImageLink().isEmpty()) {
+                                Picasso.get().load(recipe.getImageLink()).into(recipeImage);
                             }
 
                             Log.d(LOG_TAG, "Document exists!");

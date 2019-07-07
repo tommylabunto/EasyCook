@@ -9,21 +9,30 @@ public class RecipeItem {
     private List<String> ingredient;
     private String preparation;
 
+    // url of food2fork recipe
     private String url;
+
+    // link to download image
+    private String imageLink;
 
     // used to identify the document
     private String documentID;
+
+    // path in firebase storage
+    private String path;
 
     // no argument constructor
     public RecipeItem() {
     }
 
-    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID, String url) {
+    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID, String url, String imageLink, String path) {
         this.name = name;
         this.ingredient = ingredient;
         this.preparation = preparation;
         this.documentID = documentID;
         this.url = url;
+        this.imageLink = imageLink;
+        this.path = path;
     }
 
     public String getName() {
@@ -49,5 +58,13 @@ public class RecipeItem {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public String getPath() {
+        return path;
     }
 }

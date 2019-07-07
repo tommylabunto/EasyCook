@@ -1,6 +1,8 @@
 package com.example.easycook.Home;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
 import com.example.easycook.Settings.ProfileForm;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +46,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -111,7 +118,7 @@ public class HomeFragment extends Fragment {
     // to display database recipes
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "80665d2ce31ddd34451bfaa7653bc773";
+    private static final String API_KEY = "8a4ae4cd3fe5ecfb667066a276d339ec";
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 
@@ -563,6 +570,8 @@ public class HomeFragment extends Fragment {
                             + details.getString("recipe_id");
 
                     List<String> ingredientList = new ArrayList<>();
+
+                    String imageLink = "";
                     try {
                         url = new URL(recipeURL);
                         urlConnection = (HttpURLConnection) url.openConnection();
@@ -582,18 +591,25 @@ public class HomeFragment extends Fragment {
                         for (int k = 0; k < ingredientArray.length(); k++) {
                             ingredientList.add(ingredientArray.get(k).toString());
                         }
+                        // dont download and save into firebase storage
+                        // save image url in recipeitem
+                        // picasso can only load https web image
+                        imageLink = details.getString("image_url").replace("http", "https");
+
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
 
+                    String name = details.getString("title");
+                    String source_url = details.getString("source_url");
+
                     if (id == null) {
-                        recipeRef.add(new RecipeItem(details.getString("title"),
-                                ingredientList,
-                                "", id, details.getString("source_url")));
+                        recipeRef.add(new RecipeItem(name, ingredientList,
+                                "", id, source_url, imageLink, ""));
                     } else {
-                        recipeRef.document(id).set(new RecipeItem(details.getString("title"),
+                        recipeRef.document(id).set(new RecipeItem(name,
                                 ingredientList,
-                                "", id, details.getString("source_url")), SetOptions.merge());
+                                "", id, source_url, imageLink, ""), SetOptions.merge());
                     }
                 }
 

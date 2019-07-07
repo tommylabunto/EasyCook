@@ -45,7 +45,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.Random;
 
-// TODO fix recommended recipe
+// TODO fix recommended recipe (add ingredients that match ingredient with recipe)
 // Search recipe by typing ingredient (caps and leave a space)
 public class ExploreFragment extends Fragment {
 
@@ -346,7 +346,9 @@ public class ExploreFragment extends Fragment {
                                 FirebaseFirestore.getInstance()
                                         .collection("users").document(ProfileForm.user.getUid())
                                         .collection("my_recipe").document(documentSnapshot.getId())
-                                        .set(new RecipeItem(recipe.getName(), recipe.getIngredient(), recipe.getPreparation(), documentSnapshot.getId(), recipe.getUrl()), SetOptions.merge());
+                                        .set(new RecipeItem(recipe.getName(), recipe.getIngredient(),
+                                                recipe.getPreparation(), documentSnapshot.getId(),
+                                                recipe.getUrl(), recipe.getImageLink(), recipe.getPath()), SetOptions.merge());
                             }
                         }
                     }
