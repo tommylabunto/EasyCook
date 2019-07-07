@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        backButton();
+        setUpBackButton();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -107,6 +107,22 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         return super.onOptionsItemSelected(item);
     }
 
+    public void setUpBackButton() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                int stackHeight = getSupportFragmentManager().getBackStackEntryCount();
+                if (stackHeight > 0) { // if we have something on the stack (doesn't include the current shown fragment)
+                    getSupportActionBar().setHomeButtonEnabled(true);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } else {
+                    getSupportActionBar().setHomeButtonEnabled(false);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+            }
+        });
+    }
+
     // sign out and then sign in
     public void signOut() {
         if (mAuth != null) {
@@ -125,22 +141,6 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     public static void passAuth(FirebaseAuth auth, FirebaseUser thisUser) {
         mAuth = auth;
         user = thisUser;
-    }
-
-    public void backButton() {
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                int stackHeight = getSupportFragmentManager().getBackStackEntryCount();
-                if (stackHeight > 0) { // if we have something on the stack (doesn't include the current shown fragment)
-                    getSupportActionBar().setHomeButtonEnabled(true);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                } else {
-                    getSupportActionBar().setHomeButtonEnabled(false);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                }
-            }
-        });
     }
 
     // for debugging

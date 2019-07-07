@@ -2,6 +2,7 @@ package com.example.easycook.Home;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -144,20 +145,8 @@ public class HomeFragment extends Fragment {
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
 
-        // when click ingredient button
-        Button ingredientButton = view.findViewById(R.id.ingredientButton);
-        ingredientButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // replace container view (the main activity container) with ingredient fragment
-                IngredientForm ingredientFragment = new IngredientForm();
-                goToFragment(ingredientFragment);
-            }
-        });
-
         // when click recipe button
-        Button recipeButton = view.findViewById(R.id.recipeButton);
+        ImageView recipeButton = view.findViewById(R.id.recipeButton);
         recipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +154,18 @@ public class HomeFragment extends Fragment {
                 // replace container view (the main activity container) with recipe fragment
                 RecipeForm recipeForm = new RecipeForm();
                 goToFragment(recipeForm);
+            }
+        });
+
+        // when click ingredient button
+        ImageView ingredientButton = view.findViewById(R.id.ingredientButton);
+        ingredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // replace container view (the main activity container) with ingredient fragment
+                IngredientForm ingredientFragment = new IngredientForm();
+                goToFragment(ingredientFragment);
             }
         });
 

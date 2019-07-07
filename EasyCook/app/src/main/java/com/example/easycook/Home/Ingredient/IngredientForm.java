@@ -108,6 +108,48 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         return view;
     }
 
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tick_button:
+                addIngredient();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void createSpinner(Spinner spinner) {
+        // Create an ArrayAdapter using the string array and default spinner
+        // layout.
+        // ArrayAdapter connects array of spinner items to spinner
+        adapter = ArrayAdapter.createFromResource(
+                getContext(),
+                // string array in strings.xml
+                R.array.ingredients_array,
+                // default Android supplied
+                android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner.
+        if (spinner != null) {
+            spinner.setAdapter(adapter);
+        }
+    }
+
     public void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
@@ -229,27 +271,6 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         transaction.commit();
     }
 
-    public void createSpinner(Spinner spinner) {
-        // Create an ArrayAdapter using the string array and default spinner
-        // layout.
-        // ArrayAdapter connects array of spinner items to spinner
-        adapter = ArrayAdapter.createFromResource(
-                getContext(),
-                // string array in strings.xml
-                R.array.ingredients_array,
-                // default Android supplied
-                android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears.
-        adapter.setDropDownViewResource
-                (android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner.
-        if (spinner != null) {
-            spinner.setAdapter(adapter);
-        }
-    }
-
     // receive reference from ingredientformview fragment
     // need to check if its null (not created before)
     public void passReference(IngredientItem ingredient, String id, String path) {
@@ -283,27 +304,6 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
             sortIngredient(ingredient);
         }
         backToHome(getFragmentManager());
-    }
-
-    // Inflates the menu, and adds items to the action bar if it is present.
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    // Handles app bar item clicks.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.tick_button:
-                addIngredient();
-                return true;
-            default:
-                // Do nothing
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     // for debugging

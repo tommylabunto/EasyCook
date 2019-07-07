@@ -63,6 +63,27 @@ public class IngredientFormView extends Fragment {
         return view;
     }
 
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_button:
+                editIngredient();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
@@ -113,27 +134,6 @@ public class IngredientFormView extends Fragment {
         this.ingredient = ingredient;
         this.id = id;
         this.path = path;
-    }
-
-    // Inflates the menu, and adds items to the action bar if it is present.
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    // Handles app bar item clicks.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_button:
-                editIngredient();
-                return true;
-            default:
-                // Do nothing
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void editIngredient() {

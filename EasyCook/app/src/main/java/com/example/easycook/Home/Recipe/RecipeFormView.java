@@ -77,20 +77,31 @@ public class RecipeFormView extends Fragment {
 
                 // Get the URL text.
                 String url = urlEditText.getText().toString();
-
-                // Parse the URI and create the intent.
-                Uri webpage = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-
-                // Find an activity to hand the intent and start that activity.
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Log.d("ImplicitIntents", "Can't handle this intent!");
-                }
+                openURL(url);
             }
         });
         return view;
+    }
+
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_button:
+                editRecipe();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void checkIfSnapshotExist(final View view) {
@@ -141,6 +152,26 @@ public class RecipeFormView extends Fragment {
         }
     }
 
+    private void editRecipe() {
+        // edits recipe
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.passReference(recipe, id, path);
+        goToFragment(recipeForm);
+    }
+
+    private void openURL(String url) {
+        // Parse the URI and create the intent.
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+
+        // Find an activity to hand the intent and start that activity.
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d("ImplicitIntents", "Can't handle this intent!");
+        }
+    }
+
     public void goToFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
@@ -156,34 +187,6 @@ public class RecipeFormView extends Fragment {
         this.recipe = recipe;
         this.id = id;
         this.path = path;
-    }
-
-    // Inflates the menu, and adds items to the action bar if it is present.
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    // Handles app bar item clicks.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_button:
-                editRecipe();
-                return true;
-            default:
-                // Do nothing
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void editRecipe() {
-        // edits recipe
-        RecipeForm recipeForm = new RecipeForm();
-        recipeForm.passReference(recipe, id, path);
-        goToFragment(recipeForm);
     }
 
     // for debugging

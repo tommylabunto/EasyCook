@@ -65,6 +65,27 @@ public class ProfileForm extends Fragment {
         return view;
     }
 
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tick_button:
+                saveChanges();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void checkIfSnapshotExist(final View view) {
 
         EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
@@ -72,6 +93,23 @@ public class ProfileForm extends Fragment {
 
         nameEditText.setText(user.getDisplayName());
         emailEditText.setText(user.getEmail());
+    }
+
+    private void saveChanges() {
+        // save changes in firestore documents
+        EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
+        EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
+
+        String name = nameEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
+
+        // if input is empty, go back to home fragment
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email)) {
+        } else {
+            // save into firestore
+            saveUser(name, email);
+        }
+        goToFragment(new SettingsFragment());
     }
 
     // saves changes to user data on firebase, not firestore collection
@@ -113,44 +151,6 @@ public class ProfileForm extends Fragment {
 
         // make changes
         transaction.commit();
-    }
-
-    // Inflates the menu, and adds items to the action bar if it is present.
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    // Handles app bar item clicks.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.tick_button:
-                saveChanges();
-                return true;
-            default:
-                // Do nothing
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void saveChanges() {
-        // save changes in firestore documents
-        EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
-        EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
-
-        String name = nameEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-
-        // if input is empty, go back to home fragment
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email)) {
-        } else {
-            // save into firestore
-            saveUser(name, email);
-        }
-        goToFragment(new SettingsFragment());
     }
 
     // for debugging

@@ -1,6 +1,7 @@
 package com.example.easycook.Explore;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.Home.Ingredient.IngredientItem;
@@ -100,7 +102,7 @@ public class ExploreFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
         // when click search button
-        Button searchButton = view.findViewById(R.id.search_button);
+        ImageView searchButton = view.findViewById(R.id.search_button);
         final EditText searchEditText = view.findViewById(R.id.search_text);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override

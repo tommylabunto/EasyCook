@@ -101,6 +101,49 @@ public class RecipeForm extends Fragment {
         return view;
     }
 
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tick_button:
+                addRecipe();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void addRecipe() {
+
+        // get user input and list it in home fragment
+        EditText nameEditText = (EditText) view.findViewById(R.id.recipe_name_input);
+        EditText ingredientEditText = (EditText) view.findViewById(R.id.ingredient_list_input);
+        EditText preparationEditText = (EditText) view.findViewById(R.id.preparation_input);
+
+        String name = nameEditText.getText().toString().trim();
+        String ingredient = ingredientEditText.getText().toString().trim();
+        String preparation = preparationEditText.getText().toString().trim();
+
+        // if input is empty, go back to home fragment
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
+                || TextUtils.isEmpty(preparation)) {
+        } else {
+            // upload pic into firebase storage
+            // must have pic to add recipe into firestore
+            uploadFile(name, Arrays.asList(ingredient.split(" ")), preparation);
+        }
+        backToHome(getFragmentManager());
+    }
+
     public void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
@@ -141,24 +184,6 @@ public class RecipeForm extends Fragment {
         this.recipe = recipe;
         this.id = id;
         this.path = path;
-    }
-
-    public void addRecipeToFirebase(String name, List<String> ingredient, String preparation, String imageLink, String path) {
-
-        // when recipe is first created, id is null
-        // but when recipe is clicked / explore page is clicked -> the id is set
-
-        if (id == null) {
-            CollectionReference myRecipe = FirebaseFirestore.getInstance()
-                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.add(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path));
-        } else {
-            CollectionReference myRecipe = FirebaseFirestore.getInstance()
-                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path), SetOptions.merge());
-        }
-
-        Log.d(LOG_TAG, "saved changes");
     }
 
     public void backToHome(FragmentManager fragmentManager) {
@@ -241,47 +266,22 @@ public class RecipeForm extends Fragment {
         }
     }
 
-    private void addRecipe() {
+    public void addRecipeToFirebase(String name, List<String> ingredient, String preparation, String imageLink, String path) {
 
-        // get user input and list it in home fragment
-        EditText nameEditText = (EditText) view.findViewById(R.id.recipe_name_input);
-        EditText ingredientEditText = (EditText) view.findViewById(R.id.ingredient_list_input);
-        EditText preparationEditText = (EditText) view.findViewById(R.id.preparation_input);
+        // when recipe is first created, id is null
+        // but when recipe is clicked / explore page is clicked -> the id is set
 
-        String name = nameEditText.getText().toString().trim();
-        String ingredient = ingredientEditText.getText().toString().trim();
-        String preparation = preparationEditText.getText().toString().trim();
-
-        // if input is empty, go back to home fragment
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
-                || TextUtils.isEmpty(preparation)) {
+        if (id == null) {
+            CollectionReference myRecipe = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
+            myRecipe.add(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path));
         } else {
-            // upload pic into firebase storage
-            // must have pic to add recipe into firestore
-            uploadFile(name, Arrays.asList(ingredient.split(" ")), preparation);
+            CollectionReference myRecipe = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
+            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path), SetOptions.merge());
         }
-        backToHome(getFragmentManager());
-    }
 
-    // Inflates the menu, and adds items to the action bar if it is present.
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    // Handles app bar item clicks.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.tick_button:
-                addRecipe();
-                return true;
-            default:
-                // Do nothing
-        }
-        return super.onOptionsItemSelected(item);
+        Log.d(LOG_TAG, "saved changes");
     }
 
     // for debugging

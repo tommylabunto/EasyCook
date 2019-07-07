@@ -31,12 +31,13 @@
                     android:layout_width="212dp"
                     android:layout_height="46dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/home_recipe_header"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/recipe_recyclerView"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ingredientButton"
                     tools:layout_conversion_absoluteHeight="49dp"
                     tools:layout_conversion_absoluteWidth="407dp" />
 
@@ -44,19 +45,20 @@
                     android:id="@+id/recipe_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toTopOf="@+id/home_ingredient_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_recipe_header" />
 
-                <Button
+                <ImageView
                     android:id="@+id/recipeButton"
-                    android:layout_width="104dp"
-                    android:layout_height="52dp"
-                    android:layout_marginLeft="56dp"
-                    android:text="recipe"
-                    app:layout_constraintBottom_toTopOf="@+id/ingredientButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_add_black_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/home_recipe_header"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,24 +66,27 @@
                     android:id="@+id/home_ingredient_header"
                     android:layout_width="213dp"
                     android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/home_ingredient_header"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/home_recipe_header"
+                    app:layout_constraintTop_toBottomOf="@+id/recipe_recyclerView"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <Button
+                <ImageView
                     android:id="@+id/ingredientButton"
-                    android:layout_width="104dp"
-                    android:layout_height="52dp"
-                    android:layout_marginRight="5dp"
-                    android:text="Ingredient"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recipeButton" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_add_black_24dp"
+                    app:layout_constraintBottom_toTopOf="@+id/home_ingredient_meat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/home_ingredient_header" />
 
                 <TextView
                     android:id="@+id/home_ingredient_meat"
