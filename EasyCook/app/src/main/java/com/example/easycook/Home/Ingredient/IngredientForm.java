@@ -15,6 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,8 +44,6 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
     private final String LOG_TAG = "IngredientForm";
 
-    private Button tickButton;
-    private Button backButton;
     private EditText date;
     private String selectedDate;
 
@@ -59,6 +60,8 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
     private String id;
     private String path;
 
+    private View view;
+
     public IngredientForm() {
         // Required empty public constructor
     }
@@ -68,6 +71,11 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_ingredient_form, container, false);
+
+        this.view = view;
+
+        // inflate toolbar
+        setHasOptionsMenu(true);
 
         // get fragment manager so we can launch from fragment
         final FragmentManager fragmentManager = getFragmentManager();
@@ -83,49 +91,6 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
         // if snapshot exist, populate screen with data
         checkIfSnapshotExist(view);
-
-        // when done, go back to home fragment
-        tickButton = view.findViewById(R.id.tick_button_ingredient);
-        tickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // get user input and list it in home fragment
-                Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
-                EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
-                EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
-                EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
-
-                String type = typeEditText.getSelectedItem().toString().trim();
-                String name = nameEditText.getText().toString().trim();
-                String weight = weightEditText.getText().toString().trim();
-                String date = dateEditText.getText().toString().trim();
-
-                // if input is empty, go back to home fragment
-                if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
-                        || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
-                } else {
-                    IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0);
-
-                    // pass ingredient to explore fragment to check if its closest to expiring (so it shows up under recommended)
-                    ExploreFragment.passIngredient(ingredient);
-                    // sort ingredient by type and add into firestore accordingly
-                    sortIngredient(ingredient);
-                }
-                backToHome(fragmentManager);
-            }
-        });
-
-        // pressing back doesn't save any changes
-        backButton = view.findViewById(R.id.back_button_ingredient);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStackImmediate();
-            }
-        });
 
         // Creates a new date picker fragment and show it.
         date = view.findViewById(R.id.IngredientExpiry_input);
@@ -291,6 +256,54 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         this.ingredient = ingredient;
         this.id = id;
         this.path = path;
+    }
+
+    private void addIngredient() {
+
+        // get user input and list it in home fragment
+        Spinner typeEditText = (Spinner) view.findViewById(R.id.IngredientType_input);
+        EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
+        EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
+        EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+
+        String type = typeEditText.getSelectedItem().toString().trim();
+        String name = nameEditText.getText().toString().trim();
+        String weight = weightEditText.getText().toString().trim();
+        String date = dateEditText.getText().toString().trim();
+
+        // if input is empty, go back to home fragment
+        if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
+                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
+        } else {
+            IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0);
+
+            // pass ingredient to explore fragment to check if its closest to expiring (so it shows up under recommended)
+            ExploreFragment.passIngredient(ingredient);
+            // sort ingredient by type and add into firestore accordingly
+            sortIngredient(ingredient);
+        }
+        backToHome(getFragmentManager());
+    }
+
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_tick, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tick_button:
+                addIngredient();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // for debugging

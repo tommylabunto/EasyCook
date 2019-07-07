@@ -28,26 +28,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/tick_button_ingredient"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="44dp"
-                android:text="tick"
-                app:layout_constraintStart_toEndOf="@+id/IngredientType"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/back_button_ingredient"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="8dp"
-                android:text="back"
-                app:layout_constraintBottom_toTopOf="@+id/IngredientType"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
             <Spinner
                 android:id="@+id/IngredientType_input"
                 android:layout_width="0dp"

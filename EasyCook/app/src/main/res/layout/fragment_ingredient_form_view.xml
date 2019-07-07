@@ -28,26 +28,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/edit_button_ingredient"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="44dp"
-                android:text="edit"
-                app:layout_constraintStart_toEndOf="@+id/IngredientType_view"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/back_button_ingredient_view"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="8dp"
-                android:text="back"
-                app:layout_constraintBottom_toTopOf="@+id/IngredientType_view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
             <TextView
                 android:id="@+id/IngredientType_input_view"
                 android:text=""

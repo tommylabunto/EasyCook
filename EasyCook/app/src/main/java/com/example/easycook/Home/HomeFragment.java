@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -63,6 +65,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO create log d for all methods
 // TODO when flipped -> data gets lost (in form)
 // TODO improve UI (fonts,button,color)
 // use random email generator to register for food2fork

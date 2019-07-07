@@ -12,6 +12,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,13 +35,12 @@ public class IngredientFormView extends Fragment {
 
     private final String LOG_TAG = "IngredientFormView";
 
-    private Button editButton;
-    private Button backButton;
-
     // referenced passed from home fragment
     private IngredientItem ingredient;
     private String id;
     private String path;
+
+    private View view;
 
     public IngredientFormView() {
         // Required empty public constructor
@@ -50,34 +52,13 @@ public class IngredientFormView extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_ingredient_form_view, container, false);
 
+        this.view = view;
+
+        // inflate toolbar
+        setHasOptionsMenu(true);
+
         // if snapshot exist, populate screen with data
         checkIfSnapshotExist(view);
-
-        // when done, go back to home fragment
-        editButton = view.findViewById(R.id.edit_button_ingredient);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // pass reference to form
-                IngredientForm ingredientForm = new IngredientForm();
-                ingredientForm.passReference(ingredient, id, path);
-
-                // edit form
-                goToFragment(ingredientForm);
-            }
-        });
-
-        // pressing back doesn't save any changes
-        backButton = view.findViewById(R.id.back_button_ingredient_view);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStackImmediate();
-            }
-        });
 
         return view;
     }
@@ -132,6 +113,36 @@ public class IngredientFormView extends Fragment {
         this.ingredient = ingredient;
         this.id = id;
         this.path = path;
+    }
+
+    // Inflates the menu, and adds items to the action bar if it is present.
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handles app bar item clicks.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_button:
+                editIngredient();
+                return true;
+            default:
+                // Do nothing
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void editIngredient() {
+        // pass reference to form
+        IngredientForm ingredientForm = new IngredientForm();
+        ingredientForm.passReference(ingredient, id, path);
+
+        // edit form
+        goToFragment(ingredientForm);
     }
 
     // for debugging

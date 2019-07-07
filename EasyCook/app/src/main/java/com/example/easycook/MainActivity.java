@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.Menu;
@@ -68,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        backButton();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         // if no user, sign in
@@ -94,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
             case R.id.sign_out:
                 signOut();
                 return true;
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStackImmediate();
+                return true;
             default:
                 // Do nothing
         }
@@ -118,6 +125,22 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     public static void passAuth(FirebaseAuth auth, FirebaseUser thisUser) {
         mAuth = auth;
         user = thisUser;
+    }
+
+    public void backButton() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                int stackHeight = getSupportFragmentManager().getBackStackEntryCount();
+                if (stackHeight > 0) { // if we have something on the stack (doesn't include the current shown fragment)
+                    getSupportActionBar().setHomeButtonEnabled(true);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } else {
+                    getSupportActionBar().setHomeButtonEnabled(false);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+            }
+        });
     }
 
     // for debugging
