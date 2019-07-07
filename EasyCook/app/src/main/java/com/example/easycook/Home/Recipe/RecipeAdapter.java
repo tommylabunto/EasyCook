@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAdapter.RecipeViewHolder> {
 
@@ -42,6 +44,8 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
     protected void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position, @NonNull RecipeItem recipeItem) {
 
         recipeViewHolder.recipeName.setText(recipeItem.getName());
+
+        Picasso.get().load(recipeItem.getImageLink()).into(recipeViewHolder.recipeImage);
     }
 
     public void deleteItem(int position) {
@@ -74,10 +78,12 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
      */
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
         public TextView recipeName;
+        public ImageView recipeImage;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipe_name);
+            recipeImage = itemView.findViewById(R.id.recipe_image);
 
             // when recycler view is clicked
             itemView.setOnClickListener(new View.OnClickListener() {

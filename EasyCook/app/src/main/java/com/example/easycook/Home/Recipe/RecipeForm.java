@@ -48,7 +48,6 @@ import com.squareup.picasso.Picasso;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO enable firebase authentication and change rules in storage back to normal
 public class RecipeForm extends Fragment {
 
     private final String LOG_TAG = "RecipeForm";
@@ -105,7 +104,7 @@ public class RecipeForm extends Fragment {
                         || TextUtils.isEmpty(preparation)) {
                 } else {
                     // upload pic into firebase storage
-                    // add recipe into firestore
+                    // must have pic to add recipe into firestore
                     uploadFile(name, Arrays.asList(ingredient.split(" ")), preparation);
                 }
                 backToHome(fragmentManager);

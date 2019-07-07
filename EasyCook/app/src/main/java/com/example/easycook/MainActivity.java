@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 // TODO notification for ingredient
-// TODO upload image
 // TODO do up documentation
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
