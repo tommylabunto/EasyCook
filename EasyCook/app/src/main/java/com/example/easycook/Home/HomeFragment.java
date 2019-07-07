@@ -63,6 +63,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO when flipped -> data gets lost (in form)
 // TODO improve UI (fonts,button,color)
 // use random email generator to register for food2fork
 /**

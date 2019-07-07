@@ -55,6 +55,7 @@ public class RecipeForm extends Fragment {
     private Button tickButton;
 
     private ImageView recipeImage;
+    private Button chooseImageButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri foodUri;
 
@@ -122,7 +123,8 @@ public class RecipeForm extends Fragment {
         });
 
         recipeImage = view.findViewById(R.id.food_image);
-        recipeImage.setOnClickListener(new View.OnClickListener() {
+        chooseImageButton = view.findViewById(R.id.choose_image_button);
+        chooseImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openFileChooser();

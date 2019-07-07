@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     tools:context=".Home.Recipe.RecipeItem">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,16 +16,21 @@
             android:id="@+id/recipe_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text=""
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/recipe_image" />
 
         <ImageView
             android:id="@+id/recipe_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_name"
-            android:layout_width="235dp"
-            android:layout_height="90dp" />
+            app:layout_constraintTop_toBottomOf="@+id/recipe_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

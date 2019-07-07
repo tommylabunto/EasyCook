@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
+// TODO separate ingredients line by line
 // when clicked on existing recipe
 public class RecipeFormView extends Fragment {
 
@@ -127,7 +128,11 @@ public class RecipeFormView extends Fragment {
                             ImageView recipeImage = (ImageView) view.findViewById(R.id.food_image_view);
 
                             nameEditText.setText(recipe.getName());
-                            ingredientEditText.setText(recipe.getIngredientString());
+
+                            // every ingredient go to new line
+                            String editIngredientString = recipe.getIngredientString().replace(", ", ",\n");
+                            ingredientEditText.setText(editIngredientString);
+
                             preparationEditText.setText(recipe.getPreparation());
 
                             if (!recipe.getUrl().isEmpty()) {

@@ -24,6 +24,7 @@
                 android:text="@string/ingredient_type"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +67,7 @@
                 android:text="@string/ingredient_name"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/IngredientType_input" />
 
@@ -75,6 +77,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
+                android:layout_marginStart="8dp"
                 android:inputType="textCapSentences"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +90,7 @@
                 android:text="@string/ingredient_weight"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/IngredientName_input" />
@@ -95,10 +99,10 @@
                 android:id="@+id/IngredientWeight_input"
                 android:layout_width="0dp"
                 android:layout_height="46dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
                 android:inputType="number"
+                android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,6 +114,7 @@
                 android:layout_height="51dp"
                 android:text="@string/ingredient_expiry"
                 android:textSize="20sp"
+                android:layout_marginStart="8dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/IngredientWeight_input" />
@@ -118,9 +123,9 @@
                 android:id="@+id/IngredientExpiry_input"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:inputType="date"
+                android:layout_marginStart="8dp"
                 android:focusable="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

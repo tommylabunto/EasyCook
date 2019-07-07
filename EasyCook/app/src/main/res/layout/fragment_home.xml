@@ -34,15 +34,16 @@
                     android:text="@string/home_recipe_header"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/recipe_recyclerView"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ingredientButton"
                     tools:layout_conversion_absoluteHeight="49dp"
                     tools:layout_conversion_absoluteWidth="407dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recipe_recyclerView"
-                    android:layout_width="380dp"
-                    android:layout_height="137dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toTopOf="@+id/home_ingredient_header"
@@ -63,6 +64,7 @@
                     android:id="@+id/home_ingredient_header"
                     android:layout_width="213dp"
                     android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginStart="8dp"
                     android:text="@string/home_ingredient_header"
                     android:textSize="24sp"
@@ -97,7 +99,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/meat_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
@@ -119,7 +121,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/grains_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
@@ -143,7 +145,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/veg_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
@@ -167,7 +169,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/dairy_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
@@ -190,7 +192,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sauces_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"
@@ -213,7 +215,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/cond_recyclerView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginEnd="4dp"
                     android:scrollbars="vertical"

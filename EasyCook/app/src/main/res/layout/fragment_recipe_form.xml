@@ -14,11 +14,12 @@
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/tick_button_recipe"
@@ -41,15 +42,28 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <Button
+                    android:id="@+id/choose_image_button"
+                    android:layout_width="83dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="72dp"
+                    android:text="Choose image"
+                    app:layout_constraintBottom_toTopOf="@+id/recipe_name"
+                    app:layout_constraintEnd_toStartOf="@+id/food_image"
+                    app:layout_constraintHorizontal_bias="0.212"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/back_button_recipe"
+                    app:layout_constraintVertical_bias="0.349" />
+
                 <ImageView
                     android:id="@+id/food_image"
-                    android:layout_width="235dp"
-                    android:layout_height="90dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="270dp"
+                    android:layout_height="145dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="36dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.495"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/back_button_recipe" />
 
                 <TextView
@@ -60,6 +74,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="Recipe name"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.024"
                     app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +83,7 @@
 
                 <EditText
                     android:id="@+id/recipe_name_input"
-                    android:layout_width="403dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -87,6 +103,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="Ingredients"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.024"
                     app:layout_constraintStart_toStartOf="parent"
@@ -94,13 +112,13 @@
 
                 <EditText
                     android:id="@+id/ingredient_list_input"
-                    android:layout_width="403dp"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:ems="10"
-                    android:inputType="textCapSentences"
+                    android:inputType="textMultiLine"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -110,22 +128,24 @@
                     android:id="@+id/preparation"
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="308dp"
                     android:text="Preparation"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ingredient_list_input" />
 
                 <EditText
                     android:id="@+id/preparation_input"
-                    android:layout_width="397dp"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="80dp"
                     android:ems="10"
-                    android:inputType="textCapSentences"
+                    android:inputType="textMultiLine"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

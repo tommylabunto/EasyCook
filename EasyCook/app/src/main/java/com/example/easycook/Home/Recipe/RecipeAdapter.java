@@ -50,23 +50,25 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
 
     public void deleteItem(int position) {
 
-        // delete image on storage
         RecipeItem recipe = getSnapshots().getSnapshot(position).toObject(RecipeItem.class);
 
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference imageRef = storageRef.child(recipe.getPath());
+        // delete image on storage
+        if (!recipe.getPath().isEmpty()) {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference imageRef = storageRef.child(recipe.getPath());
 
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(LOG_TAG, "deleted image successfully");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(LOG_TAG, "failed to delete image");
-            }
-        });
+            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(LOG_TAG, "deleted image successfully");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.d(LOG_TAG, "failed to delete image");
+                }
+            });
+        }
 
         // delete document reference on firestore
         getSnapshots().getSnapshot(position).getReference().delete();
