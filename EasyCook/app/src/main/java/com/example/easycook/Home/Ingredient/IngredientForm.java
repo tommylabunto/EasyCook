@@ -39,7 +39,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
-// TODO include unit of measurement
 public class IngredientForm extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private final String LOG_TAG = "IngredientForm";
@@ -53,7 +52,8 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
     private OnFragmentInteractionListener mListener;
 
     // for spinner
-    private ArrayAdapter<CharSequence> adapter;
+    private ArrayAdapter<CharSequence> typeAdapter;
+    private ArrayAdapter<CharSequence> unitsAdapter;
 
     // referenced passed from home fragment
     private IngredientItem ingredient;
@@ -82,12 +82,19 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
         // Create the spinner.
         // set it as listener
-        Spinner spinner = view.findViewById(R.id.IngredientType_input);
-        if (spinner != null) {
-            spinner.setOnItemSelectedListener(this);
+        Spinner ingredientTypeSpinner = view.findViewById(R.id.IngredientType_input);
+        if (ingredientTypeSpinner != null) {
+            ingredientTypeSpinner.setOnItemSelectedListener(this);
         }
 
-        createSpinner(spinner);
+        createTypeSpinner(ingredientTypeSpinner);
+
+        Spinner ingredientUnitsSpinner = view.findViewById(R.id.IngredientUnits_input);
+        if (ingredientUnitsSpinner != null) {
+            ingredientUnitsSpinner.setOnItemSelectedListener(this);
+        }
+
+        createUnitsSpinner(ingredientUnitsSpinner);
 
         // if snapshot exist, populate screen with data
         checkIfSnapshotExist(view);
@@ -129,11 +136,12 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         return super.onOptionsItemSelected(item);
     }
 
-    public void createSpinner(Spinner spinner) {
+    // for ingredient type
+    public void createTypeSpinner(Spinner spinner) {
         // Create an ArrayAdapter using the string array and default spinner
         // layout.
         // ArrayAdapter connects array of spinner items to spinner
-        adapter = ArrayAdapter.createFromResource(
+        typeAdapter = ArrayAdapter.createFromResource(
                 getContext(),
                 // string array in strings.xml
                 R.array.ingredients_array,
@@ -141,12 +149,34 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                 android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears.
-        adapter.setDropDownViewResource
+        typeAdapter.setDropDownViewResource
                 (android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner.
         if (spinner != null) {
-            spinner.setAdapter(adapter);
+            spinner.setAdapter(typeAdapter);
+        }
+    }
+
+    // for ingredient type
+    public void createUnitsSpinner(Spinner spinner) {
+        // Create an ArrayAdapter using the string array and default spinner
+        // layout.
+        // ArrayAdapter connects array of spinner items to spinner
+        unitsAdapter = ArrayAdapter.createFromResource(
+                getContext(),
+                // string array in strings.xml
+                R.array.units_array,
+                // default Android supplied
+                android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears.
+        unitsAdapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner.
+        if (spinner != null) {
+            spinner.setAdapter(unitsAdapter);
         }
     }
 
@@ -165,11 +195,16 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                             EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
                             EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
                             EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+                            Spinner unitsEditText = (Spinner) view.findViewById(R.id.IngredientUnits_input);
 
                             if (ingredient != null) {
-                                int spinnerPosition = adapter.getPosition(ingredient.getIngredientType());
+                                int spinnerPosition = typeAdapter.getPosition(ingredient.getIngredientType());
                                 typeEditText.setSelection(spinnerPosition);
+
+                                int spinnerPosition1 = unitsAdapter.getPosition(ingredient.getUnits());
+                                unitsEditText.setSelection(spinnerPosition1);
                             }
+
                             nameEditText.setText(ingredient.getIngredientName());
                             weightEditText.setText("" + ingredient.getWeight());
                             dateEditText.setText(ingredient.getExpiry());
@@ -187,6 +222,18 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
     }
 
     public void sortIngredient(IngredientItem ingredient) {
+
+        // keeps track of all ingredients
+        // check if user has any ingredients -> generates some for user (so can test features)
+        if (id == null) {
+            CollectionReference ingredientsRef = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients");
+            ingredientsRef.add(ingredient);
+        } else {
+            CollectionReference meatRef = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients");
+            meatRef.document(id).set(ingredient, SetOptions.merge());
+        }
 
         switch (ingredient.getIngredientType()) {
             case ("Meat"):
@@ -286,17 +333,19 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         EditText nameEditText = (EditText) view.findViewById(R.id.IngredientName_input);
         EditText weightEditText = (EditText) view.findViewById(R.id.IngredientWeight_input);
         EditText dateEditText = (EditText) view.findViewById(R.id.IngredientExpiry_input);
+        Spinner unitsEditText = (Spinner) view.findViewById(R.id.IngredientUnits_input);
 
         String type = typeEditText.getSelectedItem().toString().trim();
         String name = nameEditText.getText().toString().trim();
         String weight = weightEditText.getText().toString().trim();
         String date = dateEditText.getText().toString().trim();
+        String units = unitsEditText.getSelectedItem().toString().trim();
 
         // if input is empty, go back to home fragment
         if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
-                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date)) {
+                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date) || TextUtils.isEmpty(units)) {
         } else {
-            IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0);
+            IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0, units);
 
             // pass ingredient to explore fragment to check if its closest to expiring (so it shows up under recommended)
             ExploreFragment.passIngredient(ingredient);

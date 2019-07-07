@@ -27,10 +27,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.easycook.Explore.ExploreFragment;
+import com.example.easycook.Home.Ingredient.GenerateTestIngredient;
 import com.example.easycook.Home.Ingredient.IngredientAdapter;
 import com.example.easycook.Home.Ingredient.IngredientForm;
 import com.example.easycook.Home.Ingredient.IngredientFormView;
 import com.example.easycook.Home.Ingredient.IngredientItem;
+import com.example.easycook.Home.Recipe.GenerateTestRecipe;
 import com.example.easycook.Home.Recipe.RecipeAdapter;
 import com.example.easycook.Home.Recipe.RecipeForm;
 import com.example.easycook.Home.Recipe.RecipeFormView;
@@ -66,7 +68,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO create log d for all methods
+// TODO security issues
+// TODO performance issues
+// TODO change to private variables/methods / separate into diff classes (3)
+// TODO create log d for all methods (4)
 // TODO when flipped -> data gets lost (in form)
 // TODO improve UI (fonts,button,color)
 // use random email generator to register for food2fork
@@ -121,15 +126,6 @@ public class HomeFragment extends Fragment {
     private FirestoreRecyclerOptions<IngredientItem> condOptions;
     private FirestoreRecyclerOptions<RecipeItem> recipeOptions;
 
-    // to display database recipes
-    private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
-    private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "8a4ae4cd3fe5ecfb667066a276d339ec";
-    private static final String API_SEARCH_END = "&q=";
-    private static final String API_GET_END = "&rId=";
-
-    private static List<String> list = new ArrayList<>();
-
     private String id;
 
     public HomeFragment() {
@@ -174,6 +170,9 @@ public class HomeFragment extends Fragment {
 
         // check if user has zero recipes. If yes -> load recipes from food2fork
         checkRecipe();
+
+        // check if user has zero ingredients. If yes -> load test recipes
+        checkIngredients();
 
         // this causes the error of recycler view only appearing
         // if click on ingredient form (but don't fill in anything)
@@ -524,7 +523,7 @@ public class HomeFragment extends Fragment {
                     }
                     if (count == 0) {
                         Toast.makeText(getContext(), "Loading recipes...", Toast.LENGTH_LONG).show();
-                        showDatabaseRecipe();
+                        GenerateTestRecipe.showDatabaseRecipe(id);
                     }
                 } else {
                     Log.d(LOG_TAG, "Error getting documents: ", task.getException());
@@ -533,107 +532,29 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void showDatabaseRecipe() {
-        // Getting recipes according to ingredients
-        DownloadTask task = new DownloadTask();
-        String website = API_URL_SEARCH_BASE + API_KEY + API_SEARCH_END;
-        for (String s : list) {
-            website += "," + s;
-        }
-        try {
-            task.execute(website);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private void checkIngredients() {
+        db.collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            int count = 0;
 
-    // Downloading web data
-    public class DownloadTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String result = "";
-            URL url;
-            HttpURLConnection urlConnection = null;
-            try {
-                url = new URL(strings[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = urlConnection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-                int data = reader.read();
-                while (data != -1) {
-                    char current = (char) data;
-                    result += current;
-                    data = reader.read();
-                }
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray recipes = (JSONArray) jsonObject.get("recipes");
-                // for every recipe
-                for (int i = 0; i < recipes.length(); i++) {
-                    JSONObject details = (JSONObject) recipes.get(i);
-
-                    //Getting every recipe ingredients
-                    String recipeURL = API_URL_GET_BASE + API_KEY + API_GET_END
-                            + details.getString("recipe_id");
-
-                    List<String> ingredientList = new ArrayList<>();
-
-                    String imageLink = "";
-                    try {
-                        url = new URL(recipeURL);
-                        urlConnection = (HttpURLConnection) url.openConnection();
-                        InputStream input = urlConnection.getInputStream();
-                        InputStreamReader readers = new InputStreamReader(input);
-                        int output = readers.read();
-                        String ingredients = "";
-                        while (output != -1) {
-                            char current = (char) output;
-                            ingredients += current;
-                            output = readers.read();
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        count++;
+                        if (count >= 1) {
+                            break;
                         }
-                        JSONObject ingredientsObject = new JSONObject(ingredients);
-                        JSONObject detailsObject = (JSONObject) ingredientsObject.get("recipe");
-                        JSONArray ingredientArray = (JSONArray) detailsObject.get("ingredients");
-
-                        for (int k = 0; k < ingredientArray.length(); k++) {
-                            ingredientList.add(ingredientArray.get(k).toString());
                         }
-                        // dont download and save into firebase storage
-                        // save image url in recipeitem
-                        // picasso can only load https web image
-                        imageLink = details.getString("image_url").replace("http", "https");
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-
-                    String name = details.getString("title");
-                    String source_url = details.getString("source_url");
-
-                    if (id == null) {
-                        recipeRef.add(new RecipeItem(name, ingredientList,
-                                "", id, source_url, imageLink, ""));
+                    if (count == 0) {
+                        Toast.makeText(getContext(), "Loading ingredients...", Toast.LENGTH_LONG).show();
+                        GenerateTestIngredient.generateIngredients();
+                        }
                     } else {
-                        recipeRef.document(id).set(new RecipeItem(name,
-                                ingredientList,
-                                "", id, source_url, imageLink, ""), SetOptions.merge());
-                    }
+                    Log.d(LOG_TAG, "Error getting documents: ", task.getException());
                 }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
+        });
     }
 
     // for debugging

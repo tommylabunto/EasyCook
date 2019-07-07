@@ -36,4 +36,14 @@
         <item>Condiment</item>
     </string-array>
 
+    <string-array name="units_array">
+        <item>g</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>litre</item>
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>qty</item>
+    </string-array>
+
 </resources>

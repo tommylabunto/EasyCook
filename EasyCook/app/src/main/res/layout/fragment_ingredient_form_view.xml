@@ -78,16 +78,26 @@
 
             <TextView
                 android:id="@+id/IngredientWeight_input_view"
-                android:layout_width="0dp"
-                android:text=""
+                android:layout_width="173dp"
                 android:layout_height="46dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:text=""
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/IngredientWeight_view" />
+
+            <TextView
+                android:id="@+id/IngredientUnits_input_view"
+                android:layout_width="123dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="56dp"
+                android:layout_marginEnd="84dp"
+                android:ems="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IngredientName_input_view" />
 
             <TextView
                 android:id="@+id/IngredientExpiry_view"

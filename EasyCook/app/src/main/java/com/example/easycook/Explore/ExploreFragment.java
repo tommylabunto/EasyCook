@@ -48,7 +48,6 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.Random;
 
-// TODO fix recommended recipe (add ingredients that match ingredient with recipe)
 // Search recipe by typing ingredient (caps and leave a space)
 public class ExploreFragment extends Fragment {
 
@@ -158,7 +157,7 @@ public class ExploreFragment extends Fragment {
     public void showRecommendedRecyclerView(View view) {
 
         if (ingredient == null) {
-            ingredient = new IngredientItem("", "", 0, "", 0);
+            ingredient = new IngredientItem("", "", 0, "", 0, "");
         }
         // recommended
         recommendedRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");

@@ -34,7 +34,7 @@ public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientItem, 
     protected void onBindViewHolder(@NonNull IngredientViewHolder ingredientViewHolder, int position, @NonNull IngredientItem ingredientItem) {
 
         ingredientViewHolder.ingredientName.setText(ingredientItem.getIngredientName());
-        ingredientViewHolder.ingredientWeight.setText(String.valueOf(ingredientItem.getWeight()));
+        ingredientViewHolder.ingredientWeight.setText(ingredientItem.getWeight() + " " + ingredientItem.getUnits());
     }
 
     public void deleteItem(int position) {

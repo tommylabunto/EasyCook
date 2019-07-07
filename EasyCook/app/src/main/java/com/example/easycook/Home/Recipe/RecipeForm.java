@@ -56,7 +56,7 @@ public class RecipeForm extends Fragment {
     private final String LOG_TAG = "RecipeForm";
 
     private ImageView recipeImage;
-    private Button chooseImageButton;
+    private ImageView chooseImageButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri foodUri;
 

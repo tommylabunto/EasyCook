@@ -99,11 +99,13 @@ public class IngredientFormView extends Fragment {
                             TextView nameEditText = (TextView) view.findViewById(R.id.IngredientName_input_view);
                             TextView weightEditText = (TextView) view.findViewById(R.id.IngredientWeight_input_view);
                             TextView dateEditText = (TextView) view.findViewById(R.id.IngredientExpiry_input_view);
+                            TextView unitsEditText = (TextView) view.findViewById(R.id.IngredientUnits_input_view);
 
                             typeEditText.setText(ingredient.getIngredientType());
                             nameEditText.setText(ingredient.getIngredientName());
                             weightEditText.setText("" + ingredient.getWeight());
                             dateEditText.setText(ingredient.getExpiry());
+                            unitsEditText.setText(ingredient.getUnits());
 
                             Log.d(LOG_TAG, "Document exists!");
                         } else {

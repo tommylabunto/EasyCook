@@ -16,12 +16,14 @@ public class IngredientItem {
     // used to sort ingredients
     public int numDays;
 
+    private String units;
+
     // no argument constructor
     public IngredientItem() {
     }
 
     public IngredientItem(String ingredientType, String ingredientName, int weight
-            , String expiry, int number) {
+            , String expiry, int number, String units) {
 
         this.ingredientType = ingredientType;
         this.ingredientName = ingredientName;
@@ -29,6 +31,8 @@ public class IngredientItem {
         this.expiry = expiry;
 
         this.numDays = countNumDays(expiry);
+
+        this.units = units;
     }
 
     public String getIngredientType() {
@@ -78,5 +82,9 @@ public class IngredientItem {
             System.err.println(e.toString());
         }
         return num;
+    }
+
+    public String getUnits() {
+        return units;
     }
 }
