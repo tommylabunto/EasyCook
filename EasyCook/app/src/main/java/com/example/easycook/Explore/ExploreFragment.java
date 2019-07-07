@@ -132,6 +132,8 @@ public class ExploreFragment extends Fragment {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            Log.i(LOG_TAG, "hideKeyboard");
         }
     }
 
@@ -300,7 +302,7 @@ public class ExploreFragment extends Fragment {
 
     public static void passIngredient(IngredientItem thisIngredient) {
 
-        if ((ingredient == null && thisIngredient.getNumDays() > 0) ||
+        if ((ingredient == null && thisIngredient.getNumDays() >= 0) ||
                 (thisIngredient.getNumDays() < ingredient.getNumDays() && thisIngredient.getNumDays() > 0)) {
             ingredient = thisIngredient;
         }
@@ -351,6 +353,8 @@ public class ExploreFragment extends Fragment {
                                         .set(new RecipeItem(recipe.getName(), recipe.getIngredient(),
                                                 recipe.getPreparation(), documentSnapshot.getId(),
                                                 recipe.getUrl(), recipe.getImageLink(), recipe.getPath()), SetOptions.merge());
+                            } else {
+                                Log.d(LOG_TAG, "recipe is null");
                             }
                         }
                     }

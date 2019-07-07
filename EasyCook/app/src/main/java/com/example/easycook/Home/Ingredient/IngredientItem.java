@@ -1,5 +1,7 @@
 package com.example.easycook.Home.Ingredient;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class IngredientItem {
+
+    private String LOG_TAG = "IngredientItem";
 
     private String ingredientType;
     private String ingredientName;
@@ -59,6 +63,10 @@ public class IngredientItem {
 
         int num = 0;
 
+        if (expiry.isEmpty()) {
+            return 0;
+        }
+
         try {
             // convert into number of days
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -67,7 +75,6 @@ public class IngredientItem {
             Calendar current = Calendar.getInstance();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(expiryDate);
-
 
             // not accurate, but can compare
             // positive number means not expired
@@ -79,7 +86,7 @@ public class IngredientItem {
                             + (current.get(Calendar.MONTH) * 30)
                             + (current.get(Calendar.YEAR) * 12 * 30));
         } catch (ParseException e) {
-            System.err.println(e.toString());
+            Log.w(LOG_TAG, e.toString());
         }
         return num;
     }

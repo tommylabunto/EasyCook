@@ -1,6 +1,7 @@
 package com.example.easycook.Home.Ingredient;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import io.opencensus.metrics.LongGauge;
+
 public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientItem, IngredientAdapter.IngredientViewHolder> {
+
+    private String LOG_TAG = "IngredientAdapter";
 
     private OnItemClickListener listener;
 
@@ -59,8 +64,14 @@ public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientItem, 
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (listener != null) {
+                            listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                        } else {
+                            Log.d(LOG_TAG, "listener is null");
+                        }
+                    } else {
+                        Log.d(LOG_TAG, "no position");
                     }
                 }
             });

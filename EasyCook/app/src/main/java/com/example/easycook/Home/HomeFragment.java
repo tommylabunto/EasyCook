@@ -70,9 +70,8 @@ import java.util.List;
 
 // TODO security issues
 // TODO performance issues
-// TODO change to private variables/methods / separate into diff classes (3)
-// TODO create log d for all methods (4)
-// TODO when flipped -> data gets lost (in form)
+// TODO change to private variables/methods / separate into diff classes (1)
+// TODO when flipped -> data gets lost (in form) (2)
 // TODO improve UI (fonts,button,color)
 // use random email generator to register for food2fork
 /**
@@ -526,7 +525,7 @@ public class HomeFragment extends Fragment {
                         GenerateTestRecipe.showDatabaseRecipe(id);
                     }
                 } else {
-                    Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
@@ -551,7 +550,7 @@ public class HomeFragment extends Fragment {
                         GenerateTestIngredient.generateIngredients();
                         }
                     } else {
-                    Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
                 }
             }
         });

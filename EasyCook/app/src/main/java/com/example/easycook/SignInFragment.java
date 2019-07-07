@@ -138,6 +138,8 @@ public class SignInFragment extends Fragment {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new HomeFragment())
                     .commit();
+        } else {
+            Log.d(LOG_TAG, "no user");
         }
     }
 

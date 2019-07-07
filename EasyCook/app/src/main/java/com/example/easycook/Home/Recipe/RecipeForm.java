@@ -133,9 +133,9 @@ public class RecipeForm extends Fragment {
         String ingredient = ingredientEditText.getText().toString().trim();
         String preparation = preparationEditText.getText().toString().trim();
 
-        // if input is empty, go back to home fragment
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredient)
-                || TextUtils.isEmpty(preparation)) {
+        // if any one of input is empty, go back to home fragment
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(ingredient)
+                && TextUtils.isEmpty(preparation)) {
         } else {
             // upload pic into firebase storage
             // must have pic to add recipe into firestore
@@ -173,7 +173,7 @@ public class RecipeForm extends Fragment {
                             Log.d(LOG_TAG, "Document does not exist!");
                         }
                     } else {
-                        Log.d(LOG_TAG, "Failed with: ", task.getException());
+                        Log.w(LOG_TAG, "Failed with: ", task.getException());
                     }
                 }
             });
@@ -232,6 +232,22 @@ public class RecipeForm extends Fragment {
             // create a storage reference to app
             mStorageRef = FirebaseStorage.getInstance().getReference();
 
+            // when got existing image on storage, it deletes old image
+            if (recipe != null && recipe.getPath() != null && !recipe.getPath().isEmpty()) {
+                mStorageRef.child(recipe.getPath()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(LOG_TAG, "deleted image successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.d(LOG_TAG, "failed to delete image");
+                    }
+                });
+                ;
+            }
+
             final String path = ProfileForm.user.getUid() + "." + name
                     + "." + getFileExtension(foodUri);
 
@@ -263,6 +279,13 @@ public class RecipeForm extends Fragment {
                     }
                 }
             });
+        } else {
+            if (recipe != null && recipe.getImageLink() != null && !recipe.getImageLink().isEmpty()) {
+                addRecipeToFirebase(name, ingredient, preparation, recipe.getImageLink(), recipe.getPath());
+            } else {
+                addRecipeToFirebase(name, ingredient, preparation, "", "");
+            }
+            Log.d(LOG_TAG, "foodUri is null");
         }
     }
 

@@ -45,7 +45,9 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
 
         recipeViewHolder.recipeName.setText(recipeItem.getName());
 
-        Picasso.get().load(recipeItem.getImageLink()).into(recipeViewHolder.recipeImage);
+        if (!recipeItem.getImageLink().isEmpty()) {
+            Picasso.get().load(recipeItem.getImageLink()).into(recipeViewHolder.recipeImage);
+        }
     }
 
     public void deleteItem(int position) {
@@ -92,8 +94,14 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (listener != null) {
+                            listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                        } else {
+                            Log.d(LOG_TAG, "listener is null");
+                        }
+                    } else {
+                        Log.d(LOG_TAG, "no position");
                     }
                 }
             });

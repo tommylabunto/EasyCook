@@ -214,7 +214,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                             Log.d(LOG_TAG, "Document does not exist!");
                         }
                     } else {
-                        Log.d(LOG_TAG, "Failed with: ", task.getException());
+                        Log.w(LOG_TAG, "Failed with: ", task.getException());
                     }
                 }
             });
@@ -342,9 +342,14 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         String units = unitsEditText.getSelectedItem().toString().trim();
 
         // if input is empty, go back to home fragment
-        if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)
-                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(date) || TextUtils.isEmpty(units)) {
+        if (TextUtils.isEmpty(type) && TextUtils.isEmpty(name)
+                && TextUtils.isEmpty(weight) && TextUtils.isEmpty(date) && TextUtils.isEmpty(units)) {
         } else {
+
+            if (TextUtils.isEmpty(weight)) {
+                weight = "0";
+            }
+
             IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0, units);
 
             // pass ingredient to explore fragment to check if its closest to expiring (so it shows up under recommended)

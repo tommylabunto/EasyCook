@@ -112,7 +112,7 @@ public class IngredientFormView extends Fragment {
                             Log.d(LOG_TAG, "Document does not exist!");
                         }
                     } else {
-                        Log.d(LOG_TAG, "Failed with: ", task.getException());
+                        Log.w(LOG_TAG, "Failed with: ", task.getException());
                     }
                 }
             });
