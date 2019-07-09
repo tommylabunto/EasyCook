@@ -24,25 +24,34 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GenerateTestRecipe {
 
+    // keys for API_KEY
+    private static final String key1 = "80c4812dfb139f9175e20d9e9a951c17";
+    private static final String key2 = "9e7281bd1a13bd325a8bb8f6b3437b68";
+    private static final String key3 = "d5359e0e90ce8db59c252521c4f9cf8c";
+    private static final String key4 = "5b9abf96fcd9a7e699a7847f36c4fbdc";
+    private static final String key5 = "e765ff5f65725fb2dd35d9102de66226";
+    private static final String key6 = "ac96dfb1b6e562dcf67e36396bcdfde7";
+    private static final String key7 = "1f397beda6e074864648ce46c6a4b4ce";
+    private static final String key8 = "72a9e3d8cc17fbce8b47084a00181de9";
+    private static final String key9 = "7a6b9d662b13ac4c1f71e3eff78b674d";
+    private static final String key10 = "bcee4295121a53d9ca5f481adf6b451d";
+
     // to display database recipes
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
-    private static final String API_KEY = "e749d499d08d9eae5a3f5c6fc74a95aa";
+    // change here
+    private static final String API_KEY = key2;
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 
     private static List<String> list = new ArrayList<>();
-
-    private static String id;
 
     private static CollectionReference recipeRef = FirebaseFirestore.getInstance()
             .collection("users")
             .document(ProfileForm.user.getUid())
             .collection("my_recipe");
 
-    public static void showDatabaseRecipe(String id) {
-
-        id = id;
+    public static void showDatabaseRecipe() {
 
         // Getting recipes according to ingredients
         DownloadTask task = new DownloadTask();
@@ -119,14 +128,9 @@ public class GenerateTestRecipe {
                     String name = details.getString("title");
                     String source_url = details.getString("source_url");
 
-                    if (id == null) {
-                        recipeRef.add(new RecipeItem(name, ingredientList,
-                                "", id, source_url, imageLink, "", ProfileForm.user.getUid()));
-                    } else {
-                        recipeRef.document(id).set(new RecipeItem(name,
-                                ingredientList,
-                                "", id, source_url, imageLink, "", ProfileForm.user.getUid()), SetOptions.merge());
-                    }
+                    recipeRef.add(new RecipeItem(name, ingredientList,
+                            "", "", source_url, imageLink, "", ProfileForm.user.getUid()));
+
                 }
 
             } catch (MalformedURLException e) {

@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.easycook.Home.HomeFragment;
+import com.example.easycook.Home.Ingredient.GenerateTestIngredient;
+import com.example.easycook.Home.Recipe.GenerateTestRecipe;
+import com.example.easycook.Settings.ProfileForm;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +31,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class SignInFragment extends Fragment {
@@ -44,9 +50,12 @@ public class SignInFragment extends Fragment {
 
     private SignInButton signInButton;
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     public SignInFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -135,12 +144,78 @@ public class SignInFragment extends Fragment {
 
             MainActivity.passAuth(mAuth, user);
 
+            // check if user has zero recipes. If yes -> load recipes from food2fork
+            checkRecipe();
+
+            // check if user has zero ingredients. If yes -> load test recipes
+            checkIngredient();
+
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new HomeFragment())
                     .commit();
         } else {
             Log.d(LOG_TAG, "no user");
         }
+    }
+
+    private void checkRecipe() {
+
+        final Context tempContext = getContext();
+
+        db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe")
+                .whereEqualTo("author", ProfileForm.user.getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+            int count = 0;
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        count++;
+                        if (count >= 1) {
+                            break;
+                        }
+                        Log.d(LOG_TAG, document.getId() + " => " + document.getData());
+                    }
+                    if (count == 0) {
+                        Toast.makeText(tempContext, "Loading recipes...", Toast.LENGTH_LONG).show();
+                        GenerateTestRecipe.showDatabaseRecipe();
+                    }
+                } else {
+                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void checkIngredient() {
+
+        final Context tempContext = getContext();
+
+        db.collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients")
+                .whereEqualTo("author", ProfileForm.user.getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            int count = 0;
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        count++;
+                        if (count >= 1) {
+                            break;
+                        }
+                    }
+                    if (count == 0) {
+                        Toast.makeText(tempContext, "Loading ingredients...", Toast.LENGTH_LONG).show();
+                        GenerateTestIngredient.generateIngredients();
+                    }
+                } else {
+                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 
     @Override

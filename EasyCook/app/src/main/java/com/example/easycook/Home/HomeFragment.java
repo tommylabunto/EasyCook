@@ -68,8 +68,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO input validation
 // TODO UI (HTML/CSS)
-// TODO performance issues (2)
 // TODO when flipped -> data gets lost (in form)
 // use random email generator to register for food2fork
 /**
@@ -164,12 +164,6 @@ public class HomeFragment extends Fragment {
 
         // load recyclerview for ingredients and recipes
         showRecyclerView(view);
-
-        // check if user has zero recipes. If yes -> load recipes from food2fork
-        checkRecipe();
-
-        // check if user has zero ingredients. If yes -> load test recipes
-        checkIngredients();
 
         // this causes the error of recycler view only appearing
         // if click on ingredient form (but don't fill in anything)
@@ -500,60 +494,6 @@ public class HomeFragment extends Fragment {
 
         // make changes
         transaction.commit();
-    }
-
-    private void checkRecipe() {
-        db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe")
-                .whereEqualTo("author", ProfileForm.user.getUid())
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-            int count = 0;
-
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        count++;
-                        if (count >= 1) {
-                            break;
-                        }
-                        Log.d(LOG_TAG, document.getId() + " => " + document.getData());
-                    }
-                    if (count == 0) {
-                        Toast.makeText(getContext(), "Loading recipes...", Toast.LENGTH_LONG).show();
-                        GenerateTestRecipe.showDatabaseRecipe(id);
-                    }
-                } else {
-                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
-
-    private void checkIngredients() {
-        db.collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients")
-                .whereEqualTo("author", ProfileForm.user.getUid())
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            int count = 0;
-
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        count++;
-                        if (count >= 1) {
-                            break;
-                        }
-                        }
-                    if (count == 0) {
-                        Toast.makeText(getContext(), "Loading ingredients...", Toast.LENGTH_LONG).show();
-                        GenerateTestIngredient.generateIngredients();
-                        }
-                    } else {
-                    Log.w(LOG_TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
     }
 
     // for debugging
