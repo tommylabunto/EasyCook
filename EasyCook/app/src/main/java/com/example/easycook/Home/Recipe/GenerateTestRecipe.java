@@ -38,7 +38,6 @@ public class GenerateTestRecipe {
             .document(ProfileForm.user.getUid())
             .collection("my_recipe");
 
-
     public static void showDatabaseRecipe(String id) {
 
         id = id;
@@ -120,11 +119,11 @@ public class GenerateTestRecipe {
 
                     if (id == null) {
                         recipeRef.add(new RecipeItem(name, ingredientList,
-                                "", id, source_url, imageLink, ""));
+                                "", id, source_url, imageLink, "", ProfileForm.user.getUid()));
                     } else {
                         recipeRef.document(id).set(new RecipeItem(name,
                                 ingredientList,
-                                "", id, source_url, imageLink, ""), SetOptions.merge());
+                                "", id, source_url, imageLink, "", ProfileForm.user.getUid()), SetOptions.merge());
                     }
                 }
 

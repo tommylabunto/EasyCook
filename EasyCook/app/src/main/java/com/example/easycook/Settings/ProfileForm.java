@@ -42,6 +42,7 @@ public class ProfileForm extends Fragment {
 
     private View view;
 
+    // other classes access it to access ingredients/recipe on firestore
     public static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public ProfileForm() {
@@ -86,7 +87,7 @@ public class ProfileForm extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkIfSnapshotExist(final View view) {
+    private void checkIfSnapshotExist(final View view) {
 
         EditText nameEditText = (EditText) view.findViewById(R.id.username_input);
         EditText emailEditText = (EditText) view.findViewById(R.id.email_input);
@@ -113,36 +114,46 @@ public class ProfileForm extends Fragment {
     }
 
     // saves changes to user data on firebase, not firestore collection
+    // only save changes when input is different
     // takes a while to load changes, done when toast appears
-    public void saveUser(String name, String email) {
+    private void saveUser(String name, String email) {
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
+        if (!name.equals(user.getDisplayName())) {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(name)
+                    .build();
 
-        FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(LOG_TAG, "User profile updated.");
-                            Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(LOG_TAG, "User profile updated.");
+                                Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-        FirebaseAuth.getInstance().getCurrentUser().updateEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(LOG_TAG, "User email address updated.");
-                            Toast.makeText(getContext(), "Email address updated", Toast.LENGTH_LONG).show();
+                    });
+        } else {
+            Log.d(LOG_TAG, "name not updated");
+        }
+
+        if (!email.equals(user.getEmail())) {
+            FirebaseAuth.getInstance().getCurrentUser().updateEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(LOG_TAG, "User email address updated.");
+                                Toast.makeText(getContext(), "Email address updated", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            Log.d(LOG_TAG, "email not updated");
+        }
     }
 
-    public void goToFragment(Fragment fragment) {
+    private void goToFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
 

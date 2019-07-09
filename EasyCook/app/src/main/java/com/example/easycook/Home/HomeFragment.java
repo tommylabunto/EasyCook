@@ -68,11 +68,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO security issues
-// TODO performance issues
-// TODO change to private variables/methods / separate into diff classes (1)
-// TODO when flipped -> data gets lost (in form) (2)
-// TODO improve UI (fonts,button,color)
+// TODO UI (HTML/CSS)
+// TODO performance issues (2)
+// TODO when flipped -> data gets lost (in form)
 // use random email generator to register for food2fork
 /**
  * Home page
@@ -180,11 +178,11 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public void showRecyclerView(View view) {
+    private void showRecyclerView(View view) {
 
         // meat
         meatRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_meat");
-        meatQuery = meatRef.orderBy("numDays", Query.Direction.ASCENDING);
+        meatQuery = meatRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         meatOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(meatQuery, IngredientItem.class)
                 .build();
@@ -228,7 +226,7 @@ public class HomeFragment extends Fragment {
 
         // grains
         grainsRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_grains");
-        grainsQuery = grainsRef.orderBy("numDays", Query.Direction.ASCENDING);
+        grainsQuery = grainsRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         grainsOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(grainsQuery, IngredientItem.class)
                 .build();
@@ -272,7 +270,7 @@ public class HomeFragment extends Fragment {
 
         // veg
         vegRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_vegetable");
-        vegQuery = vegRef.orderBy("numDays", Query.Direction.ASCENDING);
+        vegQuery = vegRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         vegOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(vegQuery, IngredientItem.class)
                 .build();
@@ -316,7 +314,7 @@ public class HomeFragment extends Fragment {
 
         // dairy
         dairyRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_dairy");
-        dairyQuery = dairyRef.orderBy("numDays", Query.Direction.ASCENDING);
+        dairyQuery = dairyRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         dairyOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(dairyQuery, IngredientItem.class)
                 .build();
@@ -360,7 +358,7 @@ public class HomeFragment extends Fragment {
 
         // sauces
         saucesRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_sauces");
-        saucesQuery = saucesRef.orderBy("numDays", Query.Direction.ASCENDING);
+        saucesQuery = saucesRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         saucesOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(saucesQuery, IngredientItem.class)
                 .build();
@@ -404,7 +402,7 @@ public class HomeFragment extends Fragment {
 
         // condiment
         condRef = db.collection("users").document(ProfileForm.user.getUid()).collection("ingredient_condiment");
-        condQuery = condRef.orderBy("numDays", Query.Direction.ASCENDING);
+        condQuery = condRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("numDays", Query.Direction.ASCENDING);
         condOptions = new FirestoreRecyclerOptions.Builder<IngredientItem>()
                 .setQuery(condQuery, IngredientItem.class)
                 .build();
@@ -448,7 +446,7 @@ public class HomeFragment extends Fragment {
 
         // recipe
         recipeRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-        recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
+        recipeQuery = recipeRef.whereEqualTo("author", ProfileForm.user.getUid()).orderBy("name", Query.Direction.ASCENDING);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recipeQuery, RecipeItem.class)
                 .build();
@@ -480,7 +478,7 @@ public class HomeFragment extends Fragment {
                 id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
 
-                ExploreFragment.recentDocumentID = id;
+                ExploreFragment.setRecipeId(id);
 
                 // replace container view (the main activity container) with ingredient fragment
                 RecipeFormView recipeFragmentView = new RecipeFormView();
@@ -493,7 +491,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void goToFragment(Fragment fragment) {
+    private void goToFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
 
@@ -504,8 +502,9 @@ public class HomeFragment extends Fragment {
         transaction.commit();
     }
 
-    public void checkRecipe() {
+    private void checkRecipe() {
         db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe")
+                .whereEqualTo("author", ProfileForm.user.getUid())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
             int count = 0;
@@ -533,6 +532,7 @@ public class HomeFragment extends Fragment {
 
     private void checkIngredients() {
         db.collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients")
+                .whereEqualTo("author", ProfileForm.user.getUid())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             int count = 0;
 

@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-// TODO do up documentation (3)
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void setUpBackButton() {
+    private void setUpBackButton() {
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -123,21 +122,21 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     }
 
     // sign out and then sign in
-    public void signOut() {
+    private void signOut() {
         if (mAuth != null) {
             mAuth.signOut();
             goToFragment(new SignInFragment());
         }
     }
 
-    public void goToFragment(Fragment fragment) {
+    private void goToFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
 
     // used to pass auth from sign in fragment to sign out
-    public static void passAuth(FirebaseAuth auth, FirebaseUser thisUser) {
+    protected static void passAuth(FirebaseAuth auth, FirebaseUser thisUser) {
         mAuth = auth;
         user = thisUser;
     }

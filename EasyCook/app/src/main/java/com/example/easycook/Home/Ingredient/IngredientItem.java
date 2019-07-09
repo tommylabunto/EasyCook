@@ -22,12 +22,15 @@ public class IngredientItem {
 
     private String units;
 
+    // store user uid
+    private String author;
+
     // no argument constructor
     public IngredientItem() {
     }
 
     public IngredientItem(String ingredientType, String ingredientName, int weight
-            , String expiry, int number, String units) {
+            , String expiry, int number, String units, String author) {
 
         this.ingredientType = ingredientType;
         this.ingredientName = ingredientName;
@@ -37,6 +40,8 @@ public class IngredientItem {
         this.numDays = countNumDays(expiry);
 
         this.units = units;
+
+        this.author = author;
     }
 
     public String getIngredientType() {
@@ -93,5 +98,9 @@ public class IngredientItem {
 
     public String getUnits() {
         return units;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 }

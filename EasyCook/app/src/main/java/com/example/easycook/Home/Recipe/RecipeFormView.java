@@ -104,7 +104,7 @@ public class RecipeFormView extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkIfSnapshotExist(final View view) {
+    private void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
             DocumentReference docIdRef = FirebaseFirestore.getInstance().document(path);
@@ -172,7 +172,7 @@ public class RecipeFormView extends Fragment {
         }
     }
 
-    public void goToFragment(Fragment fragment) {
+    private void goToFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
 

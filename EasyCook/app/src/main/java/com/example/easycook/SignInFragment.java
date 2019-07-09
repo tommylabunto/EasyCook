@@ -129,7 +129,7 @@ public class SignInFragment extends Fragment {
     }
 
     // replace container
-    public void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user) {
 
         if (user != null) {
 

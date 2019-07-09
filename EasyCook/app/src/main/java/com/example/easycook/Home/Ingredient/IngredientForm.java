@@ -48,7 +48,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
     // for date picker
     // Used to identify the result
-    public static final int REQUEST_CODE = 11;
+    private static final int REQUEST_CODE = 11;
     private OnFragmentInteractionListener mListener;
 
     // for spinner
@@ -137,7 +137,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
     }
 
     // for ingredient type
-    public void createTypeSpinner(Spinner spinner) {
+    private void createTypeSpinner(Spinner spinner) {
         // Create an ArrayAdapter using the string array and default spinner
         // layout.
         // ArrayAdapter connects array of spinner items to spinner
@@ -159,7 +159,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
     }
 
     // for ingredient type
-    public void createUnitsSpinner(Spinner spinner) {
+    private void createUnitsSpinner(Spinner spinner) {
         // Create an ArrayAdapter using the string array and default spinner
         // layout.
         // ArrayAdapter connects array of spinner items to spinner
@@ -180,7 +180,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    public void checkIfSnapshotExist(final View view) {
+    private void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
             DocumentReference docIdRef = FirebaseFirestore.getInstance().document(path);
@@ -221,7 +221,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    public void sortIngredient(IngredientItem ingredient) {
+    private void sortIngredient(IngredientItem ingredient) {
 
         // keeps track of all ingredients
         // check if user has any ingredients -> generates some for user (so can test features)
@@ -305,7 +305,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    public void backToHome(FragmentManager fragmentManager) {
+    private void backToHome(FragmentManager fragmentManager) {
         // replace container view (the main activity container) with ingredient fragment
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -320,7 +320,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
     // receive reference from ingredientformview fragment
     // need to check if its null (not created before)
-    public void passReference(IngredientItem ingredient, String id, String path) {
+    protected void passReference(IngredientItem ingredient, String id, String path) {
         this.ingredient = ingredient;
         this.id = id;
         this.path = path;
@@ -350,7 +350,7 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
                 weight = "0";
             }
 
-            IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0, units);
+            IngredientItem ingredient = new IngredientItem(type, name, Integer.parseInt(weight), date, 0, units, ProfileForm.user.getUid());
 
             // pass ingredient to explore fragment to check if its closest to expiring (so it shows up under recommended)
             ExploreFragment.passIngredient(ingredient);

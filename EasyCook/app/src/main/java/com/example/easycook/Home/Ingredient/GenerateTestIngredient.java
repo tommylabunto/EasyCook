@@ -30,12 +30,12 @@ public class GenerateTestIngredient {
         CollectionReference ingredientRef = FirebaseFirestore.getInstance()
                 .collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients");
 
-        IngredientItem meat = new IngredientItem("Meat", "1 pound Hot Breakfast Sausage", 450, "18/9/2019", 0, "g");
-        IngredientItem grains = new IngredientItem("Grains", "10 ounces dry elbow macaroni", 280, "13/9/2019", 0, "g");
-        IngredientItem veg = new IngredientItem("Vegetable", "1 whole Large Onion", 1, "21/9/2019", 0, "qty");
-        IngredientItem dairy = new IngredientItem("Dairy", "1 tablespoon fresh lemon juice", 1, "10/9/2019", 0, "tbsp");
-        IngredientItem sauces = new IngredientItem("Sauces", "3 tbsp olive oil", 3, "21/9/2019", 0, "tbsp");
-        IngredientItem condiment = new IngredientItem("Condiment", "1 tsp pepper", 1, "29/9/2019", 0, "tsp");
+        IngredientItem meat = new IngredientItem("Meat", "1 pound Hot Breakfast Sausage", 450, "18/9/2019", 0, "g", ProfileForm.user.getUid());
+        IngredientItem grains = new IngredientItem("Grains", "10 ounces dry elbow macaroni", 280, "13/9/2019", 0, "g", ProfileForm.user.getUid());
+        IngredientItem veg = new IngredientItem("Vegetable", "1 whole Large Onion", 1, "21/9/2019", 0, "qty", ProfileForm.user.getUid());
+        IngredientItem dairy = new IngredientItem("Dairy", "1 tablespoon fresh lemon juice", 1, "10/9/2019", 0, "tbsp", ProfileForm.user.getUid());
+        IngredientItem sauces = new IngredientItem("Sauces", "3 tbsp olive oil", 3, "21/9/2019", 0, "tbsp", ProfileForm.user.getUid());
+        IngredientItem condiment = new IngredientItem("Condiment", "1 tsp pepper", 1, "29/9/2019", 0, "tsp", ProfileForm.user.getUid());
 
         meatRef.add(meat);
         grainsRef.add(grains);

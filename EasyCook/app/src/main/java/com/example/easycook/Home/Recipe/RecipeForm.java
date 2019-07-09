@@ -144,7 +144,7 @@ public class RecipeForm extends Fragment {
         backToHome(getFragmentManager());
     }
 
-    public void checkIfSnapshotExist(final View view) {
+    private void checkIfSnapshotExist(final View view) {
 
         if (path != null) {
             DocumentReference docIdRef = FirebaseFirestore.getInstance().document(path);
@@ -180,13 +180,14 @@ public class RecipeForm extends Fragment {
         }
     }
 
-    public void passReference(RecipeItem recipe, String id, String path) {
+    // received from recipe form view
+    protected void passReference(RecipeItem recipe, String id, String path) {
         this.recipe = recipe;
         this.id = id;
         this.path = path;
     }
 
-    public void backToHome(FragmentManager fragmentManager) {
+    private void backToHome(FragmentManager fragmentManager) {
         // replace container view (the main activity container) with home fragment
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -227,7 +228,7 @@ public class RecipeForm extends Fragment {
     }
 
     // upload file to firebase storage
-    public void uploadFile(final String name, final List<String> ingredient, final String preparation) {
+    private void uploadFile(final String name, final List<String> ingredient, final String preparation) {
         if (foodUri != null) {
             // create a storage reference to app
             mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -289,7 +290,7 @@ public class RecipeForm extends Fragment {
         }
     }
 
-    public void addRecipeToFirebase(String name, List<String> ingredient, String preparation, String imageLink, String path) {
+    private void addRecipeToFirebase(String name, List<String> ingredient, String preparation, String imageLink, String path) {
 
         // when recipe is first created, id is null
         // but when recipe is clicked / explore page is clicked -> the id is set
@@ -297,11 +298,11 @@ public class RecipeForm extends Fragment {
         if (id == null) {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.add(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path));
+            myRecipe.add(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path, ProfileForm.user.getUid()));
         } else {
             CollectionReference myRecipe = FirebaseFirestore.getInstance()
                     .collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path), SetOptions.merge());
+            myRecipe.document(id).set(new RecipeItem(name, ingredient, preparation, id, "", imageLink, path, ProfileForm.user.getUid()), SetOptions.merge());
         }
 
         Log.d(LOG_TAG, "saved changes");

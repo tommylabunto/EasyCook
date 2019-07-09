@@ -82,10 +82,10 @@ public class ExploreFragment extends Fragment {
 
     // keeps track of recent recipes clicked
     // thus recycler view can only show 1
-    public static String recentDocumentID;
+    private static String recentDocumentID;
 
     // the ingredient closest to expiring
-    public static IngredientItem ingredient;
+    private static IngredientItem ingredient;
 
     private String id;
 
@@ -127,7 +127,7 @@ public class ExploreFragment extends Fragment {
         return view;
     }
 
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
 
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -137,10 +137,12 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    public void showRecipeRecyclerView(View view) {
+    private void showRecipeRecyclerView(View view) {
         // recipe
         recipeRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
-        recipeQuery = recipeRef.orderBy("name", Query.Direction.ASCENDING);
+        recipeQuery = recipeRef
+                .whereEqualTo("author", ProfileForm.user.getUid())
+                .orderBy("name", Query.Direction.ASCENDING);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recipeQuery, RecipeItem.class)
                 .build();
@@ -156,16 +158,17 @@ public class ExploreFragment extends Fragment {
     }
 
     // recommends only recipes with the ingredient closest to expiry
-    public void showRecommendedRecyclerView(View view) {
+    private void showRecommendedRecyclerView(View view) {
 
         if (ingredient == null) {
-            ingredient = new IngredientItem("", "", 0, "", 0, "");
+            ingredient = new IngredientItem("", "", 0, "", 0, "", ProfileForm.user.getUid());
         }
         // recommended
         recommendedRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recommendedQuery = recommendedRef
                 .orderBy("name", Query.Direction.ASCENDING)
-                .whereArrayContains("ingredient", ingredient.getIngredientName());
+                .whereArrayContains("ingredient", ingredient.getIngredientName())
+                .whereEqualTo("author", ProfileForm.user.getUid());
         recommendedOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
                 .setQuery(recommendedQuery, RecipeItem.class)
                 .build();
@@ -182,9 +185,10 @@ public class ExploreFragment extends Fragment {
 
     // show recent
     // can only show one
-    public void showRecentRecyclerView(View view) {
+    private void showRecentRecyclerView(View view) {
         recentRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         recentQuery = recentRef
+                .whereEqualTo("author", ProfileForm.user.getUid())
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereEqualTo("documentID", recentDocumentID);
         recentOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
@@ -202,7 +206,7 @@ public class ExploreFragment extends Fragment {
     }
 
     // show recipe of the day
-    public void showTodayRecyclerView(View view) {
+    private void showTodayRecyclerView(View view) {
 
         // the cheat way
         // refreshes every time start app
@@ -212,6 +216,7 @@ public class ExploreFragment extends Fragment {
 
         todayRef = db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe");
         todayQuery = todayRef
+                .whereEqualTo("author", ProfileForm.user.getUid())
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereArrayContains("ingredient", search);
         todayOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
@@ -229,9 +234,10 @@ public class ExploreFragment extends Fragment {
     }
 
     // update recycler view when user enter search
-    public void updateAdapter(View view, String search) {
+    private void updateAdapter(View view, String search) {
 
         recipeQuery = recipeRef
+                .whereEqualTo("author", ProfileForm.user.getUid())
                 .orderBy("name", Query.Direction.ASCENDING)
                 .whereArrayContains("ingredient", search);
         recipeOptions = new FirestoreRecyclerOptions.Builder<RecipeItem>()
@@ -252,7 +258,7 @@ public class ExploreFragment extends Fragment {
     }
 
     // delete when swipe left/right
-    public void recyclerViewSwipe(final RecipeAdapter adapter, RecyclerView recyclerView) {
+    private void recyclerViewSwipe(final RecipeAdapter adapter, RecyclerView recyclerView) {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -268,7 +274,7 @@ public class ExploreFragment extends Fragment {
     }
 
     // edits value when clicked
-    public void recyclerViewClick(RecipeAdapter adapter) {
+    private void recyclerViewClick(RecipeAdapter adapter) {
         adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
@@ -289,7 +295,7 @@ public class ExploreFragment extends Fragment {
         });
     }
 
-    public void goToFragment(Fragment fragment) {
+    private void goToFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
 
@@ -298,6 +304,13 @@ public class ExploreFragment extends Fragment {
 
         // make changes
         transaction.commit();
+    }
+
+    // passed from home fragment to set recent recipe viewed
+    public static void setRecipeId(String id) {
+        if (id != null || !id.isEmpty()) {
+            recentDocumentID = id;
+        }
     }
 
     public static void passIngredient(IngredientItem thisIngredient) {
@@ -336,8 +349,8 @@ public class ExploreFragment extends Fragment {
 
     // set document id for each recipe
     // cheat way
-    public void setID() {
-        recipeRef.get()
+    private void setID() {
+        recipeRef.whereEqualTo("author", ProfileForm.user.getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -352,9 +365,9 @@ public class ExploreFragment extends Fragment {
                                         .collection("my_recipe").document(documentSnapshot.getId())
                                         .set(new RecipeItem(recipe.getName(), recipe.getIngredient(),
                                                 recipe.getPreparation(), documentSnapshot.getId(),
-                                                recipe.getUrl(), recipe.getImageLink(), recipe.getPath()), SetOptions.merge());
+                                                recipe.getUrl(), recipe.getImageLink(), recipe.getPath(), recipe.getAuthor()), SetOptions.merge());
+                                Log.d(LOG_TAG, recipe.getName() + "setID");
                             } else {
-                                Log.d(LOG_TAG, "recipe is null");
                             }
                         }
                     }

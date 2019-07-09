@@ -21,11 +21,15 @@ public class RecipeItem {
     // path in firebase storage
     private String path;
 
+    // store user uid
+    private String author;
+
     // no argument constructor
     public RecipeItem() {
     }
 
-    public RecipeItem(String name, List<String> ingredient, String preparation, String documentID, String url, String imageLink, String path) {
+    public RecipeItem(String name, List<String> ingredient, String preparation,
+                      String documentID, String url, String imageLink, String path, String author) {
         this.name = name;
         this.ingredient = ingredient;
         this.preparation = preparation;
@@ -33,6 +37,7 @@ public class RecipeItem {
         this.url = url;
         this.imageLink = imageLink;
         this.path = path;
+        this.author = author;
     }
 
     public String getName() {
@@ -66,5 +71,9 @@ public class RecipeItem {
 
     public String getPath() {
         return path;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 }
