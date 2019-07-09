@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class GenerateTestRecipe {
 
     // to display database recipes
@@ -61,10 +63,10 @@ public class GenerateTestRecipe {
         protected String doInBackground(String... strings) {
             String result = "";
             URL url;
-            HttpURLConnection urlConnection = null;
+            HttpsURLConnection urlConnection = null;
             try {
                 url = new URL(strings[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection = (HttpsURLConnection) url.openConnection();
                 InputStream in = urlConnection.getInputStream();
                 InputStreamReader reader = new InputStreamReader(in);
                 int data = reader.read();
@@ -88,7 +90,7 @@ public class GenerateTestRecipe {
                     String imageLink = "";
                     try {
                         url = new URL(recipeURL);
-                        urlConnection = (HttpURLConnection) url.openConnection();
+                        urlConnection = (HttpsURLConnection) url.openConnection();
                         InputStream input = urlConnection.getInputStream();
                         InputStreamReader readers = new InputStreamReader(input);
                         int output = readers.read();
