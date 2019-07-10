@@ -129,7 +129,7 @@ public class ProfileForm extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Log.d(LOG_TAG, "User profile updated.");
-                                Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_LONG).show();
+                                showToast("Profile updated");
                             }
                         }
                     });
@@ -144,7 +144,7 @@ public class ProfileForm extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Log.d(LOG_TAG, "User email address updated.");
-                                Toast.makeText(getContext(), "Email address updated", Toast.LENGTH_LONG).show();
+                                showToast("Email address updated");
                             }
                         }
                     });
@@ -162,6 +162,11 @@ public class ProfileForm extends Fragment {
 
         // make changes
         transaction.commit();
+    }
+
+    private void showToast(String msg) {
+
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     // for debugging

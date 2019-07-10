@@ -46,7 +46,8 @@
         <item>qty</item>
     </string-array>
 
-    <string name="receipt_desc">The image must be clear.
-        Please give extra room along the sides of the image so it can analyse text.</string>
+    <string name="receipt_desc">1. The image must be clear.\n\n
+        2. Crop out the cost of ingredient, leaving only the ingredient name.\n\n
+    3. Please see below image for an example.</string>
 
 </resources>

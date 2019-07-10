@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +21,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.easycook.Home.Ingredient.IngredientItem;
 import com.example.easycook.R;
+import com.example.easycook.Settings.ProfileForm;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -80,9 +85,16 @@ public class ReceiptForm extends Fragment {
     // Handles app bar item clicks.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.tick_button:
-                readReceipt();
+                if (receiptUri != null) {
+                    readReceipt();
+                    goToFragment(new HomeFragment());
+                } else {
+                    showToast("No image found");
+                    Log.d(LOG_TAG, "No image found");
+                }
                 return true;
             default:
                 // Do nothing
@@ -146,33 +158,93 @@ public class ReceiptForm extends Fragment {
 
     }
 
-    // TODO make into list (check for no text blocks)
-    // TODO check if is string of char
-    // TODO textview for bigger
-    // TODO create ingredients
     private void processText(FirebaseVisionText firebaseVisionText) {
 
-        if (firebaseVisionText == null) {
-            Toast.makeText(getContext(), "no text found", Toast.LENGTH_LONG);
+        int count = 0;
+
+        List<FirebaseVisionText.TextBlock> blocks = firebaseVisionText.getTextBlocks();
+        if (blocks.size() == 0) {
+            showToast("No text found");
+            Log.d(LOG_TAG, "No text found");
             return;
         }
 
-        String resultText = firebaseVisionText.getText();
-        for (FirebaseVisionText.TextBlock block : firebaseVisionText.getTextBlocks()) {
+        for (FirebaseVisionText.TextBlock block : blocks) {
             String blockText = block.getText();
             System.out.println("blockText " + blockText);
             System.out.println();
+
             for (FirebaseVisionText.Line line : block.getLines()) {
-                String lineText = line.getText();
+                String lineText = line.getText().toLowerCase();
                 System.out.println("lineText " + lineText);
                 System.out.println();
+
+                // sort and add into firebase
+                if (sortIngredient(lineText)) {
+                    count++;
+                }
+
+                // if need to use each word
+                /*
                 for (FirebaseVisionText.Element element : line.getElements()) {
                     String elementText = element.getText();
-                    System.out.println("elementText " + elementText);
-                }
+                } */
             }
         }
 
+        if (count > 0) {
+            showToast(count + " ingredients added");
+        } else {
+            showToast("No ingredients added");
+        }
+
+    }
+
+    // use hashmap if it gets big
+    private boolean sortIngredient(String ingredientName) {
+
+        String ingredientType;
+        IngredientItem ingredientItem;
+
+        if (ingredientName.contains("spinach") || ingredientName.contains("radish")) {
+
+            ingredientType = "Vegetable";
+            ingredientItem = new IngredientItem(ingredientType, ingredientName, 0, "", 0, "qty", ProfileForm.user.getUid());
+            CollectionReference vegRef = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("ingredient_vegetable");
+            vegRef.add(ingredientItem);
+
+            return true;
+        }
+
+        if (ingredientName.contains("curry")) {
+
+            ingredientType = "Sauces";
+            ingredientItem = new IngredientItem(ingredientType, ingredientName, 0, "", 0, "qty", ProfileForm.user.getUid());
+            CollectionReference saucesRef = FirebaseFirestore.getInstance()
+                    .collection("users").document(ProfileForm.user.getUid()).collection("ingredient_sauces");
+            saucesRef.add(ingredientItem);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void goToFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+
+        // add to back stack so user can navigate back
+        transaction.addToBackStack(null);
+
+        // make changes
+        transaction.commit();
+    }
+
+    private void showToast(String msg) {
+
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     // for debugging
