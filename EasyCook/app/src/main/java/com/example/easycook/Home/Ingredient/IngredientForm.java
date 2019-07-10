@@ -30,6 +30,7 @@ import com.example.easycook.Explore.ExploreFragment;
 import com.example.easycook.Home.HomeFragment;
 import com.example.easycook.R;
 import com.example.easycook.Settings.ProfileForm;
+import com.google.android.gms.common.util.NumberUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -343,7 +344,8 @@ public class IngredientForm extends Fragment implements AdapterView.OnItemSelect
 
         // if input is empty, go back to home fragment
         if (TextUtils.isEmpty(type) && TextUtils.isEmpty(name)
-                && TextUtils.isEmpty(weight) && TextUtils.isEmpty(date) && TextUtils.isEmpty(units)) {
+                && TextUtils.isEmpty(weight) && TextUtils.isEmpty(units)
+                && TextUtils.isEmpty(date)) {
         } else {
 
             if (TextUtils.isEmpty(weight)) {

@@ -46,4 +46,7 @@
         <item>qty</item>
     </string-array>
 
+    <string name="receipt_desc">The image must be clear.
+        Please give extra room along the sides of the image so it can analyse text.</string>
+
 </resources>
