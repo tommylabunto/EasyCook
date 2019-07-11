@@ -1,6 +1,5 @@
 package com.example.easycook;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,11 +17,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
+// TODO add support for chinese text
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";
@@ -41,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
 
             Fragment selectedFragment = null;
 
-            if (mAuth != null) {
+            FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (currUser != null) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         selectedFragment = new HomeFragment();
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -76,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
 
         // if no user, sign in
         if (user == null) {
-            goToFragment(new SignInFragment());
+            goToFragment(new WelcomePageFragment());
+            delayNav();
+
         } else {
             goToFragment(new HomeFragment());
         }
@@ -130,7 +136,24 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         }
     }
 
+    private void delayNav() {
+
+        // make bottom nav view appear same time as sign in
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                navView.setVisibility(View.VISIBLE);
+            }
+        };
+
+        handler.postDelayed(runnable, 2500);
+    }
+
     private void goToFragment(Fragment fragment) {
+
+        getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();

@@ -73,7 +73,8 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeItem, RecipeAd
         }
 
         // delete document reference on firestore
-        getSnapshots().getSnapshot(position).getReference().delete();
+        getSnapshots().getSnapshot(position)
+                .getReference().delete();
     }
 
     /**

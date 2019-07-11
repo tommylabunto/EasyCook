@@ -39,7 +39,8 @@
             android:layout_height="65dp"
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
-            app:menu="@menu/bottom_nav_menu" />
+            app:menu="@menu/bottom_nav_menu"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
