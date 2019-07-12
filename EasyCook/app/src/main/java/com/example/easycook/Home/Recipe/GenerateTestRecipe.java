@@ -40,7 +40,7 @@ public class GenerateTestRecipe {
     private static final String API_URL_SEARCH_BASE = "https://www.food2fork.com/api/search?key=";
     private static final String API_URL_GET_BASE = "https://www.food2fork.com/api/get?key=";
     // change here
-    private static final String API_KEY = key4;
+    private static final String API_KEY = key2;
     private static final String API_SEARCH_END = "&q=";
     private static final String API_GET_END = "&rId=";
 

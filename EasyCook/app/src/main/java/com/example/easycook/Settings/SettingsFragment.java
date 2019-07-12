@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,7 +136,6 @@ public class SettingsFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteUserFirestore();
-                        deleteUserAuth();
                     }
                 });
 
@@ -151,12 +151,55 @@ public class SettingsFragment extends Fragment {
         myAlertBuilder.show();
     }
 
+    // delete all collections
+    private void deleteUserFirestore() {
+
+        String uid = ProfileForm.user.getUid();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DeleteDocThread recipeThread = new DeleteDocThread("my_recipe", uid);
+        DeleteDocThread allIngrThread = new DeleteDocThread("all_ingredients", uid);
+        DeleteDocThread meatThread = new DeleteDocThread("ingredient_meat", uid);
+        DeleteDocThread grainsThread = new DeleteDocThread("ingredient_grains", uid);
+        DeleteDocThread vegThread = new DeleteDocThread("ingredient_vegetable", uid);
+        DeleteDocThread dairyThread = new DeleteDocThread("ingredient_dairy", uid);
+        DeleteDocThread saucesThread = new DeleteDocThread("ingredient_sauces", uid);
+        DeleteDocThread condThread = new DeleteDocThread("ingredient_condiment", uid);
+
+        recipeThread.start();
+        allIngrThread.start();
+        meatThread.start();
+        grainsThread.start();
+        vegThread.start();
+        dairyThread.start();
+        saucesThread.start();
+        condThread.start();
+
+        showToast(getContext(), "Please wait...");
+
+        try {
+            condThread.join();
+            saucesThread.join();
+            dairyThread.join();
+            vegThread.join();
+            grainsThread.join();
+            meatThread.join();
+            allIngrThread.join();
+            recipeThread.join();
+
+            // somehow deleting user has higher priority than deleting docs from firestore
+            // cheat way, let it sleep for 5 seconds, then delete user
+            delay(user);
+
+        } catch (InterruptedException e) {
+            Log.w(LOG_TAG, e.getMessage() + "Interrupted");
+        }
+    }
+
     // delete user on firebase authentication
-    private void deleteUserAuth() {
+    private void deleteUserAuth(FirebaseUser user) {
 
         final Context tempContext = getContext();
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         // deletes user on firebase auth
         user.delete()
@@ -167,43 +210,24 @@ public class SettingsFragment extends Fragment {
                             showToast(tempContext, "User account deleted.");
                             Log.d(LOG_TAG, "User account deleted.");
                             goToFragment(new SignInFragment());
+                        } else {
+                            Log.d(LOG_TAG, "delete user auth: task not successful.");
                         }
                     }
                 });
     }
 
-    // TODO permission denied (3)
-    // delete recipe/ingredient on firestore associated with user
-    private void deleteUserFirestore() {
+    private void delay(final FirebaseUser user) {
 
-        FirebaseFirestore.getInstance()
-                .collection("users").document(ProfileForm.user.getUid()).collection("ingredient_meat").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                deleteUserAuth(user);
+            }
+        };
 
-                                String path = document.getReference().getPath();
-
-                                FirebaseFirestore.getInstance().document(path).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(LOG_TAG, "DocumentSnapshot successfully deleted!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w(LOG_TAG, "Error deleting document", e);
-                                            }
-                                        });
-                            }
-                        } else {
-                        }
-                    }
-                });
+        handler.postDelayed(runnable, 5000);
     }
 
     private void showToast(Context tempContext, String msg) {
