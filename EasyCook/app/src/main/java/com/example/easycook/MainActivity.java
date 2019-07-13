@@ -46,12 +46,15 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
             if (currUser != null) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
+                        item.setChecked(true);
                         selectedFragment = new HomeFragment();
                         break;
                     case R.id.navigation_explore:
+                        item.setChecked(true);
                         selectedFragment = new ExploreFragment();
                         break;
                     case R.id.navigation_settings:
+                        item.setChecked(true);
                         selectedFragment = new SettingsFragment();
                         break;
                 }
