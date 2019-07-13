@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    // to show recycler view
+    // to show recycler view (english)
     private RecyclerView meatRecyclerView;
     private RecyclerView grainsRecyclerView;
     private RecyclerView vegRecyclerView;

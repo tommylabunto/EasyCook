@@ -129,7 +129,7 @@ public class ProfileForm extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Log.d(LOG_TAG, "User profile updated.");
-                                showToast("Profile updated");
+                                showToast(getString(R.string.profile_updated));
                             }
                         }
                     });
@@ -144,7 +144,7 @@ public class ProfileForm extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Log.d(LOG_TAG, "User email address updated.");
-                                showToast("Email address updated");
+                                showToast(getString(R.string.email_updated));
                             }
                         }
                     });

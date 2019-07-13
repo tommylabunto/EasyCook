@@ -92,7 +92,7 @@ public class ReceiptForm extends Fragment {
                     readReceipt();
                     goToFragment(new HomeFragment());
                 } else {
-                    showToast("No image found");
+                    showToast(getString(R.string.no_image_found));
                     Log.d(LOG_TAG, "No image found");
                 }
                 return true;
@@ -164,20 +164,16 @@ public class ReceiptForm extends Fragment {
 
         List<FirebaseVisionText.TextBlock> blocks = firebaseVisionText.getTextBlocks();
         if (blocks.size() == 0) {
-            showToast("No text found");
+            showToast(getString(R.string.no_text_found));
             Log.d(LOG_TAG, "No text found");
             return;
         }
 
         for (FirebaseVisionText.TextBlock block : blocks) {
             String blockText = block.getText();
-            System.out.println("blockText " + blockText);
-            System.out.println();
 
             for (FirebaseVisionText.Line line : block.getLines()) {
                 String lineText = line.getText().toLowerCase();
-                System.out.println("lineText " + lineText);
-                System.out.println();
 
                 // sort and add into firebase
                 if (sortIngredient(lineText)) {
@@ -193,9 +189,9 @@ public class ReceiptForm extends Fragment {
         }
 
         if (count > 0) {
-            showToast(count + " ingredients added");
+            showToast(count + " " + getString(R.string.ingredients_added));
         } else {
-            showToast("No ingredients added");
+            showToast(getString(R.string.no_ingredients_added));
         }
 
     }

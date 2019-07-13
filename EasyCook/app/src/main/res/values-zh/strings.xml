@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EasyCook</string>
+    <string name="sign_out">退出</string>
+    <string name="please_wait">请稍等。。。</string>
+    <string name="recommended">热门推荐</string>
+    <string name="settings_text">设置</string>
+    <string name="url">网址</string>
+    <string name="ingredient_name">原料</string>
+    <string name="ingredients">食材</string>
+    <string name="date">日期</string>
+    <string name="explore_text">探索</string>
+    <string name="home_ingredient_meat">肉类</string>
+    <string name="home_ingredient_veg">蔬菜</string>
+    <string name="home_recipe_header">收藏食谱</string>
+    <string name="loading_ingredients">正在下载食材中。。。</string>
+    <string name="loading_recipes">正在下载食谱中。。。</string>
+    <string name="contact_support">联络我们</string>
+    <string name="account">账号</string>
+    <string name="preparation">步骤</string>
+    <string name="home_ingredient_sauces">酱料</string>
+    <string name="home_ingredient_header">我的食材</string>
+    <string name="ingredients_added">输入食材中</string>
+    <string name="username">用户名</string>
+    <string name="user_account_deleted">用户已被删除</string>
+    <string name="type_an_ingredient">请输入食材</string>
+    <string name="title_explore">探索</string>
+    <string name="title_home">个人</string>
+    <string name="title_settings">设置</string>
+    <string name="recipes_of_the_day">今日推荐</string>
+    <string name="delete_account">删除用户</string>
+    <string name="hello_amigo">欢迎傻逼：</string>
+    <string name="ingredient_type">分类</string>
+    <string name="ingredient_weight">重量</string>
+    <string name="recipe_name">食谱</string>
+    <string name="email">邮箱</string>
+    <string name="email_updated">邮箱账号已更新</string>
+    <string name="ingredient_expiry">保质期</string>
+    <string name="no_ingredients_added">没有添加食材</string>
+    <string name="profile">账号</string>
+    <string name="profile_updated">账号已更新</string>
+    <string name="home_ingredient_grains">米类</string>
+    <string name="home_ingredient_condiment">调味品</string>
+    <string name="general">个人</string>
+    <string name="home_ingredient_dairy">乳品类</string>
+    <string name="recently_viewed">最近游览过的食谱</string>
+    <string name="no_image_found">没有发现图片</string>
+    <string name="no_text_found">没有发现字体</string>
+    <string name="receipt_desc">一。图片必须要清晰\n二。图片不可有食品价格\n三。请看下面的例子</string>
+
+
+    <string-array name="units_array">
+        <item>克</item>
+        <item>公斤</item>
+        <item>毫升</item>
+        <item>升</item>
+        <item>茶匙</item>
+        <item>汤匙</item>
+        <item>个</item>
+    </string-array>
+</resources>

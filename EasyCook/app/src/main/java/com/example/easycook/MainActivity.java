@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-// TODO add support for chinese text
 public class MainActivity extends AppCompatActivity implements IngredientForm.OnFragmentInteractionListener {
 
     private final String LOG_TAG = "MainActivity";
@@ -56,9 +55,7 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
                         selectedFragment = new SettingsFragment();
                         break;
                 }
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, selectedFragment)
-                        .commit();
+                popGoToFragment(selectedFragment);
             }
             return false;
         }
@@ -82,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
         if (user == null) {
             goToFragment(new WelcomePageFragment());
             delayNav();
-
         } else {
             goToFragment(new HomeFragment());
+            navView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     private void signOut() {
         if (mAuth != null) {
             mAuth.signOut();
-            goToFragment(new SignInFragment());
+            popGoToFragment(new SignInFragment());
         }
     }
 
@@ -151,6 +148,13 @@ public class MainActivity extends AppCompatActivity implements IngredientForm.On
     }
 
     private void goToFragment(Fragment fragment) {
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+    private void popGoToFragment(Fragment fragment) {
 
         getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 

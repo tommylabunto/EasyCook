@@ -1,9 +1,12 @@
 <resources>
+
+    <!-- main activity -->
     <string name="app_name">EasyCook</string>
     <string name="title_home">Home</string>
     <string name="title_explore">Explore</string>
     <string name="title_settings">Settings</string>
 
+    <!-- home fragment -->
     <string name="home_recipe_header">My Recipes</string>
     <string name="home_ingredient_header">My Ingredients</string>
     <string name="home_ingredient_meat">Meat</string>
@@ -22,11 +25,32 @@
     <string name="ingredient_expiry">Expiry</string>
 
     <string name="date">Date:</string>
-    <string name="datepicker">datePicker</string>
+    <string name="datepicker" translatable="false">datePicker</string>
 
-    <string name="web_client_id">1016789155182-mkfcpcb6cvedlcr10p7mbflaljl0tapv.apps.googleusercontent.com</string>
+    <string name="web_client_id" translatable="false">1016789155182-mkfcpcb6cvedlcr10p7mbflaljl0tapv.apps.googleusercontent.com</string>
     <string name="sign_out">Sign Out</string>
 
+    <!-- settings -->
+    <string name="hello_amigo">Hello amigo:</string>
+    <string name="loading_recipes">Loading recipes...</string>
+    <string name="loading_ingredients">Loading ingredients...</string>
+
+    <string name="please_wait">Please wait...</string>
+    <string name="user_account_deleted">User account deleted.</string>
+
+    <string name="general">General</string>
+    <string name="profile">Profile</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="account">Account</string>
+    <string name="delete_account">Delete Account</string>
+
+    <!-- explore -->
+    <string name="type_an_ingredient">Type an ingredient</string>
+    <string name="recommended">Recommended</string>
+    <string name="recently_viewed">Recently Viewed</string>
+    <string name="recipes_of_the_day">Recipes Of The Day</string>
+
+    <!-- ingredient form -->
     <string-array name="ingredients_array">
         <item>Meat</item>
         <item>Grains</item>
@@ -46,8 +70,26 @@
         <item>qty</item>
     </string-array>
 
+    <!-- receipt form -->
+    <string name="no_image_found">No image found</string>
+    <string name="no_text_found">No text found</string>
+    <string name="ingredients_added">ingredients added</string>
+    <string name="no_ingredients_added">No ingredients added</string>
+
     <string name="receipt_desc">1. The image must be clear.\n\n
         2. Crop out the cost of ingredient, leaving only the ingredient name.\n\n
     3. Please see below image for an example.</string>
 
+    <!-- profile form -->
+    <string name="profile_updated">Profile updated</string>
+    <string name="email_updated">Email address updated</string>
+
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+
+    <!-- recipe form / recipe form view-->
+    <string name="recipe_name">Recipe name</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="preparation">Preparation</string>
+    <string name="url">Url</string>
 </resources>

@@ -35,7 +35,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
 public class SignInFragment extends Fragment {
 
     private String LOG_TAG = "SignInActivity";
@@ -55,7 +54,6 @@ public class SignInFragment extends Fragment {
     public SignInFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,6 +94,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+
         Log.d(LOG_TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -107,7 +106,7 @@ public class SignInFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-                            showToast(getContext(), "Hello amigo: " + user.getDisplayName());
+                            showToast(getContext(), getString(R.string.hello_amigo) + " " + user.getDisplayName());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -144,6 +143,7 @@ public class SignInFragment extends Fragment {
 
             MainActivity.passAuth(mAuth, user);
 
+            // doesnt work if user sign in, delete all ingredient/recipe, then sign in again
             // check if user has zero recipes. If yes -> load recipes from food2fork
             checkRecipe();
 
@@ -153,14 +153,13 @@ public class SignInFragment extends Fragment {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new HomeFragment())
                     .commit();
+
         } else {
             Log.d(LOG_TAG, "no user");
         }
     }
 
     private void checkRecipe() {
-
-        final Context tempContext = getContext();
 
         db.collection("users").document(ProfileForm.user.getUid()).collection("my_recipe")
                 .whereEqualTo("author", ProfileForm.user.getUid())
@@ -179,7 +178,7 @@ public class SignInFragment extends Fragment {
                         Log.d(LOG_TAG, document.getId() + " => " + document.getData());
                     }
                     if (count == 0) {
-                        showToast(tempContext, "Loading recipes...");
+                        showToast(getContext(), getString(R.string.loading_recipes));
                         GenerateTestRecipe.showDatabaseRecipe();
                     }
                 } else {
@@ -190,8 +189,6 @@ public class SignInFragment extends Fragment {
     }
 
     private void checkIngredient() {
-
-        final Context tempContext = getContext();
 
         db.collection("users").document(ProfileForm.user.getUid()).collection("all_ingredients")
                 .whereEqualTo("author", ProfileForm.user.getUid())
@@ -208,7 +205,7 @@ public class SignInFragment extends Fragment {
                         }
                     }
                     if (count == 0) {
-                        showToast(tempContext, "Loading ingredients...");
+                        showToast(getContext(), getString(R.string.loading_ingredients));
                         GenerateTestIngredient.generateIngredients();
                     }
                 } else {

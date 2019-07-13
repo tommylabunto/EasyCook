@@ -175,7 +175,7 @@ public class SettingsFragment extends Fragment {
         saucesThread.start();
         condThread.start();
 
-        showToast(getContext(), "Please wait...");
+        showToast(getContext(), getString(R.string.please_wait));
 
         try {
             condThread.join();
@@ -207,7 +207,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            showToast(tempContext, "User account deleted.");
+                            showToast(tempContext, getString(R.string.user_account_deleted));
                             Log.d(LOG_TAG, "User account deleted.");
                             goToFragment(new SignInFragment());
                         } else {
