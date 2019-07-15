@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/recipe_edit_button"
+        android:orderInCategory="30"
+        android:title="EDIT"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_edit_black_24dp" />
+
+    <item
+        android:id="@+id/recipe_share_button"
+        android:orderInCategory="20"
+        android:title="SHARE"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_share_black_24dp" />
+</menu>

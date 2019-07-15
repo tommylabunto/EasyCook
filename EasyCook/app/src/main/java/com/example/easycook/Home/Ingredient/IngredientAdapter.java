@@ -10,10 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easycook.Home.Recipe.RecipeItem;
 import com.example.easycook.R;
+import com.example.easycook.Settings.ProfileForm;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import io.opencensus.metrics.LongGauge;
 
@@ -44,6 +53,34 @@ public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientItem, 
 
     public void deleteItem(int position) {
         getSnapshots().getSnapshot(position).getReference().delete();
+
+        // delete from all ingredients
+        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
+        if (documentSnapshot.exists()) {
+            IngredientItem ingredientItem = documentSnapshot.toObject(IngredientItem.class);
+
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(ProfileForm.user.getUid())
+                    .collection("all_ingredients")
+                    .whereEqualTo("author", ProfileForm.user.getUid())
+                    .whereEqualTo("ingredientName", ingredientItem.getIngredientName())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    document.getReference().delete();
+                                }
+                            } else {
+                                Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        } else {
+            Log.d(LOG_TAG, "ingredient item doesn't exist ");
+        }
     }
 
     /**

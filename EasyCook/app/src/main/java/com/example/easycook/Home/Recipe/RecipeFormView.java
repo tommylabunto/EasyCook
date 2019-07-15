@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -87,7 +88,7 @@ public class RecipeFormView extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_edit, menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_recipe_edit, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -95,8 +96,11 @@ public class RecipeFormView extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.edit_button:
+            case R.id.recipe_edit_button:
                 editRecipe();
+                return true;
+            case R.id.recipe_share_button:
+                shareRecipe();
                 return true;
             default:
                 // Do nothing
@@ -187,6 +191,35 @@ public class RecipeFormView extends Fragment {
         this.recipe = recipe;
         this.id = id;
         this.path = path;
+    }
+
+    // share recipe name and url to social media
+    private void shareRecipe() {
+
+        String recipeName = "";
+        String recipeUrl = "";
+
+        if (recipe.getName() != null || !recipe.getName().isEmpty()) {
+            recipeName = recipe.getName();
+        }
+
+        if (recipe.getUrl() != null || !recipe.getUrl().isEmpty()) {
+            recipeUrl = recipe.getUrl();
+        }
+
+        String mimeType = "text/plain";
+        ShareCompat.IntentBuilder
+                // from the activity that launched share intent
+                .from(getActivity())
+                // MIME type
+                .setType(mimeType)
+                // title
+                .setChooserTitle(recipeName)
+                // text to be shared
+                .setText(recipeUrl)
+                // show app chooser and send intent
+                .startChooser();
+
     }
 
     // for debugging
