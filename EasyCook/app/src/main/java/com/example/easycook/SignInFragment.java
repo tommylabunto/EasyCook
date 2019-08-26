@@ -106,7 +106,7 @@ public class SignInFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-                            showToast(getContext(), getString(R.string.hello_amigo) + " " + user.getDisplayName());
+                            //showToast(getContext(), getString(R.string.hello_amigo) + " " + user.getDisplayName());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -178,7 +178,7 @@ public class SignInFragment extends Fragment {
                         Log.d(LOG_TAG, document.getId() + " => " + document.getData());
                     }
                     if (count == 0) {
-                        showToast(getContext(), getString(R.string.loading_recipes));
+                        //showToast(getContext(), getString(R.string.loading_recipes));
                         GenerateTestRecipe.showDatabaseRecipe();
                     }
                 } else {
@@ -205,7 +205,7 @@ public class SignInFragment extends Fragment {
                         }
                     }
                     if (count == 0) {
-                        showToast(getContext(), getString(R.string.loading_ingredients));
+                        //showToast(getContext(), getString(R.string.loading_ingredients));
                         GenerateTestIngredient.generateIngredients();
                     }
                 } else {
